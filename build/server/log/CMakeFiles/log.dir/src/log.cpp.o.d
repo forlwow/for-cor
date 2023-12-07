@@ -234,6 +234,22 @@ server/log/CMakeFiles/log.dir/src/log.cpp.o: \
  /usr/local/include/c++/13.1.0/bits/ranges_algobase.h \
  /usr/local/include/c++/13.1.0/pstl/glue_memory_defs.h \
  /usr/local/include/c++/13.1.0/pstl/execution_defs.h \
+ /home/webserver/web_server/server/ethread/inc/ethread.h \
+ /usr/local/include/c++/13.1.0/cstdint \
+ /usr/local/include/c++/13.1.0/thread \
+ /usr/local/include/c++/13.1.0/stop_token \
+ /usr/local/include/c++/13.1.0/atomic \
+ /usr/local/include/c++/13.1.0/bits/std_thread.h \
+ /usr/local/include/c++/13.1.0/semaphore \
+ /usr/local/include/c++/13.1.0/bits/semaphore_base.h \
+ /usr/local/include/c++/13.1.0/bits/chrono.h \
+ /usr/local/include/c++/13.1.0/ratio /usr/local/include/c++/13.1.0/limits \
+ /usr/local/include/c++/13.1.0/ctime \
+ /usr/local/include/c++/13.1.0/bits/parse_numbers.h \
+ /usr/local/include/c++/13.1.0/bits/atomic_timed_wait.h \
+ /usr/local/include/c++/13.1.0/bits/this_thread_sleep.h \
+ /usr/include/x86_64-linux-gnu/sys/time.h /usr/include/semaphore.h \
+ /usr/include/x86_64-linux-gnu/bits/semaphore.h \
  /usr/local/include/c++/13.1.0/functional \
  /usr/local/include/c++/13.1.0/bits/std_function.h \
  /usr/local/include/c++/13.1.0/unordered_map \
@@ -246,10 +262,11 @@ server/log/CMakeFiles/log.dir/src/log.cpp.o: \
  /usr/local/include/c++/13.1.0/bits/algorithmfwd.h \
  /usr/local/include/c++/13.1.0/bits/stl_heap.h \
  /usr/local/include/c++/13.1.0/bits/uniform_int_dist.h \
+ /usr/local/include/c++/13.1.0/mutex \
+ /usr/local/include/c++/13.1.0/bits/unique_lock.h \
  /usr/local/include/c++/13.1.0/iomanip \
  /usr/local/include/c++/13.1.0/locale \
  /usr/local/include/c++/13.1.0/bits/locale_facets_nonio.h \
- /usr/local/include/c++/13.1.0/ctime \
  /usr/local/include/c++/13.1.0/x86_64-pc-linux-gnu/bits/time_members.h \
  /usr/local/include/c++/13.1.0/x86_64-pc-linux-gnu/bits/messages_members.h \
  /usr/include/libintl.h \

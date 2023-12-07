@@ -17,7 +17,7 @@ static Logger::ptr g_logger = CreateStdLogger("system");
 
 thread_local EThread* t_thread = nullptr;
 thread_local std::string t_thread_name = "UNKNOW";
-thread_local int t_thread_id = -1;
+thread_local int t_thread_id = syscall(SYS_gettid);
 
 Semaphore::Semaphore(uint32_t count){
     if (sem_init(&m_semaphore, 0, count)){

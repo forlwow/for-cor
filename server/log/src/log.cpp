@@ -83,7 +83,7 @@ public:
         os << event->getThreadId();
     }
     inline void format(FILE* file, std::shared_ptr<Logger> logger, const LogEvent::ptr &event) override{
-        fprintf(file, "%u", event->getThreadId());
+        fprintf(file, "%d", event->getThreadId());
     }
 };
 
@@ -197,22 +197,19 @@ LogEventWrap::~LogEventWrap(){
 // Logger
 Logger::Logger(const std::string &name, const std::string &fmt)
     : m_name(name), 
-    m_level(LogLevel::DEBUG), 
     m_formatter(new LogFormatter(fmt))
 {
 
 }
 
 void Logger::log(const server::LogEvent::ptr &event) {
-    if (event->getLevel() >= m_level){
-        for (auto &i: m_appenders){
-            i->log(shared_from_this(), event);
-        }
+    for (auto &i: m_appenders){
+        i->log(shared_from_this(), event);
     }
-
 }
 
 void Logger::addAppender(server::LogAppender::ptr appender) {
+    LockGuard lock(m_mutex);
     if (!appender->getFormatter()){
         appender->setFormatter(m_formatter);
     }
@@ -220,12 +217,33 @@ void Logger::addAppender(server::LogAppender::ptr appender) {
 }
 
 void Logger::delAppender(server::LogAppender::ptr appender) {
+    LockGuard lock(m_mutex);
     for (auto it = m_appenders.begin(); it != m_appenders.end(); ++it){
         if(*it == appender){
             m_appenders.erase(it);
             break;
         }
     }
+}
+
+// LogAppender
+void LogAppender::setFormatter(LogFormatter::ptr val) {
+    LockGuard lock(m_mutex);
+    m_formatter = val;
+}
+
+LogFormatter::ptr LogAppender::getFormatter() const {
+    LockGuard lock(m_mutex);
+    return m_formatter;
+}
+
+void LogAppender::setLevel(LogLevel::Level level){
+    LockGuard lock(m_mutex);
+    m_level = level;
+}
+
+LogLevel::Level LogAppender::getLevel() const{
+    return m_level;
 }
 
 // FileLogAppender
@@ -236,6 +254,8 @@ FileLogAppender::FileLogAppender(const std::string &filename)
 }
 
 void FileLogAppender::log(Logger::ptr logger, const LogEvent::ptr &event) {
+    if (event->getLevel() < m_level) return;
+    LockGuard lock(m_mutex);
     if(!m_formatter->format(m_file, logger, event)){
         reopen();
         std::cout << "error" << std::endl;
@@ -253,6 +273,8 @@ inline bool FileLogAppender::reopen() {
 }
 
 void StdoutLogAppender::log(Logger::ptr logger, const LogEvent::ptr &event) {
+    if (event->getLevel() < m_level) return;
+    LockGuard lock(m_mutex);
     m_formatter->format(stdout, logger, event);
 }
 

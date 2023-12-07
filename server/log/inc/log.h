@@ -10,15 +10,16 @@
 #include <memory>
 #include <cstdio>
 
+#include <ethread.h>
+
 namespace server{
 
 extern thread_local int t_thread_id;
 
 #define SERVER_LOG_LEVEL(logger, level)  \
-    if(logger->getLevel() <= level) \
-        server::LogEventWrap(server::LogEvent::ptr(\
-                    new server::LogEvent(logger, level, \
-                    __FILE__, __LINE__, 0, server::t_thread_id, 2, time(0))))
+    server::LogEventWrap(server::LogEvent::ptr(\
+        new server::LogEvent(logger, level, \
+        __FILE__, __LINE__, 0, server::t_thread_id, 2, time(0))))
 
 #define SERVER_LOG_DEBUG(logger) SERVER_LOG_LEVEL(logger, server::LogLevel::DEBUG)
 #define SERVER_LOG_INFO(logger) SERVER_LOG_LEVEL(logger, server::LogLevel::INFO)
@@ -180,11 +181,15 @@ public:
 
     virtual void log(std::shared_ptr<Logger>, const LogEvent::ptr &event) = 0;
 
-    void setFormatter(LogFormatter::ptr val) {m_formatter = val;}
-    LogFormatter::ptr getFormatter() const {return m_formatter;}
+    void setFormatter(LogFormatter::ptr val);
+    LogFormatter::ptr getFormatter() const;
+    void setLevel(LogLevel::Level level);
+    LogLevel::Level getLevel() const;
 protected:
-    LogLevel::Level m_level = LogLevel::DEBUG;
+    LogLevel::Level m_level = LogLevel::INFO;
     LogFormatter::ptr m_formatter;
+   
+    mutable Mutex m_mutex;
 };
 
 // 日志输出器
@@ -196,14 +201,13 @@ public:
     void log(const LogEvent::ptr &event);
     void addAppender(LogAppender::ptr appender);
     void delAppender(LogAppender::ptr appender);
-    LogLevel::Level getLevel() const { return m_level; }
-    void setLevel(LogLevel::Level val) {m_level = val;}
     auto getName() const {return m_name;}
 private:
     std::string m_name;                 // 日志名称
-    LogLevel::Level m_level = LogLevel::DEBUG;            // 日志界别
     std::list<LogAppender::ptr>  m_appenders;     // Appender集合
     LogFormatter::ptr m_formatter;
+    
+    mutable Mutex m_mutex;
 };
 
 // 输出到控制台的Appender

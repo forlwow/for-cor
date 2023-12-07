@@ -27,7 +27,9 @@ void test1(){
     SERVER_LOG_INFO(log) << "test begin";
     int count = 0;
     auto fun1 = std::function<void()>(
-            [&](){
+        [&](){
+            int i = 10;
+            while(i--){
                 SERVER_LOG_INFO(log) 
                 << "name:" 
                 << server::EThread::GetName() << " "
@@ -37,9 +39,7 @@ void test1(){
                 << syscall(SYS_gettid) << " "
                 << "this.id: " 
                 << server::EThread::GetThis()->getId();
-                for (int i=0; i<1e5; ++i){
-                    ++count;
-                }
+            }
             }
         );
     std::vector<server::EThread::ptr> thp;
@@ -54,7 +54,6 @@ void test1(){
 
 void test2(){
     server::Logger::ptr log(new server::Logger("root", "%s%n"));
-    log->setLevel(server::LogLevel::DEBUG);
     // log->addAppender(server::LogAppender::ptr(new server::StdoutLogAppender));
     log->addAppender(server::LogAppender::ptr(new server::FileLogAppender("./log.txt")));
 

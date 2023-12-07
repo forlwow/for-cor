@@ -2,7 +2,6 @@
 #define ETHREAD_H
 
 #include <cstdint>
-#include <shared_mutex>
 #include <string>
 #include <thread>
 #include <functional>
@@ -11,6 +10,13 @@
 #include <mutex>
 
 namespace server {
+
+class EThread;
+
+extern thread_local EThread* t_thread;
+extern thread_local std::string t_thread_name;
+extern thread_local int t_thread_id;
+
 
 class Semaphore{
 public:
@@ -29,14 +35,14 @@ private:
 };
 
 template<typename T>
-struct SemLockGuard{
-    SemLockGuard(T& mutex)
+struct LockGuard{
+    LockGuard(T& mutex)
         :m_mutex(mutex)
     {
         m_mutex.lock();
         m_locked = true;
     }
-    ~SemLockGuard(){
+    ~LockGuard(){
         unlock();
     }
 
@@ -116,12 +122,12 @@ private:
     bool m_locked;
 };
 
-class RWMutex{
+class RWMutex_{
 public:
-    RWMutex(){
+    RWMutex_(){
         pthread_rwlock_init(&m_lock, nullptr);
     }
-    ~RWMutex(){
+    ~RWMutex_(){
         pthread_rwlock_destroy(&m_lock);
     }
     void rdlock(){
@@ -138,12 +144,25 @@ private:
     pthread_rwlock_t m_lock;
 };
 
+// 空的锁 无效果 用于调试
+struct NullMutex{
+    NullMutex() {}
+    ~NullMutex() {}
+    void lock() {}
+    void unlock() {}
+};
+struct NullRWMutex{
+    NullRWMutex() {}
+    ~NullRWMutex() {}
+    void wrlock() {}
+    void rdlock() {}
+    void unlock() {}
+};
+// typedef NullMutex Mutex;
+// typedef NullRWMutex RWMutex;
 
-class EThread;
-
-extern thread_local EThread* t_thread;
-extern thread_local std::string t_thread_name;
-extern thread_local int t_thread_id;
+typedef RWMutex_ RWMutex;
+typedef std::mutex Mutex;
 
 class EThread{
 public:
