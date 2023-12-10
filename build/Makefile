@@ -168,6 +168,32 @@ ethread/fast:
 	$(MAKE) $(MAKESILENT) -f server/ethread/CMakeFiles/ethread.dir/build.make server/ethread/CMakeFiles/ethread.dir/build
 .PHONY : ethread/fast
 
+#=============================================================================
+# Target rules for targets named ecoroutine
+
+# Build rule for target.
+ecoroutine: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ecoroutine
+.PHONY : ecoroutine
+
+# fast build rule for target.
+ecoroutine/fast:
+	$(MAKE) $(MAKESILENT) -f server/ecoroutine/CMakeFiles/ecoroutine.dir/build.make server/ecoroutine/CMakeFiles/ecoroutine.dir/build
+.PHONY : ecoroutine/fast
+
+#=============================================================================
+# Target rules for targets named fiber
+
+# Build rule for target.
+fiber: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 fiber
+.PHONY : fiber
+
+# fast build rule for target.
+fiber/fast:
+	$(MAKE) $(MAKESILENT) -f server/fiber/CMakeFiles/fiber.dir/build.make server/fiber/CMakeFiles/fiber.dir/build
+.PHONY : fiber/fast
+
 server/main.o: server/main.cpp.o
 .PHONY : server/main.o
 
@@ -200,7 +226,9 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... ecoroutine"
 	@echo "... ethread"
+	@echo "... fiber"
 	@echo "... log"
 	@echo "... util"
 	@echo "... web_server"

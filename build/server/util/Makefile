@@ -154,6 +154,30 @@ src/range.cpp.s:
 	cd /home/webserver/web_server/build && $(MAKE) $(MAKESILENT) -f server/util/CMakeFiles/util.dir/build.make server/util/CMakeFiles/util.dir/src/range.cpp.s
 .PHONY : src/range.cpp.s
 
+src/util.o: src/util.cpp.o
+.PHONY : src/util.o
+
+# target to build an object file
+src/util.cpp.o:
+	cd /home/webserver/web_server/build && $(MAKE) $(MAKESILENT) -f server/util/CMakeFiles/util.dir/build.make server/util/CMakeFiles/util.dir/src/util.cpp.o
+.PHONY : src/util.cpp.o
+
+src/util.i: src/util.cpp.i
+.PHONY : src/util.i
+
+# target to preprocess a source file
+src/util.cpp.i:
+	cd /home/webserver/web_server/build && $(MAKE) $(MAKESILENT) -f server/util/CMakeFiles/util.dir/build.make server/util/CMakeFiles/util.dir/src/util.cpp.i
+.PHONY : src/util.cpp.i
+
+src/util.s: src/util.cpp.s
+.PHONY : src/util.s
+
+# target to generate assembly for a file
+src/util.cpp.s:
+	cd /home/webserver/web_server/build && $(MAKE) $(MAKESILENT) -f server/util/CMakeFiles/util.dir/build.make server/util/CMakeFiles/util.dir/src/util.cpp.s
+.PHONY : src/util.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -166,6 +190,9 @@ help:
 	@echo "... src/range.o"
 	@echo "... src/range.i"
 	@echo "... src/range.s"
+	@echo "... src/util.o"
+	@echo "... src/util.i"
+	@echo "... src/util.s"
 .PHONY : help
 
 

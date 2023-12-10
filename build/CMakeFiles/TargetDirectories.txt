@@ -12,3 +12,9 @@
 /home/webserver/web_server/build/server/ethread/CMakeFiles/ethread.dir
 /home/webserver/web_server/build/server/ethread/CMakeFiles/edit_cache.dir
 /home/webserver/web_server/build/server/ethread/CMakeFiles/rebuild_cache.dir
+/home/webserver/web_server/build/server/ecoroutine/CMakeFiles/ecoroutine.dir
+/home/webserver/web_server/build/server/ecoroutine/CMakeFiles/edit_cache.dir
+/home/webserver/web_server/build/server/ecoroutine/CMakeFiles/rebuild_cache.dir
+/home/webserver/web_server/build/server/fiber/CMakeFiles/fiber.dir
+/home/webserver/web_server/build/server/fiber/CMakeFiles/edit_cache.dir
+/home/webserver/web_server/build/server/fiber/CMakeFiles/rebuild_cache.dir

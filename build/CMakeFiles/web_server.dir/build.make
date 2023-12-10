@@ -95,6 +95,8 @@ web_server_EXTERNAL_OBJECTS =
 /home/webserver/web_server/bin/web_server: /home/webserver/web_server/lib/liblog.so
 /home/webserver/web_server/bin/web_server: /home/webserver/web_server/lib/libutil.so
 /home/webserver/web_server/bin/web_server: /home/webserver/web_server/lib/libethread.so
+/home/webserver/web_server/bin/web_server: /home/webserver/web_server/lib/libecoroutine.so
+/home/webserver/web_server/bin/web_server: /home/webserver/web_server/lib/libfiber.so
 /home/webserver/web_server/bin/web_server: CMakeFiles/web_server.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/webserver/web_server/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable /home/webserver/web_server/bin/web_server"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/web_server.dir/link.txt --verbose=$(VERBOSE)

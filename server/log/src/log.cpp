@@ -1,10 +1,15 @@
 #include "log.h"
+#include "yaml-cpp/exceptions.h"
+#include "yaml-cpp/node/parse.h"
+#include "yaml-cpp/yaml.h"
+#include <iostream>
 #include <map>
 #include <functional>
 
 #include <iomanip>
 #include <cstdio>
 #include <cstdlib>
+#include <memory>
 #include <utility>
 
 namespace server {
@@ -195,9 +200,8 @@ LogEventWrap::~LogEventWrap(){
 
 
 // Logger
-Logger::Logger(const std::string &name, const std::string &fmt)
-    : m_name(name), 
-    m_formatter(new LogFormatter(fmt))
+Logger::Logger(const std::string &name)
+    : m_name(name) 
 {
 
 }
@@ -210,9 +214,6 @@ void Logger::log(const server::LogEvent::ptr &event) {
 
 void Logger::addAppender(server::LogAppender::ptr appender) {
     LockGuard lock(m_mutex);
-    if (!appender->getFormatter()){
-        appender->setFormatter(m_formatter);
-    }
     m_appenders.push_back(appender);
 }
 
@@ -394,22 +395,79 @@ std::FILE* LogFormatter::format(FILE *file, std::shared_ptr<Logger> logger, LogE
 
 
 LogManger::LogManger()
-    :m_root(std::make_shared<Logger>())
 {
-    m_root->addAppender(std::make_shared<StdoutLogAppender>());
-    m_loggers[m_root->getName()] = m_root;
-    init();
+    if (int res = initFromYaml("log.yml")){
+        std::cout << "log file error "<< res << std::endl;
+        init();
+    }
+    else
+        std::cout << "log file OK" << std::endl;
 }
 
 Logger::ptr LogManger::getLogger(const std::string &name){
+    LockGuard lock(m_mutex);
     auto it = m_loggers.find(name);
     if (it != m_loggers.end())
         return it->second;
-    return {};
+    Logger::ptr logger(new Logger(name));
+    m_loggers[name] = logger;
+    return logger;
 }
 
 void LogManger::init(){
+    server::Logger::ptr log = std::make_shared<server::Logger>("system");
+    log->addAppender(std::shared_ptr<server::LogAppender>(new server::StdoutLogAppender)); 
+    m_loggers["system"] = log;
+}
 
+int LogManger::initFromYaml(const std::string& file_name){
+    try{
+        auto logs = YAML::LoadFile(file_name); 
+        for(auto logitem: logs){
+            std::string logname = logitem.first.as<std::string>();
+            if (logname.empty())
+                return 1;
+            Logger::ptr log = std::make_shared<Logger>(logname);
+            for(auto appenditem: logitem.second){
+                LogAppender::ptr appender;
+                std::string mode = appenditem["out"].as<std::string>();
+                std::string fmtpat = appenditem["fmt"].as<std::string>();
+                std::string level = appenditem["level"].as<std::string>();
+                // 只要有一个没有就失败
+                if (mode.empty() || fmtpat.empty() || level.empty())
+                    return 2;
+                // 创建Appender
+                if(mode == "std"){
+                    appender.reset(new StdoutLogAppender);
+                }
+                else if(mode == "file"){
+                    auto outname = appenditem["filename"].as<std::string>();
+                    if (outname.empty())
+                        return 3;
+                    appender.reset(new FileLogAppender(outname));
+                }
+                else{
+                    return 4;
+                }
+                // 设置等级
+                auto lv = LogLevel::FromString(level);
+                if (lv == LogLevel::UNKNOW)
+                    return 5;
+                appender->setLevel(lv);
+                // 创建格式化器
+                LogFormatter::ptr fmter(new LogFormatter(fmtpat));
+                appender->setFormatter(fmter);
+
+                log->addAppender(appender);
+            }
+            m_loggers[logname] = log;
+        }
+    }
+    catch(YAML::Exception error){
+        std::cout << error.msg << std::endl;
+        return 6;
+    }
+    return 0;
 }
 
 }

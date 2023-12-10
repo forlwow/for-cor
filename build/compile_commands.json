@@ -1,26 +1,44 @@
 [
 {
   "directory": "/home/webserver/web_server/build",
-  "command": "/usr/local/bin/g++  -I/home/webserver/web_server/server/log/inc -I/home/webserver/web_server/server/util/inc -I/home/webserver/web_server/server/ethread/inc  -O0 -w -g2 -ggdb -std=c++20 -std=gnu++20 -o CMakeFiles/web_server.dir/server/main.cpp.o -c /home/webserver/web_server/server/main.cpp",
+  "command": "/usr/local/bin/g++  -I/home/webserver/web_server/server/log/inc -I/home/webserver/web_server/server/util/inc -I/home/webserver/web_server/server/ethread/inc -I/home/webserver/web_server/server/ecoroutine/inc -I/home/webserver/web_server/server/fiber/inc -I/home/webserver/web_server/server/ThirdModule/include  -O0 -w -g2 -ggdb -std=c++20 -std=gnu++20 -o CMakeFiles/web_server.dir/server/main.cpp.o -c /home/webserver/web_server/server/main.cpp",
   "file": "/home/webserver/web_server/server/main.cpp",
   "output": "CMakeFiles/web_server.dir/server/main.cpp.o"
 },
 {
   "directory": "/home/webserver/web_server/build/server/log",
-  "command": "/usr/local/bin/g++ -Dlog_EXPORTS -I/home/webserver/web_server/server/log/inc -I/home/webserver/web_server/server/util/inc -I/home/webserver/web_server/server/ethread/inc  -O0 -w -g2 -ggdb -std=c++20 -std=gnu++20 -fPIC -o CMakeFiles/log.dir/src/log.cpp.o -c /home/webserver/web_server/server/log/src/log.cpp",
+  "command": "/usr/local/bin/g++ -Dlog_EXPORTS -I/home/webserver/web_server/server/log/inc -I/home/webserver/web_server/server/util/inc -I/home/webserver/web_server/server/ethread/inc -I/home/webserver/web_server/server/ecoroutine/inc -I/home/webserver/web_server/server/fiber/inc -I/home/webserver/web_server/server/ThirdModule/include  -O0 -w -g2 -ggdb -std=c++20 -std=gnu++20 -fPIC -o CMakeFiles/log.dir/src/log.cpp.o -c /home/webserver/web_server/server/log/src/log.cpp",
   "file": "/home/webserver/web_server/server/log/src/log.cpp",
   "output": "server/log/CMakeFiles/log.dir/src/log.cpp.o"
 },
 {
   "directory": "/home/webserver/web_server/build/server/util",
-  "command": "/usr/local/bin/g++ -Dutil_EXPORTS -I/home/webserver/web_server/server/log/inc -I/home/webserver/web_server/server/util/inc -I/home/webserver/web_server/server/ethread/inc  -O0 -w -g2 -ggdb -std=c++20 -std=gnu++20 -fPIC -o CMakeFiles/util.dir/src/range.cpp.o -c /home/webserver/web_server/server/util/src/range.cpp",
+  "command": "/usr/local/bin/g++ -Dutil_EXPORTS -I/home/webserver/web_server/server/log/inc -I/home/webserver/web_server/server/util/inc -I/home/webserver/web_server/server/ethread/inc -I/home/webserver/web_server/server/ecoroutine/inc -I/home/webserver/web_server/server/fiber/inc -I/home/webserver/web_server/server/ThirdModule/include  -O0 -w -g2 -ggdb -std=c++20 -std=gnu++20 -fPIC -o CMakeFiles/util.dir/src/range.cpp.o -c /home/webserver/web_server/server/util/src/range.cpp",
   "file": "/home/webserver/web_server/server/util/src/range.cpp",
   "output": "server/util/CMakeFiles/util.dir/src/range.cpp.o"
 },
 {
+  "directory": "/home/webserver/web_server/build/server/util",
+  "command": "/usr/local/bin/g++ -Dutil_EXPORTS -I/home/webserver/web_server/server/log/inc -I/home/webserver/web_server/server/util/inc -I/home/webserver/web_server/server/ethread/inc -I/home/webserver/web_server/server/ecoroutine/inc -I/home/webserver/web_server/server/fiber/inc -I/home/webserver/web_server/server/ThirdModule/include  -O0 -w -g2 -ggdb -std=c++20 -std=gnu++20 -fPIC -o CMakeFiles/util.dir/src/util.cpp.o -c /home/webserver/web_server/server/util/src/util.cpp",
+  "file": "/home/webserver/web_server/server/util/src/util.cpp",
+  "output": "server/util/CMakeFiles/util.dir/src/util.cpp.o"
+},
+{
   "directory": "/home/webserver/web_server/build/server/ethread",
-  "command": "/usr/local/bin/g++ -Dethread_EXPORTS -I/home/webserver/web_server/server/log/inc -I/home/webserver/web_server/server/util/inc -I/home/webserver/web_server/server/ethread/inc  -O0 -w -g2 -ggdb -std=c++20 -std=gnu++20 -fPIC -o CMakeFiles/ethread.dir/src/ethread.cpp.o -c /home/webserver/web_server/server/ethread/src/ethread.cpp",
+  "command": "/usr/local/bin/g++ -Dethread_EXPORTS -I/home/webserver/web_server/server/log/inc -I/home/webserver/web_server/server/util/inc -I/home/webserver/web_server/server/ethread/inc -I/home/webserver/web_server/server/ecoroutine/inc -I/home/webserver/web_server/server/fiber/inc -I/home/webserver/web_server/server/ThirdModule/include  -O0 -w -g2 -ggdb -std=c++20 -std=gnu++20 -fPIC -o CMakeFiles/ethread.dir/src/ethread.cpp.o -c /home/webserver/web_server/server/ethread/src/ethread.cpp",
   "file": "/home/webserver/web_server/server/ethread/src/ethread.cpp",
   "output": "server/ethread/CMakeFiles/ethread.dir/src/ethread.cpp.o"
+},
+{
+  "directory": "/home/webserver/web_server/build/server/ecoroutine",
+  "command": "/usr/local/bin/g++ -Decoroutine_EXPORTS -I/home/webserver/web_server/server/log/inc -I/home/webserver/web_server/server/util/inc -I/home/webserver/web_server/server/ethread/inc -I/home/webserver/web_server/server/ecoroutine/inc -I/home/webserver/web_server/server/fiber/inc -I/home/webserver/web_server/server/ThirdModule/include  -O0 -w -g2 -ggdb -std=c++20 -std=gnu++20 -fPIC -o CMakeFiles/ecoroutine.dir/src/ecoroutine.cpp.o -c /home/webserver/web_server/server/ecoroutine/src/ecoroutine.cpp",
+  "file": "/home/webserver/web_server/server/ecoroutine/src/ecoroutine.cpp",
+  "output": "server/ecoroutine/CMakeFiles/ecoroutine.dir/src/ecoroutine.cpp.o"
+},
+{
+  "directory": "/home/webserver/web_server/build/server/fiber",
+  "command": "/usr/local/bin/g++ -Dfiber_EXPORTS -I/home/webserver/web_server/server/log/inc -I/home/webserver/web_server/server/util/inc -I/home/webserver/web_server/server/ethread/inc -I/home/webserver/web_server/server/ecoroutine/inc -I/home/webserver/web_server/server/fiber/inc -I/home/webserver/web_server/server/ThirdModule/include  -O0 -w -g2 -ggdb -std=c++20 -std=gnu++20 -fPIC -o CMakeFiles/fiber.dir/src/fiber.cpp.o -c /home/webserver/web_server/server/fiber/src/fiber.cpp",
+  "file": "/home/webserver/web_server/server/fiber/src/fiber.cpp",
+  "output": "server/fiber/CMakeFiles/fiber.dir/src/fiber.cpp.o"
 }
 ]

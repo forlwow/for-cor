@@ -11,6 +11,8 @@
 #include <cstdio>
 
 #include <ethread.h>
+#include <singleton.h>
+#include <fiber.h>
 
 namespace server{
 
@@ -19,7 +21,8 @@ extern thread_local int t_thread_id;
 #define SERVER_LOG_LEVEL(logger, level)  \
     server::LogEventWrap(server::LogEvent::ptr(\
         new server::LogEvent(logger, level, \
-        __FILE__, __LINE__, 0, server::t_thread_id, 2, time(0))))
+        __FILE__, __LINE__, \
+        0, server::t_thread_id, server::Fiber::GetCurFiberId(), time(0))))
 
 #define SERVER_LOG_DEBUG(logger) SERVER_LOG_LEVEL(logger, server::LogLevel::DEBUG)
 #define SERVER_LOG_INFO(logger) SERVER_LOG_LEVEL(logger, server::LogLevel::INFO)
@@ -67,7 +70,7 @@ public:
             if(str == #v)  \
                 return LogLevel::level;
             XX(DEBUG, debug);
-            XX(DEBUG, debug);
+            XX(DEBUG, DEBUG);
             XX(INFO, info);
             XX(INFO, INFO);
             XX(WARN, warn);
@@ -169,7 +172,7 @@ public:
     void init();
 
 private:
-    std::string m_pattern;
+    std::string m_pattern = "%d{%Y-%m-%d %H:%M:%S}%T%t%T%F%T[%p]%T[%c]%T%f:%l%T%m%n";
     std::vector<FormatItem::ptr> m_items;
 };
 
@@ -197,7 +200,7 @@ class Logger: public std::enable_shared_from_this<Logger>{
 public:
     typedef std::shared_ptr<Logger> ptr;
 
-    Logger(const std::string &name = "undef", const std::string &fmt = "%d{%Y-%m-%d %H:%M:%S}%T%t%T%F%T[%p]%T[%c]%T%f:%l%T%m%n");
+    Logger(const std::string &name = "undef");
     void log(const LogEvent::ptr &event);
     void addAppender(LogAppender::ptr appender);
     void delAppender(LogAppender::ptr appender);
@@ -205,7 +208,6 @@ public:
 private:
     std::string m_name;                 // 日志名称
     std::list<LogAppender::ptr>  m_appenders;     // Appender集合
-    LogFormatter::ptr m_formatter;
     
     mutable Mutex m_mutex;
 };
@@ -234,24 +236,28 @@ private:
 };
 
 
-class LogManger{
+class LogManger: public Singleton<LogManger>{
 public:
     LogManger();
     Logger::ptr getLogger(const std::string &name);
     void init();
+    int initFromYaml(const std::string& file_name);
 
 private:
     std::map<std::string, Logger::ptr> m_loggers;        // 日志起容器
-    Logger::ptr m_root;                                 // 主日志器
+    Mutex m_mutex;
 };
 
-}
+} // namespace server
 
+
+#define SERVER_LOGGER_SYSTEM server::LogManger::GetInstance()->getLogger("system")
+#define SERVER_LOGGER(name) server::LogManger::GetInstance()->getLogger(name)
 
 template<typename ...Args>
-inline static server::Logger::ptr CreateFileLogger(Args ...args){
+inline static server::Logger::ptr CreateFileLogger(const std::string& file_name, Args ...args){
     server::Logger::ptr log = std::make_shared<server::Logger>(args...);
-    log->addAppender(std::shared_ptr<server::LogAppender>(new server::FileLogAppender("log.txt"))); 
+    log->addAppender(std::shared_ptr<server::LogAppender>(new server::FileLogAppender(file_name))); 
     return log;
 }
 

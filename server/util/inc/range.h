@@ -3,16 +3,17 @@
 
 #include <coroutine>
 
+template<typename T>
 struct CoRet{
     struct promise_type{
-        int n;
+        T n;
         std::suspend_never initial_suspend() const noexcept {return {};}
         std::suspend_always final_suspend() const noexcept {return {};}
         void unhandled_exception() {}
         CoRet get_return_object(){
             return {std::coroutine_handle<promise_type>::from_promise(*this)};
         }
-        std::suspend_always yield_value(int r){
+        std::suspend_always yield_value(T r){
             n = r;
             return {};
         }
@@ -21,7 +22,7 @@ struct CoRet{
 
     struct iterator{
         std::coroutine_handle<promise_type>& h;
-        int& operator*() {
+        T& operator*() {
             return h.promise().n;
         }
         iterator operator++(){
@@ -39,11 +40,21 @@ struct CoRet{
     std::coroutine_handle<promise_type> _h;
 };
 
-CoRet _range(int begin, int end, int step);
+template<typename T>
+CoRet<T> _range(T begin, T end, T step){
+   while (begin < end){
+        co_yield begin;
+        begin += step;
+   }
+   co_return;
+}
 
-CoRet range(int end); 
-CoRet range(int begin, int end);
-CoRet range(int begin, int end, int step);
+template<typename T = int>
+CoRet<T> range(T end){return _range(0, end, 1);}
+template<typename T = int>
+CoRet<T> range(T begin, T end){return _range(begin, end, 1);}
+template<typename T = int>
+CoRet<T> range(T begin, T end, T step){return _range(begin, end, step);}
 
 
 #endif

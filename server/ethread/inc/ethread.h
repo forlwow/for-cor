@@ -8,6 +8,7 @@
 #include <memory>
 #include <pthread.h>
 #include <mutex>
+#include <atomic>
 
 namespace server {
 
@@ -144,6 +145,19 @@ private:
     pthread_rwlock_t m_lock;
 };
 
+class SpinLock{
+public:
+    SpinLock(): m_mutex(ATOMIC_FLAG_INIT) {}
+    ~SpinLock() {}
+    void lock() {
+        while(m_mutex.test_and_set(std::memory_order_acquire));
+    }
+    void unlock() {m_mutex.clear(std::memory_order_release);}
+private:
+    std::atomic_flag m_mutex;
+};
+
+
 // 空的锁 无效果 用于调试
 struct NullMutex{
     NullMutex() {}
@@ -163,6 +177,7 @@ struct NullRWMutex{
 
 typedef RWMutex_ RWMutex;
 typedef std::mutex Mutex;
+// typedef SpinLock Mutex;
 
 class EThread{
 public:

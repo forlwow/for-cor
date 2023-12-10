@@ -83,19 +83,40 @@ clean: server/clean
 server/all: server/log/all
 server/all: server/util/all
 server/all: server/ethread/all
+server/all: server/ecoroutine/all
+server/all: server/fiber/all
 .PHONY : server/all
 
 # Recursive "preinstall" directory target.
 server/preinstall: server/log/preinstall
 server/preinstall: server/util/preinstall
 server/preinstall: server/ethread/preinstall
+server/preinstall: server/ecoroutine/preinstall
+server/preinstall: server/fiber/preinstall
 .PHONY : server/preinstall
 
 # Recursive "clean" directory target.
 server/clean: server/log/clean
 server/clean: server/util/clean
 server/clean: server/ethread/clean
+server/clean: server/ecoroutine/clean
+server/clean: server/fiber/clean
 .PHONY : server/clean
+
+#=============================================================================
+# Directory level rules for directory server/ecoroutine
+
+# Recursive "all" directory target.
+server/ecoroutine/all: server/ecoroutine/CMakeFiles/ecoroutine.dir/all
+.PHONY : server/ecoroutine/all
+
+# Recursive "preinstall" directory target.
+server/ecoroutine/preinstall:
+.PHONY : server/ecoroutine/preinstall
+
+# Recursive "clean" directory target.
+server/ecoroutine/clean: server/ecoroutine/CMakeFiles/ecoroutine.dir/clean
+.PHONY : server/ecoroutine/clean
 
 #=============================================================================
 # Directory level rules for directory server/ethread
@@ -111,6 +132,21 @@ server/ethread/preinstall:
 # Recursive "clean" directory target.
 server/ethread/clean: server/ethread/CMakeFiles/ethread.dir/clean
 .PHONY : server/ethread/clean
+
+#=============================================================================
+# Directory level rules for directory server/fiber
+
+# Recursive "all" directory target.
+server/fiber/all: server/fiber/CMakeFiles/fiber.dir/all
+.PHONY : server/fiber/all
+
+# Recursive "preinstall" directory target.
+server/fiber/preinstall:
+.PHONY : server/fiber/preinstall
+
+# Recursive "clean" directory target.
+server/fiber/clean: server/fiber/CMakeFiles/fiber.dir/clean
+.PHONY : server/fiber/clean
 
 #=============================================================================
 # Directory level rules for directory server/log
@@ -149,14 +185,16 @@ server/util/clean: server/util/CMakeFiles/util.dir/clean
 CMakeFiles/web_server.dir/all: server/log/CMakeFiles/log.dir/all
 CMakeFiles/web_server.dir/all: server/util/CMakeFiles/util.dir/all
 CMakeFiles/web_server.dir/all: server/ethread/CMakeFiles/ethread.dir/all
+CMakeFiles/web_server.dir/all: server/ecoroutine/CMakeFiles/ecoroutine.dir/all
+CMakeFiles/web_server.dir/all: server/fiber/CMakeFiles/fiber.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/web_server.dir/build.make CMakeFiles/web_server.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/web_server.dir/build.make CMakeFiles/web_server.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/webserver/web_server/build/CMakeFiles --progress-num=7,8 "Built target web_server"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/webserver/web_server/build/CMakeFiles --progress-num=12,13 "Built target web_server"
 .PHONY : CMakeFiles/web_server.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/web_server.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/webserver/web_server/build/CMakeFiles 8
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/webserver/web_server/build/CMakeFiles 13
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/web_server.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/webserver/web_server/build/CMakeFiles 0
 .PHONY : CMakeFiles/web_server.dir/rule
@@ -177,7 +215,7 @@ CMakeFiles/web_server.dir/clean:
 server/log/CMakeFiles/log.dir/all:
 	$(MAKE) $(MAKESILENT) -f server/log/CMakeFiles/log.dir/build.make server/log/CMakeFiles/log.dir/depend
 	$(MAKE) $(MAKESILENT) -f server/log/CMakeFiles/log.dir/build.make server/log/CMakeFiles/log.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/webserver/web_server/build/CMakeFiles --progress-num=3,4 "Built target log"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/webserver/web_server/build/CMakeFiles --progress-num=7,8 "Built target log"
 .PHONY : server/log/CMakeFiles/log.dir/all
 
 # Build rule for subdir invocation for target.
@@ -203,12 +241,12 @@ server/log/CMakeFiles/log.dir/clean:
 server/util/CMakeFiles/util.dir/all:
 	$(MAKE) $(MAKESILENT) -f server/util/CMakeFiles/util.dir/build.make server/util/CMakeFiles/util.dir/depend
 	$(MAKE) $(MAKESILENT) -f server/util/CMakeFiles/util.dir/build.make server/util/CMakeFiles/util.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/webserver/web_server/build/CMakeFiles --progress-num=5,6 "Built target util"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/webserver/web_server/build/CMakeFiles --progress-num=9,10,11 "Built target util"
 .PHONY : server/util/CMakeFiles/util.dir/all
 
 # Build rule for subdir invocation for target.
 server/util/CMakeFiles/util.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/webserver/web_server/build/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/webserver/web_server/build/CMakeFiles 3
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 server/util/CMakeFiles/util.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/webserver/web_server/build/CMakeFiles 0
 .PHONY : server/util/CMakeFiles/util.dir/rule
@@ -229,7 +267,7 @@ server/util/CMakeFiles/util.dir/clean:
 server/ethread/CMakeFiles/ethread.dir/all:
 	$(MAKE) $(MAKESILENT) -f server/ethread/CMakeFiles/ethread.dir/build.make server/ethread/CMakeFiles/ethread.dir/depend
 	$(MAKE) $(MAKESILENT) -f server/ethread/CMakeFiles/ethread.dir/build.make server/ethread/CMakeFiles/ethread.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/webserver/web_server/build/CMakeFiles --progress-num=1,2 "Built target ethread"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/webserver/web_server/build/CMakeFiles --progress-num=3,4 "Built target ethread"
 .PHONY : server/ethread/CMakeFiles/ethread.dir/all
 
 # Build rule for subdir invocation for target.
@@ -247,6 +285,58 @@ ethread: server/ethread/CMakeFiles/ethread.dir/rule
 server/ethread/CMakeFiles/ethread.dir/clean:
 	$(MAKE) $(MAKESILENT) -f server/ethread/CMakeFiles/ethread.dir/build.make server/ethread/CMakeFiles/ethread.dir/clean
 .PHONY : server/ethread/CMakeFiles/ethread.dir/clean
+
+#=============================================================================
+# Target rules for target server/ecoroutine/CMakeFiles/ecoroutine.dir
+
+# All Build rule for target.
+server/ecoroutine/CMakeFiles/ecoroutine.dir/all:
+	$(MAKE) $(MAKESILENT) -f server/ecoroutine/CMakeFiles/ecoroutine.dir/build.make server/ecoroutine/CMakeFiles/ecoroutine.dir/depend
+	$(MAKE) $(MAKESILENT) -f server/ecoroutine/CMakeFiles/ecoroutine.dir/build.make server/ecoroutine/CMakeFiles/ecoroutine.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/webserver/web_server/build/CMakeFiles --progress-num=1,2 "Built target ecoroutine"
+.PHONY : server/ecoroutine/CMakeFiles/ecoroutine.dir/all
+
+# Build rule for subdir invocation for target.
+server/ecoroutine/CMakeFiles/ecoroutine.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/webserver/web_server/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 server/ecoroutine/CMakeFiles/ecoroutine.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/webserver/web_server/build/CMakeFiles 0
+.PHONY : server/ecoroutine/CMakeFiles/ecoroutine.dir/rule
+
+# Convenience name for target.
+ecoroutine: server/ecoroutine/CMakeFiles/ecoroutine.dir/rule
+.PHONY : ecoroutine
+
+# clean rule for target.
+server/ecoroutine/CMakeFiles/ecoroutine.dir/clean:
+	$(MAKE) $(MAKESILENT) -f server/ecoroutine/CMakeFiles/ecoroutine.dir/build.make server/ecoroutine/CMakeFiles/ecoroutine.dir/clean
+.PHONY : server/ecoroutine/CMakeFiles/ecoroutine.dir/clean
+
+#=============================================================================
+# Target rules for target server/fiber/CMakeFiles/fiber.dir
+
+# All Build rule for target.
+server/fiber/CMakeFiles/fiber.dir/all:
+	$(MAKE) $(MAKESILENT) -f server/fiber/CMakeFiles/fiber.dir/build.make server/fiber/CMakeFiles/fiber.dir/depend
+	$(MAKE) $(MAKESILENT) -f server/fiber/CMakeFiles/fiber.dir/build.make server/fiber/CMakeFiles/fiber.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/webserver/web_server/build/CMakeFiles --progress-num=5,6 "Built target fiber"
+.PHONY : server/fiber/CMakeFiles/fiber.dir/all
+
+# Build rule for subdir invocation for target.
+server/fiber/CMakeFiles/fiber.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/webserver/web_server/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 server/fiber/CMakeFiles/fiber.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/webserver/web_server/build/CMakeFiles 0
+.PHONY : server/fiber/CMakeFiles/fiber.dir/rule
+
+# Convenience name for target.
+fiber: server/fiber/CMakeFiles/fiber.dir/rule
+.PHONY : fiber
+
+# clean rule for target.
+server/fiber/CMakeFiles/fiber.dir/clean:
+	$(MAKE) $(MAKESILENT) -f server/fiber/CMakeFiles/fiber.dir/build.make server/fiber/CMakeFiles/fiber.dir/clean
+.PHONY : server/fiber/CMakeFiles/fiber.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

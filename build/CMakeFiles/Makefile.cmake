@@ -11,7 +11,9 @@ set(CMAKE_MAKEFILE_DEPENDS
   "CMakeFiles/3.27.7/CMakeCXXCompiler.cmake"
   "CMakeFiles/3.27.7/CMakeSystem.cmake"
   "/home/webserver/web_server/server/CMakeLists.txt"
+  "/home/webserver/web_server/server/ecoroutine/CMakeLists.txt"
   "/home/webserver/web_server/server/ethread/CMakeLists.txt"
+  "/home/webserver/web_server/server/fiber/CMakeLists.txt"
   "/home/webserver/web_server/server/log/CMakeLists.txt"
   "/home/webserver/web_server/server/util/CMakeLists.txt"
   "/usr/local/share/cmake-3.27/Modules/CMakeCXXInformation.cmake"
@@ -44,6 +46,8 @@ set(CMAKE_MAKEFILE_PRODUCTS
   "server/log/CMakeFiles/CMakeDirectoryInformation.cmake"
   "server/util/CMakeFiles/CMakeDirectoryInformation.cmake"
   "server/ethread/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "server/ecoroutine/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "server/fiber/CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
 # Dependency information for all targets:
@@ -52,4 +56,6 @@ set(CMAKE_DEPEND_INFO_FILES
   "server/log/CMakeFiles/log.dir/DependInfo.cmake"
   "server/util/CMakeFiles/util.dir/DependInfo.cmake"
   "server/ethread/CMakeFiles/ethread.dir/DependInfo.cmake"
+  "server/ecoroutine/CMakeFiles/ecoroutine.dir/DependInfo.cmake"
+  "server/fiber/CMakeFiles/fiber.dir/DependInfo.cmake"
   )

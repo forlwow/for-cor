@@ -264,6 +264,88 @@ server/log/CMakeFiles/log.dir/src/log.cpp.o: \
  /usr/local/include/c++/13.1.0/bits/uniform_int_dist.h \
  /usr/local/include/c++/13.1.0/mutex \
  /usr/local/include/c++/13.1.0/bits/unique_lock.h \
+ /home/webserver/web_server/server/util/inc/singleton.h \
+ /home/webserver/web_server/server/fiber/inc/fiber.h \
+ /usr/include/x86_64-linux-gnu/sys/ucontext.h \
+ /usr/include/x86_64-linux-gnu/bits/types/stack_t.h \
+ /usr/include/ucontext.h \
+ /usr/include/x86_64-linux-gnu/bits/indirect-return.h \
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/exceptions.h \
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/mark.h \
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/dll.h \
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/noexcept.h \
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/traits.h \
+ /usr/local/include/c++/13.1.0/utility \
+ /usr/local/include/c++/13.1.0/bits/stl_relops.h \
+ /usr/local/include/c++/13.1.0/sstream \
+ /usr/local/include/c++/13.1.0/bits/sstream.tcc \
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/node/parse.h \
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/yaml.h \
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/parser.h \
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/emitter.h \
+ /usr/local/include/c++/13.1.0/cmath /usr/include/math.h \
+ /usr/include/x86_64-linux-gnu/bits/math-vector.h \
+ /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h \
+ /usr/include/x86_64-linux-gnu/bits/flt-eval-method.h \
+ /usr/include/x86_64-linux-gnu/bits/fp-logb.h \
+ /usr/include/x86_64-linux-gnu/bits/fp-fast.h \
+ /usr/include/x86_64-linux-gnu/bits/mathcalls-helper-functions.h \
+ /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
+ /usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h \
+ /usr/include/x86_64-linux-gnu/bits/iscanonical.h \
+ /usr/local/include/c++/13.1.0/bits/specfun.h \
+ /usr/local/include/c++/13.1.0/tr1/gamma.tcc \
+ /usr/local/include/c++/13.1.0/tr1/special_function_util.h \
+ /usr/local/include/c++/13.1.0/tr1/bessel_function.tcc \
+ /usr/local/include/c++/13.1.0/tr1/beta_function.tcc \
+ /usr/local/include/c++/13.1.0/tr1/ell_integral.tcc \
+ /usr/local/include/c++/13.1.0/tr1/exp_integral.tcc \
+ /usr/local/include/c++/13.1.0/tr1/hypergeometric.tcc \
+ /usr/local/include/c++/13.1.0/tr1/legendre_function.tcc \
+ /usr/local/include/c++/13.1.0/tr1/modified_bessel_func.tcc \
+ /usr/local/include/c++/13.1.0/tr1/poly_hermite.tcc \
+ /usr/local/include/c++/13.1.0/tr1/poly_laguerre.tcc \
+ /usr/local/include/c++/13.1.0/tr1/riemann_zeta.tcc \
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/binary.h \
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/emitterdef.h \
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/emittermanip.h \
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/null.h \
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/ostream_wrapper.h \
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/emitterstyle.h \
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/stlemitter.h \
+ /usr/local/include/c++/13.1.0/set \
+ /usr/local/include/c++/13.1.0/bits/stl_set.h \
+ /usr/local/include/c++/13.1.0/bits/stl_multiset.h \
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/node/node.h \
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/node/detail/iterator_fwd.h \
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/node/ptr.h \
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/node/type.h \
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/node/impl.h \
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/node/detail/memory.h \
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/node/detail/node.h \
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/node/detail/node_ref.h \
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/node/detail/node_data.h \
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/node/detail/node_iterator.h \
+ /usr/local/include/c++/13.1.0/iterator \
+ /usr/local/include/c++/13.1.0/bits/stream_iterator.h \
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/node/iterator.h \
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/node/detail/iterator.h \
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/node/convert.h \
+ /usr/local/include/c++/13.1.0/valarray \
+ /usr/local/include/c++/13.1.0/algorithm \
+ /usr/local/include/c++/13.1.0/bits/ranges_algo.h \
+ /usr/local/include/c++/13.1.0/pstl/glue_algorithm_defs.h \
+ /usr/local/include/c++/13.1.0/bits/valarray_array.h \
+ /usr/local/include/c++/13.1.0/bits/valarray_array.tcc \
+ /usr/local/include/c++/13.1.0/bits/valarray_before.h \
+ /usr/local/include/c++/13.1.0/bits/slice_array.h \
+ /usr/local/include/c++/13.1.0/bits/valarray_after.h \
+ /usr/local/include/c++/13.1.0/bits/gslice.h \
+ /usr/local/include/c++/13.1.0/bits/gslice_array.h \
+ /usr/local/include/c++/13.1.0/bits/mask_array.h \
+ /usr/local/include/c++/13.1.0/bits/indirect_array.h \
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/node/detail/impl.h \
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/node/emit.h \
  /usr/local/include/c++/13.1.0/iomanip \
  /usr/local/include/c++/13.1.0/locale \
  /usr/local/include/c++/13.1.0/bits/locale_facets_nonio.h \
@@ -272,8 +354,4 @@ server/log/CMakeFiles/log.dir/src/log.cpp.o: \
  /usr/include/libintl.h \
  /usr/local/include/c++/13.1.0/bits/locale_facets_nonio.tcc \
  /usr/local/include/c++/13.1.0/bits/locale_conv.h \
- /usr/local/include/c++/13.1.0/bits/quoted_string.h \
- /usr/local/include/c++/13.1.0/sstream \
- /usr/local/include/c++/13.1.0/bits/sstream.tcc \
- /usr/local/include/c++/13.1.0/utility \
- /usr/local/include/c++/13.1.0/bits/stl_relops.h
+ /usr/local/include/c++/13.1.0/bits/quoted_string.h

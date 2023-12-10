@@ -3,8 +3,41 @@
 
 server/log/CMakeFiles/log.dir/src/log.cpp.o
  /home/webserver/web_server/server/log/src/log.cpp
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/binary.h
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/dll.h
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/emitter.h
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/emitterdef.h
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/emittermanip.h
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/emitterstyle.h
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/exceptions.h
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/mark.h
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/node/convert.h
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/node/detail/impl.h
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/node/detail/iterator.h
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/node/detail/iterator_fwd.h
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/node/detail/memory.h
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/node/detail/node.h
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/node/detail/node_data.h
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/node/detail/node_iterator.h
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/node/detail/node_ref.h
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/node/emit.h
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/node/impl.h
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/node/iterator.h
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/node/node.h
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/node/parse.h
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/node/ptr.h
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/node/type.h
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/noexcept.h
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/null.h
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/ostream_wrapper.h
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/parser.h
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/stlemitter.h
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/traits.h
+ /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/yaml.h
  /home/webserver/web_server/server/ethread/inc/ethread.h
+ /home/webserver/web_server/server/fiber/inc/fiber.h
  /home/webserver/web_server/server/log/inc/log.h
+ /home/webserver/web_server/server/util/inc/singleton.h
  /usr/include/alloca.h
  /usr/include/asm-generic/errno-base.h
  /usr/include/asm-generic/errno.h
@@ -17,6 +50,7 @@ server/log/CMakeFiles/log.dir/src/log.cpp.o
  /usr/include/linux/errno.h
  /usr/include/linux/limits.h
  /usr/include/locale.h
+ /usr/include/math.h
  /usr/include/pthread.h
  /usr/include/sched.h
  /usr/include/semaphore.h
@@ -26,6 +60,7 @@ server/log/CMakeFiles/log.dir/src/log.cpp.o
  /usr/include/stdlib.h
  /usr/include/syscall.h
  /usr/include/time.h
+ /usr/include/ucontext.h
  /usr/include/unistd.h
  /usr/include/wchar.h
  /usr/include/wctype.h
@@ -39,12 +74,22 @@ server/log/CMakeFiles/log.dir/src/log.cpp.o
  /usr/include/x86_64-linux-gnu/bits/endianness.h
  /usr/include/x86_64-linux-gnu/bits/environments.h
  /usr/include/x86_64-linux-gnu/bits/errno.h
+ /usr/include/x86_64-linux-gnu/bits/flt-eval-method.h
+ /usr/include/x86_64-linux-gnu/bits/fp-fast.h
+ /usr/include/x86_64-linux-gnu/bits/fp-logb.h
  /usr/include/x86_64-linux-gnu/bits/getopt_core.h
  /usr/include/x86_64-linux-gnu/bits/getopt_posix.h
+ /usr/include/x86_64-linux-gnu/bits/indirect-return.h
+ /usr/include/x86_64-linux-gnu/bits/iscanonical.h
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h
+ /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h
  /usr/include/x86_64-linux-gnu/bits/local_lim.h
  /usr/include/x86_64-linux-gnu/bits/locale.h
  /usr/include/x86_64-linux-gnu/bits/long-double.h
+ /usr/include/x86_64-linux-gnu/bits/math-vector.h
+ /usr/include/x86_64-linux-gnu/bits/mathcalls-helper-functions.h
+ /usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h
+ /usr/include/x86_64-linux-gnu/bits/mathcalls.h
  /usr/include/x86_64-linux-gnu/bits/posix1_lim.h
  /usr/include/x86_64-linux-gnu/bits/posix2_lim.h
  /usr/include/x86_64-linux-gnu/bits/posix_opt.h
@@ -82,6 +127,7 @@ server/log/CMakeFiles/log.dir/src/log.cpp.o
  /usr/include/x86_64-linux-gnu/bits/types/locale_t.h
  /usr/include/x86_64-linux-gnu/bits/types/mbstate_t.h
  /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h
+ /usr/include/x86_64-linux-gnu/bits/types/stack_t.h
  /usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h
  /usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h
  /usr/include/x86_64-linux-gnu/bits/types/struct_sched_param.h
@@ -108,6 +154,8 @@ server/log/CMakeFiles/log.dir/src/log.cpp.o
  /usr/include/x86_64-linux-gnu/sys/syscall.h
  /usr/include/x86_64-linux-gnu/sys/time.h
  /usr/include/x86_64-linux-gnu/sys/types.h
+ /usr/include/x86_64-linux-gnu/sys/ucontext.h
+ /usr/local/include/c++/13.1.0/algorithm
  /usr/local/include/c++/13.1.0/array
  /usr/local/include/c++/13.1.0/atomic
  /usr/local/include/c++/13.1.0/backward/auto_ptr.h
@@ -142,9 +190,12 @@ server/log/CMakeFiles/log.dir/src/log.cpp.o
  /usr/local/include/c++/13.1.0/bits/fstream.tcc
  /usr/local/include/c++/13.1.0/bits/functexcept.h
  /usr/local/include/c++/13.1.0/bits/functional_hash.h
+ /usr/local/include/c++/13.1.0/bits/gslice.h
+ /usr/local/include/c++/13.1.0/bits/gslice_array.h
  /usr/local/include/c++/13.1.0/bits/hash_bytes.h
  /usr/local/include/c++/13.1.0/bits/hashtable.h
  /usr/local/include/c++/13.1.0/bits/hashtable_policy.h
+ /usr/local/include/c++/13.1.0/bits/indirect_array.h
  /usr/local/include/c++/13.1.0/bits/invoke.h
  /usr/local/include/c++/13.1.0/bits/ios_base.h
  /usr/local/include/c++/13.1.0/bits/istream.tcc
@@ -158,6 +209,7 @@ server/log/CMakeFiles/log.dir/src/log.cpp.o
  /usr/local/include/c++/13.1.0/bits/locale_facets_nonio.h
  /usr/local/include/c++/13.1.0/bits/locale_facets_nonio.tcc
  /usr/local/include/c++/13.1.0/bits/localefwd.h
+ /usr/local/include/c++/13.1.0/bits/mask_array.h
  /usr/local/include/c++/13.1.0/bits/max_size_type.h
  /usr/local/include/c++/13.1.0/bits/memory_resource.h
  /usr/local/include/c++/13.1.0/bits/memoryfwd.h
@@ -173,6 +225,7 @@ server/log/CMakeFiles/log.dir/src/log.cpp.o
  /usr/local/include/c++/13.1.0/bits/ptr_traits.h
  /usr/local/include/c++/13.1.0/bits/quoted_string.h
  /usr/local/include/c++/13.1.0/bits/range_access.h
+ /usr/local/include/c++/13.1.0/bits/ranges_algo.h
  /usr/local/include/c++/13.1.0/bits/ranges_algobase.h
  /usr/local/include/c++/13.1.0/bits/ranges_base.h
  /usr/local/include/c++/13.1.0/bits/ranges_cmp.h
@@ -184,6 +237,8 @@ server/log/CMakeFiles/log.dir/src/log.cpp.o
  /usr/local/include/c++/13.1.0/bits/shared_ptr.h
  /usr/local/include/c++/13.1.0/bits/shared_ptr_atomic.h
  /usr/local/include/c++/13.1.0/bits/shared_ptr_base.h
+ /usr/local/include/c++/13.1.0/bits/slice_array.h
+ /usr/local/include/c++/13.1.0/bits/specfun.h
  /usr/local/include/c++/13.1.0/bits/sstream.tcc
  /usr/local/include/c++/13.1.0/bits/std_abs.h
  /usr/local/include/c++/13.1.0/bits/std_function.h
@@ -201,13 +256,16 @@ server/log/CMakeFiles/log.dir/src/log.cpp.o
  /usr/local/include/c++/13.1.0/bits/stl_list.h
  /usr/local/include/c++/13.1.0/bits/stl_map.h
  /usr/local/include/c++/13.1.0/bits/stl_multimap.h
+ /usr/local/include/c++/13.1.0/bits/stl_multiset.h
  /usr/local/include/c++/13.1.0/bits/stl_pair.h
  /usr/local/include/c++/13.1.0/bits/stl_raw_storage_iter.h
  /usr/local/include/c++/13.1.0/bits/stl_relops.h
+ /usr/local/include/c++/13.1.0/bits/stl_set.h
  /usr/local/include/c++/13.1.0/bits/stl_tempbuf.h
  /usr/local/include/c++/13.1.0/bits/stl_tree.h
  /usr/local/include/c++/13.1.0/bits/stl_uninitialized.h
  /usr/local/include/c++/13.1.0/bits/stl_vector.h
+ /usr/local/include/c++/13.1.0/bits/stream_iterator.h
  /usr/local/include/c++/13.1.0/bits/streambuf.tcc
  /usr/local/include/c++/13.1.0/bits/streambuf_iterator.h
  /usr/local/include/c++/13.1.0/bits/string_view.tcc
@@ -220,11 +278,16 @@ server/log/CMakeFiles/log.dir/src/log.cpp.o
  /usr/local/include/c++/13.1.0/bits/uses_allocator.h
  /usr/local/include/c++/13.1.0/bits/uses_allocator_args.h
  /usr/local/include/c++/13.1.0/bits/utility.h
+ /usr/local/include/c++/13.1.0/bits/valarray_after.h
+ /usr/local/include/c++/13.1.0/bits/valarray_array.h
+ /usr/local/include/c++/13.1.0/bits/valarray_array.tcc
+ /usr/local/include/c++/13.1.0/bits/valarray_before.h
  /usr/local/include/c++/13.1.0/bits/vector.tcc
  /usr/local/include/c++/13.1.0/cctype
  /usr/local/include/c++/13.1.0/cerrno
  /usr/local/include/c++/13.1.0/climits
  /usr/local/include/c++/13.1.0/clocale
+ /usr/local/include/c++/13.1.0/cmath
  /usr/local/include/c++/13.1.0/compare
  /usr/local/include/c++/13.1.0/concepts
  /usr/local/include/c++/13.1.0/cstddef
@@ -252,6 +315,7 @@ server/log/CMakeFiles/log.dir/src/log.cpp.o
  /usr/local/include/c++/13.1.0/iosfwd
  /usr/local/include/c++/13.1.0/iostream
  /usr/local/include/c++/13.1.0/istream
+ /usr/local/include/c++/13.1.0/iterator
  /usr/local/include/c++/13.1.0/limits
  /usr/local/include/c++/13.1.0/list
  /usr/local/include/c++/13.1.0/locale
@@ -262,10 +326,12 @@ server/log/CMakeFiles/log.dir/src/log.cpp.o
  /usr/local/include/c++/13.1.0/numbers
  /usr/local/include/c++/13.1.0/ostream
  /usr/local/include/c++/13.1.0/pstl/execution_defs.h
+ /usr/local/include/c++/13.1.0/pstl/glue_algorithm_defs.h
  /usr/local/include/c++/13.1.0/pstl/glue_memory_defs.h
  /usr/local/include/c++/13.1.0/pstl/pstl_config.h
  /usr/local/include/c++/13.1.0/ratio
  /usr/local/include/c++/13.1.0/semaphore
+ /usr/local/include/c++/13.1.0/set
  /usr/local/include/c++/13.1.0/sstream
  /usr/local/include/c++/13.1.0/stdexcept
  /usr/local/include/c++/13.1.0/stop_token
@@ -274,11 +340,24 @@ server/log/CMakeFiles/log.dir/src/log.cpp.o
  /usr/local/include/c++/13.1.0/string_view
  /usr/local/include/c++/13.1.0/system_error
  /usr/local/include/c++/13.1.0/thread
+ /usr/local/include/c++/13.1.0/tr1/bessel_function.tcc
+ /usr/local/include/c++/13.1.0/tr1/beta_function.tcc
+ /usr/local/include/c++/13.1.0/tr1/ell_integral.tcc
+ /usr/local/include/c++/13.1.0/tr1/exp_integral.tcc
+ /usr/local/include/c++/13.1.0/tr1/gamma.tcc
+ /usr/local/include/c++/13.1.0/tr1/hypergeometric.tcc
+ /usr/local/include/c++/13.1.0/tr1/legendre_function.tcc
+ /usr/local/include/c++/13.1.0/tr1/modified_bessel_func.tcc
+ /usr/local/include/c++/13.1.0/tr1/poly_hermite.tcc
+ /usr/local/include/c++/13.1.0/tr1/poly_laguerre.tcc
+ /usr/local/include/c++/13.1.0/tr1/riemann_zeta.tcc
+ /usr/local/include/c++/13.1.0/tr1/special_function_util.h
  /usr/local/include/c++/13.1.0/tuple
  /usr/local/include/c++/13.1.0/type_traits
  /usr/local/include/c++/13.1.0/typeinfo
  /usr/local/include/c++/13.1.0/unordered_map
  /usr/local/include/c++/13.1.0/utility
+ /usr/local/include/c++/13.1.0/valarray
  /usr/local/include/c++/13.1.0/vector
  /usr/local/include/c++/13.1.0/x86_64-pc-linux-gnu/bits/atomic_word.h
  /usr/local/include/c++/13.1.0/x86_64-pc-linux-gnu/bits/basic_file.h

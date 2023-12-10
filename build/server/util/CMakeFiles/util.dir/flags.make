@@ -4,7 +4,7 @@
 # compile CXX with /usr/local/bin/g++
 CXX_DEFINES = -Dutil_EXPORTS
 
-CXX_INCLUDES = -I/home/webserver/web_server/server/log/inc -I/home/webserver/web_server/server/util/inc -I/home/webserver/web_server/server/ethread/inc
+CXX_INCLUDES = -I/home/webserver/web_server/server/log/inc -I/home/webserver/web_server/server/util/inc -I/home/webserver/web_server/server/ethread/inc -I/home/webserver/web_server/server/ecoroutine/inc -I/home/webserver/web_server/server/fiber/inc -I/home/webserver/web_server/server/ThirdModule/include
 
 CXX_FLAGS =  -O0 -w -g2 -ggdb -std=c++20 -std=gnu++20 -fPIC
 
