@@ -79,11 +79,11 @@ void test2(){
 
 }
 
-void run_in_fiber(){
+server::CoRet run_in_fiber(){
     SERVER_LOG_INFO(logger) << "begin run in fiber";
-    server::Fiber::GetThis()->YieldToHold();
+    co_yield server::HOLD;
     SERVER_LOG_INFO(logger) << "end run in fiber";
-    server::Fiber::GetThis()->YieldToReady();
+    co_return server::READY;
 }
 
 void test3(){
@@ -96,6 +96,5 @@ void test3(){
     
     fiber->swapIn();
     SERVER_LOG_INFO(logger) << "main end";
-    fiber->swapIn();
 }
 
