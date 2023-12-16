@@ -1,6 +1,7 @@
 #ifndef SERVER_LOG_H
 #define SERVER_LOG_H
 
+#include <functional>
 #include <string>
 #include <vector>
 #include <fstream>
@@ -17,12 +18,18 @@
 namespace server{
 
 extern thread_local int t_thread_id;
+extern thread_local std::string t_thread_name;
 
 #define SERVER_LOG_LEVEL(logger, level)  \
     server::LogEventWrap(server::LogEvent::ptr(\
         new server::LogEvent(logger, level, \
         __FILE__, __LINE__, \
-        0, server::t_thread_id, server::Fiber::GetCurFiberId(), time(0))))
+        0, server::t_thread_id, server::Fiber::GetCurFiberId(), \
+        time(0), server::t_thread_name.data()\
+        )))
+
+#define SERVER_LOGGER_SYSTEM server::LogManager::GetInstance()->getLogger("system")
+#define SERVER_LOGGER(name) server::LogManager::GetInstance()->getLogger(name)
 
 #define SERVER_LOG_DEBUG(logger) SERVER_LOG_LEVEL(logger, server::LogLevel::DEBUG)
 #define SERVER_LOG_INFO(logger) SERVER_LOG_LEVEL(logger, server::LogLevel::INFO)
@@ -235,10 +242,9 @@ private:
     char buffer[1024];
 };
 
-
-class LogManger: public Singleton<LogManger>{
+class LogManager: public Singleton<LogManager>{
 public:
-    LogManger();
+    LogManager();
     Logger::ptr getLogger(const std::string &name);
     void init();
     int initFromYaml(const std::string& file_name);
@@ -250,9 +256,6 @@ private:
 
 } // namespace server
 
-
-#define SERVER_LOGGER_SYSTEM server::LogManger::GetInstance()->getLogger("system")
-#define SERVER_LOGGER(name) server::LogManger::GetInstance()->getLogger(name)
 
 template<typename ...Args>
 inline static server::Logger::ptr CreateFileLogger(const std::string& file_name, Args ...args){

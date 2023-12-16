@@ -1,4 +1,5 @@
 #include "log.h"
+#include "singleton.h"
 #include "yaml-cpp/exceptions.h"
 #include "yaml-cpp/node/parse.h"
 #include "yaml-cpp/yaml.h"
@@ -92,6 +93,17 @@ public:
     }
 };
 
+class ThreadNameFormatItem: public LogFormatter::FormatItem{
+public:
+    ThreadNameFormatItem(const std::string& = "") {}
+    void format(std::ostream &os, Logger::ptr, LogLevel::Level level, const LogEvent::ptr &event) override{
+        os << event->getThreadName();
+    }
+    inline void format(FILE* file, std::shared_ptr<Logger> logger, const LogEvent::ptr &event) override{
+        fprintf(file, "%s", event->getThreadName());
+    }
+};
+
 class FiberIdFormatItem: public LogFormatter::FormatItem{
 public:
     FiberIdFormatItem(const std::string& = "") {}
@@ -158,7 +170,13 @@ public:
     }
 };
 
-static std::map<std::string, std::function<LogFormatter::FormatItem::ptr(const std::string &str)>> s_format_items = {
+typedef std::map<std::string, std::function<LogFormatter::FormatItem::ptr(const std::string &str)>> format_map_t;
+
+class SingletonMap{
+public:
+    static format_map_t& GetInstance()
+    {
+        static format_map_t instance = { 
     #define XX(str, C) \
         {#str, [](const std::string &fmt){return LogFormatter::FormatItem::ptr(new C(fmt));}}
         XX(m, MessageFormatItem),       // m：消息
@@ -166,6 +184,7 @@ static std::map<std::string, std::function<LogFormatter::FormatItem::ptr(const s
         XX(r, ElapseFormatItem),        // r：累计毫秒数
         XX(c, NameFormatItem),          // c：日志名称
         XX(t, ThreadIdFormatItem),      // t：线程id
+        XX(N, ThreadNameFormatItem),    // t：线程id
         XX(n, NewLineFormatItem),       // n：换行
         XX(d, DateTimeFormatItem),      // d：时间
         XX(f, FileNameFormatItem),      // f：文件名
@@ -173,6 +192,17 @@ static std::map<std::string, std::function<LogFormatter::FormatItem::ptr(const s
         XX(T, TabLineFormatItem),       // T：Tab
         XX(F, FiberIdFormatItem)        // F：协程id
     #undef XX
+        };
+        return instance;
+    }
+
+    SingletonMap(format_map_t&&) = delete;
+    SingletonMap(const format_map_t&) = delete;
+    void operator= (const format_map_t&) = delete;
+
+protected:
+    SingletonMap() = default;
+    virtual ~SingletonMap() = default;
 };
 
 LogEvent::LogEvent(std::shared_ptr<Logger> logger, LogLevel::Level level
@@ -360,6 +390,7 @@ void LogFormatter::init() {
         }
         else{
             auto tstr = std::get<0>(i);
+            auto s_format_items = SingletonMap::GetInstance();
             auto it = s_format_items.find(tstr);
             if (it == s_format_items.end()){
                 m_items.emplace_back(new StringFormatItem("<<error format %" + tstr + ">>"));
@@ -394,7 +425,7 @@ std::FILE* LogFormatter::format(FILE *file, std::shared_ptr<Logger> logger, LogE
 }
 
 
-LogManger::LogManger()
+LogManager::LogManager()
 {
     if (int res = initFromYaml("log.yml")){
         std::cout << "log file error "<< res << std::endl;
@@ -404,7 +435,7 @@ LogManger::LogManger()
         std::cout << "log file OK" << std::endl;
 }
 
-Logger::ptr LogManger::getLogger(const std::string &name){
+Logger::ptr LogManager::getLogger(const std::string &name){
     LockGuard lock(m_mutex);
     auto it = m_loggers.find(name);
     if (it != m_loggers.end())
@@ -414,14 +445,15 @@ Logger::ptr LogManger::getLogger(const std::string &name){
     return logger;
 }
 
-void LogManger::init(){
+void LogManager::init(){
     server::Logger::ptr log = std::make_shared<server::Logger>("system");
     log->addAppender(std::shared_ptr<server::LogAppender>(new server::StdoutLogAppender)); 
     m_loggers["system"] = log;
 }
 
-int LogManger::initFromYaml(const std::string& file_name){
+int LogManager::initFromYaml(const std::string& file_name){
     try{
+        auto s_format_items = SingletonMap::GetInstance();
         auto logs = YAML::LoadFile(file_name); 
         for(auto logitem: logs){
             std::string logname = logitem.first.as<std::string>();

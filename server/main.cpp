@@ -1,5 +1,6 @@
 #include "ethread.h"
 #include "fiber.h"
+#include "scheduler.h"
 #include <functional>
 #include <log.h>
 #include <iostream>
@@ -13,14 +14,22 @@
 
 using namespace std;
 
+auto logger = SERVER_LOGGER_SYSTEM;
 void test1();
 void test2();
 void test3();
+void fib_func(){
+    auto fib = server::Fiber::GetThis();
+    SERVER_LOG_INFO(logger) << "before yield 1";
+    fib->YieldToHold();
+    SERVER_LOG_INFO(logger) << "before yield 2";
+    fib->YieldToReady();
+    SERVER_LOG_INFO(logger) << "after yield 2";
+}
 
-auto logger = SERVER_LOGGER_SYSTEM;
 int main(){
     SERVER_LOG_INFO(logger) << "main begin-1";
-    test3();
+    test2();
     SERVER_LOG_INFO(logger) << "main end-1";
     return 0;
 }
@@ -66,16 +75,11 @@ void test1(){
 }
 
 void test2(){
-    auto log = SERVER_LOGGER_SYSTEM;
-    
-    Timer counter;
-    counter.start_count();
-    for(int i = 0; i < 1; ++i){
-        SERVER_LOG_INFO(log) << "test";
-    }
-
-    counter.end_count();
-    cout << counter.get_duration() << endl;
+    server::Scheduler sc(5 ,0);
+    server::Fiber::ptr fib(new server::Fiber(fib_func));
+    sc.start();
+    sc.schedule(fib, 1);
+    sc.stop();
 
 }
 

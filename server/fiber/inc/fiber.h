@@ -16,7 +16,7 @@ namespace server{
 class Fiber_1;
 class Fiber_;
 
-typedef Fiber_ Fiber;
+typedef Fiber_1 Fiber;
 
 enum State{
     INIT,       // 初始化状态
@@ -40,6 +40,7 @@ public:
     void swapOut();                             // 把当前协程切换到后台
 
     uint64_t getId(){return m_id;}
+    State GetState(){return m_state;}
 public:
     static void SetThis(Fiber_1 *f);            // 设置当前协程
     static Fiber_1::ptr GetThis();              // 返回当前执行的协程

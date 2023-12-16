@@ -204,7 +204,7 @@ private:
     int m_id;                       //
     std::thread m_thread;           //
     std::function<void()> m_cb;     //
-    std::string m_name;             // 
+    std::string m_name = "None";    // 线程名
 
     Semaphore m_semaphore;          // 用于等待启动的信号量
 };

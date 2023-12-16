@@ -63,6 +63,8 @@ EThread::EThread(std::function<void()> cb, const std::string& name)
     if (name.empty()){
         m_name = "UNKNOW";
     }
+    t_thread_name = m_name;
+    SERVER_LOG_INFO(g_logger) << "create ethred:" << m_name;
     m_thread = std::thread(&EThread::run, this);
     if(!m_thread.joinable()){
         SERVER_LOG_ERROR(g_logger) << "create thread error";
@@ -91,7 +93,7 @@ void* EThread::run(void *arg){
     cb.swap(thread->m_cb);
 
     thread->m_semaphore.notify();       // 初始化完成 主线程返回
-    cb();
+    cb();                               // 执行任务
     return 0;
 }
 

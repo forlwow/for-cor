@@ -64,10 +64,10 @@ omap ic <Plug>(coc-classobj-i)
 xmap ic <Plug>(coc-classobj-i)
 omap if <Plug>(coc-funcobj-i)
 xmap if <Plug>(coc-funcobj-i)
-snoremap <silent> <BS> c
-snoremap <silent> <Del> c
-snoremap <silent> <C-H> c
 snoremap <C-R> "_c
+snoremap <silent> <C-H> c
+snoremap <silent> <Del> c
+snoremap <silent> <BS> c
 xnoremap <silent> <Plug>NetrwBrowseXVis :call netrw#BrowseXVis()
 nnoremap <silent> <Plug>NetrwBrowseX :call netrw#BrowseX(netrw#GX(),netrw#CheckIfRemote(netrw#GX()))
 onoremap <silent> <Plug>(coc-classobj-a) :call CocAction('selectSymbolRange', v:false, '', ['Interface', 'Struct', 'Class'])
@@ -149,6 +149,7 @@ set suffixes=.bak,~,.swp,.o,.info,.aux,.log,.dvi,.bbl,.blg,.brf,.cb,.ind,.idx,.i
 set tabline=%!lightline#tabline()
 set tabstop=4
 set updatetime=300
+set window=37
 set nowritebackup
 let s:so_save = &g:so | let s:siso_save = &g:siso | setg so=0 siso=0 | setl so=-1 siso=-1
 let v:this_session=expand("<sfile>:p")
@@ -163,24 +164,19 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +100 fiber/inc/fiber.h
-badd +1 fiber/src/fiber.cpp
-badd +60 util/inc/range.h
-badd +99 main.cpp
-badd +484 /usr/include/features.h
+badd +19 ./fiber/inc/scheduler.h
+badd +9 fiber/src/scheduler.cpp
 argglobal
 %argdel
-edit fiber/src/fiber.cpp
+$argadd ./fiber/inc/scheduler.h
+$argadd fiber/src/scheduler.cpp
+edit fiber/src/scheduler.cpp
 let s:save_splitbelow = &splitbelow
 let s:save_splitright = &splitright
 set splitbelow splitright
 wincmd _ | wincmd |
 vsplit
 1wincmd h
-wincmd _ | wincmd |
-split
-1wincmd k
-wincmd w
 wincmd w
 let &splitbelow = s:save_splitbelow
 let &splitright = s:save_splitright
@@ -191,13 +187,11 @@ set winminheight=0
 set winheight=1
 set winminwidth=0
 set winwidth=1
-exe '1resize ' . ((&lines * 18 + 19) / 38)
 exe 'vert 1resize ' . ((&columns * 78 + 78) / 156)
-exe '2resize ' . ((&lines * 17 + 19) / 38)
-exe 'vert 2resize ' . ((&columns * 78 + 78) / 156)
-exe 'vert 3resize ' . ((&columns * 77 + 78) / 156)
+exe 'vert 2resize ' . ((&columns * 77 + 78) / 156)
 argglobal
-balt util/inc/range.h
+if bufexists(fnamemodify("fiber/src/scheduler.cpp", ":p")) | buffer fiber/src/scheduler.cpp | else | edit fiber/src/scheduler.cpp | endif
+balt ./fiber/inc/scheduler.h
 setlocal keymap=
 setlocal noarabic
 setlocal autoindent
@@ -330,158 +324,16 @@ setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 123 - ((8 * winheight(0) + 9) / 18)
+let s:l = 9 - ((8 * winheight(0) + 18) / 36)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 123
-normal! 05|
-wincmd w
-argglobal
-if bufexists(fnamemodify("fiber/src/fiber.cpp", ":p")) | buffer fiber/src/fiber.cpp | else | edit fiber/src/fiber.cpp | endif
-balt util/inc/range.h
-setlocal keymap=
-setlocal noarabic
-setlocal autoindent
-setlocal backupcopy=
-setlocal balloonexpr=
-setlocal nobinary
-setlocal nobreakindent
-setlocal breakindentopt=
-setlocal bufhidden=
-setlocal buflisted
-setlocal buftype=
-setlocal cindent
-setlocal cinkeys=0{,0},0),0],:,0#,!^F,o,O,e
-setlocal cinoptions=
-setlocal cinscopedecls=public,protected,private
-setlocal cinwords=if,else,while,do,for,switch
-setlocal colorcolumn=
-setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,:///,://
-setlocal commentstring=/*%s*/
-setlocal complete=.,w,b,u,t,i
-setlocal concealcursor=inc
-setlocal conceallevel=2
-setlocal completefunc=
-setlocal nocopyindent
-setlocal cryptmethod=
-setlocal nocursorbind
-setlocal nocursorcolumn
-setlocal nocursorline
-setlocal cursorlineopt=both
-setlocal define=^\\s*#\\s*define
-setlocal dictionary=
-setlocal nodiff
-setlocal equalprg=
-setlocal errorformat=
-setlocal expandtab
-if &filetype != 'cpp'
-setlocal filetype=cpp
-endif
-setlocal fillchars=
-setlocal fixendofline
-setlocal foldcolumn=0
-setlocal foldenable
-setlocal foldexpr=0
-setlocal foldignore=#
-setlocal foldlevel=0
-setlocal foldmarker={{{,}}}
-setlocal foldmethod=manual
-setlocal foldminlines=1
-setlocal foldnestmax=20
-setlocal foldtext=foldtext()
-setlocal formatexpr=
-setlocal formatoptions=croql
-setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
-setlocal formatprg=
-setlocal grepprg=
-setlocal iminsert=0
-setlocal imsearch=-1
-setlocal include=^\\s*#\\s*include
-setlocal includeexpr=
-setlocal indentexpr=
-setlocal indentkeys=0{,0},0),0],:,0#,!^F,o,O,e
-setlocal noinfercase
-setlocal iskeyword=@,48-57,_,192-255
-setlocal keywordprg=
-setlocal nolinebreak
-setlocal nolisp
-setlocal lispwords=
-setlocal nolist
-setlocal listchars=
-setlocal makeencoding=
-setlocal makeprg=
-setlocal matchpairs=(:),{:},[:]
-setlocal nomodeline
-setlocal modifiable
-setlocal nrformats=bin,octal,hex
-set number
-setlocal number
-setlocal numberwidth=4
-setlocal omnifunc=ccomplete#Complete
-setlocal path=
-setlocal nopreserveindent
-setlocal nopreviewwindow
-setlocal quoteescape=\\
-setlocal noreadonly
-setlocal norelativenumber
-setlocal norightleft
-setlocal rightleftcmd=search
-setlocal noscrollbind
-setlocal scrolloff=-1
-setlocal shiftwidth=4
-setlocal noshortname
-setlocal showbreak=
-setlocal sidescrolloff=-1
-set signcolumn=yes
-setlocal signcolumn=yes
-setlocal nosmartindent
-setlocal nosmoothscroll
-setlocal softtabstop=0
-setlocal nospell
-setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
-setlocal spellfile=
-setlocal spelllang=en
-setlocal spelloptions=
-setlocal statusline=%{lightline#link()}%#LightlineLeft_inactive_0#%(\ %t\ %)%#LightlineLeft_inactive_0_1#%#LightlineMiddle_inactive#%=%#LightlineRight_inactive_1_2#%#LightlineRight_inactive_1#%(\ %3p%%\ %)%#LightlineRight_inactive_0_1#%#LightlineRight_inactive_0#%(\ %3l:%-2c\ %)
-setlocal suffixesadd=
-setlocal swapfile
-setlocal synmaxcol=3000
-if &syntax != 'cpp'
-setlocal syntax=cpp
-endif
-setlocal tabstop=4
-setlocal tagcase=
-setlocal tagfunc=
-setlocal tags=
-setlocal termwinkey=
-setlocal termwinscroll=10000
-setlocal termwinsize=
-setlocal textwidth=0
-setlocal thesaurus=
-setlocal thesaurusfunc=
-setlocal noundofile
-setlocal undolevels=-123456
-setlocal varsofttabstop=
-setlocal vartabstop=
-setlocal virtualedit=
-setlocal wincolor=
-setlocal nowinfixheight
-setlocal nowinfixwidth
-setlocal wrap
-setlocal wrapmargin=0
-silent! normal! zE
-let &fdl = &fdl
-let s:l = 205 - ((7 * winheight(0) + 8) / 17)
-if s:l < 1 | let s:l = 1 | endif
-keepjumps exe s:l
-normal! zt
-keepjumps 205
+keepjumps 9
 normal! 0
 wincmd w
 argglobal
-if bufexists(fnamemodify("fiber/inc/fiber.h", ":p")) | buffer fiber/inc/fiber.h | else | edit fiber/inc/fiber.h | endif
-balt fiber/src/fiber.cpp
+if bufexists(fnamemodify("./fiber/inc/scheduler.h", ":p")) | buffer ./fiber/inc/scheduler.h | else | edit ./fiber/inc/scheduler.h | endif
+balt fiber/src/scheduler.cpp
 setlocal keymap=
 setlocal noarabic
 setlocal autoindent
@@ -614,18 +466,15 @@ setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 90 - ((30 * winheight(0) + 18) / 36)
+let s:l = 19 - ((18 * winheight(0) + 18) / 36)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 90
-normal! 07|
+keepjumps 19
+normal! 0
 wincmd w
-exe '1resize ' . ((&lines * 18 + 19) / 38)
 exe 'vert 1resize ' . ((&columns * 78 + 78) / 156)
-exe '2resize ' . ((&lines * 17 + 19) / 38)
-exe 'vert 2resize ' . ((&columns * 78 + 78) / 156)
-exe 'vert 3resize ' . ((&columns * 77 + 78) / 156)
+exe 'vert 2resize ' . ((&columns * 77 + 78) / 156)
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0
   silent exe 'bwipe ' . s:wipebuf
@@ -640,6 +489,7 @@ if filereadable(s:sx)
   exe "source " . fnameescape(s:sx)
 endif
 let &g:so = s:so_save | let &g:siso = s:siso_save
+nohlsearch
 doautoall SessionLoadPost
 unlet SessionLoad
 " vim: set ft=vim :
