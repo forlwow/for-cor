@@ -18,14 +18,14 @@
 namespace server{
 
 extern thread_local int t_thread_id;
-extern thread_local std::string t_thread_name;
+extern thread_local const char* t_thread_name;
 
 #define SERVER_LOG_LEVEL(logger, level)  \
     server::LogEventWrap(server::LogEvent::ptr(\
         new server::LogEvent(logger, level, \
         __FILE__, __LINE__, \
         0, server::t_thread_id, server::Fiber::GetCurFiberId(), \
-        time(0), server::t_thread_name.data()\
+        time(0), server::t_thread_name\
         )))
 
 #define SERVER_LOGGER_SYSTEM server::LogManager::GetInstance()->getLogger("system")
@@ -256,7 +256,7 @@ private:
 
 } // namespace server
 
-
+/*
 template<typename ...Args>
 inline static server::Logger::ptr CreateFileLogger(const std::string& file_name, Args ...args){
     server::Logger::ptr log = std::make_shared<server::Logger>(args...);
@@ -270,4 +270,5 @@ inline static server::Logger::ptr CreateStdLogger(Args ...args){
     log->addAppender(std::shared_ptr<server::LogAppender>(new server::StdoutLogAppender)); 
     return log;
 }
+*/
 #endif //SERVER_LOG_H

@@ -16,10 +16,10 @@
             "program": "${workspaceRoot}/bin/web_server",
             "args": [],
             // 是否在程序运行之初，即main函数第一行进入调试状态
-            "stopAtEntry": false,
+            "stopAtEntry": true,
             // 执行目录指定为该变量时，会根据CMake目标程序所在目录设置当前执行目录
             // "cwd": "${command:cmake.launchTargetDirectory}",
-            "cwd": "${fileDirname}",
+            "cwd": "${workspaceRoot}",
             "environment": [],
             "externalConsole": false,
             "preLaunchTask": "Build",
@@ -30,6 +30,11 @@
                      "description": "为 gdb 启用整齐打印",
                     "text": "-enable-pretty-printing",
                     "ignoreFailures": true
+                },
+                {
+                    "description": "防止 gdb 打开标准库函数",
+                    "text": "-interpreter-exec console \"skip -gfi **/bits/*.h\"",
+                    "ignoreFailures": false
                 }
             ]
         }

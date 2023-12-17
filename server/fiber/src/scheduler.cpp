@@ -4,10 +4,10 @@
 #include "log.h"
 #include <cassert>
 #include <cstddef>
+#include <cstdio>
 #include <functional>
 #include <sched.h>
 #include <string>
-#include <thread>
 
 namespace server{
 
@@ -16,7 +16,7 @@ static server::Logger::ptr s_logger = SERVER_LOGGER_SYSTEM;
 static thread_local Scheduler* t_scheduler = nullptr;
 static thread_local Fiber* t_fiber = nullptr;
 extern thread_local int t_thread_id;
-extern thread_local std::string t_thread_name;
+extern thread_local const char* t_thread_name;
 
 Scheduler::Scheduler(size_t max_, bool use_caller, const std::string& name)
     : m_name(name)
@@ -65,7 +65,7 @@ void Scheduler::start(){
 
     m_threads.resize(m_threadCount);
     for(size_t i = 0; i < m_threadCount; ++i){
-        m_threads[i].reset(new EThread(std::bind(&Scheduler::run, this), m_name + "_" + std::to_string(i)));
+        m_threads[i].reset(new EThread(std::bind(&Scheduler::run, this), "Sch Thread_" + std::to_string(i)));
         m_threadIds.push_back(m_threads[i]->getId());
     }
     SERVER_LOG_INFO(s_logger) << "scheduler start ok";
@@ -74,7 +74,7 @@ void Scheduler::start(){
 void Scheduler::stop(){
     m_autoStop = true;
     if(m_rootFiber
-            && m_threadCount == 0
+            && m_threadCount == 0 && m_fibers.size() == 0
             ){
         SERVER_LOG_INFO(s_logger) << "Sch Stopped";
         m_stopping = true;
@@ -107,14 +107,14 @@ void Scheduler::run(){
     Fiber::ptr cb_fiber;
 
     FiberAndThread ft;
-    while(m_stopping) {
+    while(!m_stopping) {
         ft.reset();
         bool tickle_me = false;
         {
             LockGuard lock(m_mutex);
             auto it = m_fibers.begin();
             while(it != m_fibers.end()){
-                if(it->threadid != -1 && it->threadid != t_thread_id){
+                if(it->threadid != -2 && it->threadid != -1 && it->threadid != t_thread_id){       // 用于判断协程是否应该被当前线程执行
                     ++it;
                     tickle_me = true;
                     continue;
@@ -124,7 +124,7 @@ void Scheduler::run(){
                     continue;
                 }
                 ft = *it;
-                m_fibers.erase(it);
+                m_fibers.erase(it++);
                 break;
             }
         }
@@ -133,7 +133,7 @@ void Scheduler::run(){
         }
         if(ft.fiber && ft.fiber->GetState() != TERM){
             ft.fiber->swapIn();
-            if(ft.fiber->GetState() == READY){
+            if(ft.fiber->GetState() == READY || ft.fiber->GetState() == HOLD){
                 schedule(ft.fiber, ft.threadid);
             }
             ft.reset();
@@ -153,17 +153,19 @@ void Scheduler::run(){
             }
         }
         else{
-            if(idle_fiber->GetState() == TERM)
-                break;
+            // if(idle_fiber->GetState() == TERM)
+            //     break;
             ++m_idleThreadCount;
-            idle_fiber->swapIn();
+            // idle_fiber->swapIn();
              
         }
+        if(m_autoStop)
+            m_stopping = m_fibers.size() == 0;
     }
 }
 
 void Scheduler::tickle(){
-    SERVER_LOG_INFO(s_logger) << "tickled";
+//     SERVER_LOG_INFO(s_logger) << "tickled";
 }
 
 bool Scheduler::stopping(){

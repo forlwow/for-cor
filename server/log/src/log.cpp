@@ -1,5 +1,4 @@
 #include "log.h"
-#include "singleton.h"
 #include "yaml-cpp/exceptions.h"
 #include "yaml-cpp/node/parse.h"
 #include "yaml-cpp/yaml.h"
@@ -14,6 +13,8 @@
 #include <utility>
 
 namespace server {
+
+const char* TabFormatString = "  ";
 
 // FormatItem派生类 负责格式化不同对象
 class MessageFormatItem: public LogFormatter::FormatItem{
@@ -100,7 +101,7 @@ public:
         os << event->getThreadName();
     }
     inline void format(FILE* file, std::shared_ptr<Logger> logger, const LogEvent::ptr &event) override{
-        fprintf(file, "%s", event->getThreadName());
+        fprintf(file, "%-13s", event->getThreadName());
     }
 };
 
@@ -163,10 +164,10 @@ class TabLineFormatItem: public LogFormatter::FormatItem{
 public:
     TabLineFormatItem(const std::string& = "") {} 
     void format(std::ostream &os, Logger::ptr, LogLevel::Level level, const LogEvent::ptr &event) override{
-        os << "  ";
+        os << TabFormatString;
     }
     inline void format(FILE* file, Logger::ptr, const LogEvent::ptr &event) override{
-        fputs("  ", file);
+        fputs(TabFormatString, file);
     }
 };
 

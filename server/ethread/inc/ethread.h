@@ -15,7 +15,7 @@ namespace server {
 class EThread;
 
 extern thread_local EThread* t_thread;
-extern thread_local std::string t_thread_name;
+extern thread_local const char* t_thread_name;
 extern thread_local int t_thread_id;
 
 
@@ -190,7 +190,7 @@ public:
 
     void join();
     static EThread* GetThis();
-    static const std::string& GetName();
+    static const char* GetName();
     static void SetName(const std::string& name);
 
 private:

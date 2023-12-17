@@ -4,6 +4,7 @@
 #include <coroutine>
 #include <cstddef>
 #include <cstdint>
+#include <cstdio>
 #include <cstdlib>
 #include <atomic>
 #include <functional>
@@ -47,7 +48,6 @@ Fiber_1::Fiber_1(std::function<void()> cb, size_t stacksize)
 {
     ++s_fiber_count;
     m_stacksize = stacksize ? stacksize: 1024 * 1024;
-
     // 分配栈大小
     m_stack = StackAllocator::Alloc(m_stacksize);
     if(getcontext(&m_ctx)){
@@ -139,6 +139,12 @@ void Fiber_1::YieldToHold(){
     cur->swapOut();
 }
 
+void Fiber_1::YieldReturn(){
+    Fiber_1::ptr cur = GetThis();
+    cur->m_state = TERM;
+    cur->swapOut();
+}
+
 uint64_t Fiber_1::TotalFibers(){
     return s_fiber_count;
 }
@@ -161,7 +167,12 @@ void Fiber_1::MainFunc(){
         cur->m_state = EXCEPT;
         SERVER_LOG_ERROR(SERVER_LOGGER_SYSTEM) << "fiber main err";
     }
-    cur.reset();
+        // cur.reset();
+
+        auto raw_ptr = cur.get();
+        cur.reset();
+        raw_ptr->swapOut();
+
 }
 
 

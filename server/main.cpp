@@ -37,26 +37,21 @@ int main(){
 
 
 void test1(){
-    auto log = CreateFileLogger("log.txt");
-    SERVER_LOG_INFO(log) << "test begin";
+    SERVER_LOG_INFO(logger) << "test begin";
     int count = 0;
     auto fun1 = std::function<void()>(
         [&](){
-            int i = 2e4;
+            int i = 4;
             while(i--){
-                SERVER_LOG_INFO(log) 
+                SERVER_LOG_INFO(logger) 
                 << "name:" 
                 << server::EThread::GetName() << " "
-                << "this.name: " 
-                << server::EThread::GetThis()->getName() << " "
                 << "id: " 
                 << syscall(SYS_gettid) << " "
-                << "this.id: " 
-                << server::EThread::GetThis()->getId();
+                ;
             }
             }
         );
-
     Timer counter;
     counter.start_count();
 
@@ -69,16 +64,18 @@ void test1(){
     }
     counter.end_count();
 
-    SERVER_LOG_INFO(log) << "test end " << count;
+    SERVER_LOG_INFO(logger) << "test end " << count;
 
     cout << counter.get_duration() << endl;
 }
 
 void test2(){
-    server::Scheduler sc(5 ,0);
+    server::Fiber::GetThis();
+    server::Scheduler sc(2);
     server::Fiber::ptr fib(new server::Fiber(fib_func));
+    // auto fib = fib_func;
     sc.start();
-    sc.schedule(fib, 1);
+    sc.schedule(fib);
     sc.stop();
 
 }

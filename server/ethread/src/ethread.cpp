@@ -13,10 +13,10 @@
 
 namespace server {
 
-static Logger::ptr g_logger = CreateStdLogger("system");
+static Logger::ptr g_logger = SERVER_LOGGER_SYSTEM;
 
 thread_local EThread* t_thread = nullptr;
-thread_local std::string t_thread_name = "UNKNOW";
+thread_local const char* t_thread_name = "Main Thread";
 thread_local int t_thread_id = syscall(SYS_gettid);
 
 Semaphore::Semaphore(uint32_t count){
@@ -46,7 +46,7 @@ EThread* EThread::GetThis(){
     return t_thread;
 }
 
-const std::string& EThread::GetName(){
+const char* EThread::GetName(){
     return t_thread_name;
 }
 
@@ -54,7 +54,7 @@ void EThread::SetName(const std::string &name){
     if (t_thread){
         t_thread->m_name = name;
     }
-    t_thread_name = name;
+    t_thread_name = name.data();
 }
 
 EThread::EThread(std::function<void()> cb, const std::string& name)
@@ -63,8 +63,6 @@ EThread::EThread(std::function<void()> cb, const std::string& name)
     if (name.empty()){
         m_name = "UNKNOW";
     }
-    t_thread_name = m_name;
-    SERVER_LOG_INFO(g_logger) << "create ethred:" << m_name;
     m_thread = std::thread(&EThread::run, this);
     if(!m_thread.joinable()){
         SERVER_LOG_ERROR(g_logger) << "create thread error";
@@ -72,18 +70,20 @@ EThread::EThread(std::function<void()> cb, const std::string& name)
     }
 
     m_semaphore.wait();     // 保证在线程构造完毕开始运行后才完成构造
+    SERVER_LOG_INFO(g_logger) << "create ethred:" << m_name;
 }
 
 EThread::~EThread(){
     if(m_thread.joinable())
         m_thread.join();
+    SERVER_LOG_INFO(g_logger) << m_name << " delete";
 }
 
 void* EThread::run(void *arg){
     EThread* thread = (EThread*)arg;
 
     t_thread = thread;
-    t_thread_name = thread->m_name;
+    t_thread_name = thread->m_name.data();
     t_thread_id = syscall(SYS_gettid);
     pthread_setname_np(pthread_self(), thread->m_name.substr(0, 15).c_str());
 
@@ -94,6 +94,7 @@ void* EThread::run(void *arg){
 
     thread->m_semaphore.notify();       // 初始化完成 主线程返回
     cb();                               // 执行任务
+    SERVER_LOG_INFO(g_logger) << t_thread_name << " finish thread";
     return 0;
 }
 

@@ -46,6 +46,7 @@ public:
     static Fiber_1::ptr GetThis();              // 返回当前执行的协程
     static void YieldToReady();                 // 协程切换到后台，并设置为Ready状态
     static void YieldToHold();                  // 协程切换到后台，并设置为Hold状态
+    static void YieldReturn();                  // 结束当前协程
     static uint64_t TotalFibers();              // 返回总协程数
     static uint64_t GetCurFiberId();            // 获取当前协程号
     static void MainFunc();

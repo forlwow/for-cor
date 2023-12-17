@@ -25,7 +25,9 @@ public:
     virtual void stop();
 
     template<typename T>
-    void schedule(T fc, int thread){
+    void schedule(T fc, int thread = -2){
+        // thread = -1：主协程
+        // thread = -2：未指定对应线程
         bool need_tickle = false;
         {
             LockGuard lock(m_mutex);
@@ -89,7 +91,7 @@ private:
     std::vector<EThread::ptr> m_threads;
     std::list<FiberAndThread> m_fibers;
     Fiber::ptr m_rootFiber;
-    std::string m_name;
+    std::string m_name = "Scheduler";
     
 protected:
     std::vector<int> m_threadIds;
