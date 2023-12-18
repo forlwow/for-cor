@@ -36,6 +36,8 @@ public:
     ~Fiber_1();
 
     void reset(std::function<void()> cb);       // 重置协程函数和状态[INIT, TERM]
+    void reset_thread();                        // 当切换线程时需要调用
+    bool set_return_to(Fiber_1::ptr to_);
     void swapIn();                              // 切换到当前协程执行
     void swapOut();                             // 把当前协程切换到后台
 

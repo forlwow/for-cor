@@ -98,6 +98,18 @@ void Fiber_1::reset(std::function<void()> cb){
     makecontext(&m_ctx, &Fiber_1::MainFunc, 0);
     m_state = INIT;
 }
+
+void Fiber_1::reset_thread(){
+    m_ctx.uc_link = &t_threadIber_1->m_ctx;
+}
+
+bool Fiber_1::set_return_to(Fiber_1::ptr to_){
+    if(!to_)
+        return false;
+    m_ctx.uc_link = &to_->m_ctx;
+    return true;
+}
+
 void Fiber_1::swapIn(){
     assert(m_state != EXEC);
     SetThis(this);
@@ -107,6 +119,7 @@ void Fiber_1::swapIn(){
     }
 
 }
+
 void Fiber_1::swapOut(){
     SetThis(t_threadIber_1.get()) ;
     if(swapcontext(&m_ctx, &t_threadIber_1->m_ctx))
@@ -168,11 +181,9 @@ void Fiber_1::MainFunc(){
         SERVER_LOG_ERROR(SERVER_LOGGER_SYSTEM) << "fiber main err";
     }
         // cur.reset();
-
         auto raw_ptr = cur.get();
         cur.reset();
         raw_ptr->swapOut();
-
 }
 
 

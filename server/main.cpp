@@ -1,6 +1,8 @@
 #include "ethread.h"
 #include "fiber.h"
+#include "range.h"
 #include "scheduler.h"
+#include <cstdio>
 #include <functional>
 #include <log.h>
 #include <iostream>
@@ -15,22 +17,23 @@
 using namespace std;
 
 auto logger = SERVER_LOGGER_SYSTEM;
+auto slog = SERVER_LOGGER("system");
 void test1();
 void test2();
 void test3();
 void fib_func(){
     auto fib = server::Fiber::GetThis();
-    SERVER_LOG_INFO(logger) << "before yield 1";
+    SERVER_LOG_INFO(slog) << "before yield 1";
     fib->YieldToHold();
-    SERVER_LOG_INFO(logger) << "before yield 2";
+    SERVER_LOG_INFO(slog) << "before yield 2";
     fib->YieldToReady();
-    SERVER_LOG_INFO(logger) << "after yield 2";
+    SERVER_LOG_INFO(slog) << "after yield 2";
 }
 
 int main(){
-    SERVER_LOG_INFO(logger) << "main begin-1";
+    SERVER_LOG_INFO(slog) << "main begin-1";
     test2();
-    SERVER_LOG_INFO(logger) << "main end-1";
+    SERVER_LOG_INFO(slog) << "main end-1";
     return 0;
 }
 
@@ -70,14 +73,19 @@ void test1(){
 }
 
 void test2(){
+    Timer counter;
     server::Fiber::GetThis();
-    server::Scheduler sc(2);
-    server::Fiber::ptr fib(new server::Fiber(fib_func));
+    server::Scheduler sc(4);
     // auto fib = fib_func;
+    for(auto i : range<int>(1e1)){
+        server::Fiber::ptr fib(new server::Fiber(fib_func));
+        sc.schedule(fib);
+    }
+    counter.start_count();
     sc.start();
-    sc.schedule(fib);
     sc.stop();
-
+    counter.end_count();
+    cout << counter.get_duration() << endl;
 }
 
 server::CoRet run_in_fiber(){

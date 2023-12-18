@@ -90,7 +90,7 @@ public:
         os << event->getThreadId();
     }
     inline void format(FILE* file, std::shared_ptr<Logger> logger, const LogEvent::ptr &event) override{
-        fprintf(file, "%d", event->getThreadId());
+        fprintf(file, "%-2d", event->getThreadId());
     }
 };
 
@@ -112,7 +112,7 @@ public:
         os << event->getFiberId();
     }
     inline void format(FILE* file, std::shared_ptr<Logger> logger, const LogEvent::ptr &event) override{
-        fprintf(file, "%u", event->getFiberId());
+        fprintf(file, "%-3u", event->getFiberId());
     }
 };
 
@@ -448,7 +448,12 @@ Logger::ptr LogManager::getLogger(const std::string &name){
 
 void LogManager::init(){
     server::Logger::ptr log = std::make_shared<server::Logger>("system");
-    log->addAppender(std::shared_ptr<server::LogAppender>(new server::StdoutLogAppender)); 
+    server::LogAppender::ptr app(new server::StdoutLogAppender);
+    server::LogFormatter::ptr fmt(new server::LogFormatter(""));
+    app->setFormatter(fmt);
+    app->setLevel(LogLevel::INFO);
+    log->addAppender(app);
+
     m_loggers["system"] = log;
 }
 
