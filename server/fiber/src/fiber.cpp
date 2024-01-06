@@ -16,10 +16,10 @@ namespace server{
 
 static std::atomic<uint64_t> s_fiber_id = 0;        // 协程号 跨线程
 static std::atomic<uint64_t> s_fiber_count = 0;     // 协程数量 跨线程
-thread_local Fiber_1* t_fiber_1 = nullptr;              // 当前执行的协程
-thread_local Fiber_* t_fiber_ = nullptr;              // 当前执行的协程
-thread_local Fiber_::ptr t_threadIber_ = nullptr;     // 主协程
-thread_local Fiber_1::ptr t_threadIber_1 = nullptr;     // 主协程
+thread_local Fiber_1* t_fiber_1 = nullptr;          // 当前执行的协程
+thread_local Fiber_* t_fiber_ = nullptr;            // 当前执行的协程
+thread_local Fiber_::ptr t_threadIber_ = nullptr;   // 主协程
+thread_local Fiber_1::ptr t_threadIber_1 = nullptr; // 主协程
 
 struct MallocStackAllocator{
 public:
@@ -217,9 +217,11 @@ std::suspend_always CoRet::promise_type::yield_value(State s) {
 }
 
 void CoRet::promise_type::return_value(State s){
+    m_done = true;
     t_fiber_ = t_threadIber_.get();
     m_state = s;
 }
+
 
 
 Fiber_::Fiber_(){
@@ -235,6 +237,7 @@ Fiber_::Fiber_(std::function<CoRet()> cb)
 
 Fiber_::~Fiber_(){
     --s_fiber_count;    
+
     SERVER_LOG_INFO(SERVER_LOGGER_SYSTEM) << "fiber destroy id:" << m_id;
 }
 
@@ -247,6 +250,10 @@ void Fiber_::swapIn(){
         t_fiber_ = this;
         m_cb();
     }
+}
+
+bool Fiber_::done(){
+    return m_cb.done();
 }
 
 uint64_t Fiber_::GetCurFiberId(){

@@ -24,7 +24,7 @@ extern thread_local const char* t_thread_name;
     server::LogEventWrap(server::LogEvent::ptr(\
         new server::LogEvent(logger, level, \
         __FILE__, __LINE__, \
-        0, server::t_thread_id, server::Fiber::GetCurFiberId(), \
+        0, server::t_thread_id, server::Fiber_::GetCurFiberId(), \
         time(0), server::t_thread_name\
         )))
 

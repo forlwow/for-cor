@@ -2,6 +2,7 @@
 #define RANGE_H
 
 #include <coroutine>
+#include <memory>
 
 template<typename T>
 struct CoRet{
@@ -19,30 +20,41 @@ struct CoRet{
         }
         void return_void(){}
     };
-
     struct iterator{
-        std::coroutine_handle<promise_type>& h;
+        std::coroutine_handle<promise_type> *h;
         T& operator*() {
-            return h.promise().n;
+            return h->promise().n;
         }
         iterator operator++(){
-            if (!h.done())
-                h.resume();
+            if (!h->done())
+                h->resume();
             return *this;
         }
         bool operator!=(const iterator&) const{
-            return !h.done();
+            if(h->done()){
+                return false;
+            }
+            else {
+                return true;
+            }
         }
     };
     
-    iterator begin() {return {_h};}
-    iterator end() {return {_h};}
+    iterator begin() {return {&_h};}
+    iterator end() {return {&_h};}
     std::coroutine_handle<promise_type> _h;
+    std::shared_ptr<bool> destroyed = std::make_shared<bool>(false);
+    ~CoRet(){
+        if(_h.done() && !*(destroyed.get())){
+            _h.destroy();
+            *destroyed.get() = true;
+        }
+    }
 };
 
 template<typename T>
 CoRet<T> _range(T begin, T end, T step){
-   while (begin < end){
+    while (begin < end){
         co_yield begin;
         begin += step;
    }

@@ -2,6 +2,10 @@
 #define TIMER_H
 
 #include <chrono>
+#include <cstdint>
+#include <functional>
+#include <memory>
+#include "ethread.h"
 
 class Timer{
 public:
@@ -26,5 +30,20 @@ private:
     std::chrono::time_point<std::chrono::high_resolution_clock> end_time;
 
 };
+
+namespace server {
+
+class TimerManager;
+class Timer: public std::enable_shared_from_this<server::Timer>{
+friend class TimerManager;
+public:
+    typedef std::shared_ptr<Timer> ptr;
+
+private:
+    Timer(uint64_t ms, std::function<void()> cb, bool circulate = false, 
+            TimerManager* manager = nullptr);
+};
+
+} // namespace server
 
 #endif 

@@ -73,6 +73,8 @@ class Fiber_;
 struct CoRet{
     struct promise_type{
         State m_state = State::INIT;
+        bool m_done = false;
+
         std::suspend_always initial_suspend() const noexcept;
         std::suspend_never final_suspend() const noexcept;
         void unhandled_exception();
@@ -80,11 +82,10 @@ struct CoRet{
         std::suspend_always yield_void();
         std::suspend_always yield_value(State s);
         void return_value(State s);
-
     };
     std::coroutine_handle<promise_type> h_;
     void operator()(){h_.resume();}
-    bool done(){return h_.done();}
+    bool done(){return h_.promise().m_done;}
 };
 
 class Fiber_: public std::enable_shared_from_this<Fiber_>{

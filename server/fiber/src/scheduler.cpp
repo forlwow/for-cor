@@ -153,15 +153,22 @@ void Scheduler::run(){
             }
         }
         else{
-            // if(idle_fiber->GetState() == TERM)
+            //if(idle_fiber->GetState() == TERM)
             //     break;
             ++m_idleThreadCount;
-            // idle_fiber->swapIn();
+            if(idle_fiber->GetState() != TERM)
+                idle_fiber->swapIn();
              
         }
         if(m_autoStop)
             m_stopping = m_fibers.size() == 0;
     }
+}
+
+void Scheduler::wait(){
+    const char* s = "";
+    do{
+    }while(s != "q");
 }
 
 void Scheduler::tickle(){

@@ -1,0 +1,53 @@
+==519213== Memcheck, a memory error detector
+==519213== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==519213== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
+==519213== Command: ./web_server
+==519213== Parent PID: 519212
+==519213== 
+==519213== Thread 2 Sche_0:
+==519213== Invalid read of size 1
+==519213==    at 0x4936878: server::CoRet::done() (fiber.h:88)
+==519213==    by 0x4936255: server::Fiber_::done() (fiber.cpp:256)
+==519213==    by 0x4940210: server::Scheduler_::run() (scheduler_.cpp:73)
+==519213==    by 0x4943C5B: void std::__invoke_impl<void, void (server::Scheduler_::*&)(), server::Scheduler_*&>(std::__invoke_memfun_deref, void (server::Scheduler_::*&)(), server::Scheduler_*&) (invoke.h:74)
+==519213==    by 0x4943989: std::__invoke_result<void (server::Scheduler_::*&)(), server::Scheduler_*&>::type std::__invoke<void (server::Scheduler_::*&)(), server::Scheduler_*&>(void (server::Scheduler_::*&)(), server::Scheduler_*&) (invoke.h:96)
+==519213==    by 0x4943787: std::invoke_result<void (server::Scheduler_::*&)(), server::Scheduler_*&>::type std::invoke<void (server::Scheduler_::*&)(), server::Scheduler_*&>(void (server::Scheduler_::*&)(), server::Scheduler_*&) (functional:113)
+==519213==    by 0x494344F: decltype(auto) std::_Bind_front<void (server::Scheduler_::*)(), server::Scheduler_*>::_S_call<std::_Bind_front<void (server::Scheduler_::*)(), server::Scheduler_*>&, 0ul>(std::_Bind_front<void (server::Scheduler_::*)(), server::Scheduler_*>&, std::integer_sequence<unsigned long, 0ul>) (functional:989)
+==519213==    by 0x494346F: std::invoke_result<void (server::Scheduler_::*&)(), server::Scheduler_*&>::type std::_Bind_front<void (server::Scheduler_::*)(), server::Scheduler_*>::operator()<>() & (functional:945)
+==519213==    by 0x494318D: void std::__invoke_impl<void, std::_Bind_front<void (server::Scheduler_::*)(), server::Scheduler_*>&>(std::__invoke_other, std::_Bind_front<void (server::Scheduler_::*)(), server::Scheduler_*>&) (invoke.h:61)
+==519213==    by 0x4942AE7: std::enable_if<is_invocable_r_v<void, std::_Bind_front<void (server::Scheduler_::*)(), server::Scheduler_*>&>, void>::type std::__invoke_r<void, std::_Bind_front<void (server::Scheduler_::*)(), server::Scheduler_*>&>(std::_Bind_front<void (server::Scheduler_::*)(), server::Scheduler_*>&) (invoke.h:111)
+==519213==    by 0x4941C4B: std::_Function_handler<void (), std::_Bind_front<void (server::Scheduler_::*)(), server::Scheduler_*> >::_M_invoke(std::_Any_data const&) (std_function.h:290)
+==519213==    by 0x48FFF3F: std::function<void ()>::operator()() const (std_function.h:591)
+==519213==  Address 0x50a0c54 is 20 bytes inside a block of size 40 free'd
+==519213==    at 0x4840287: operator delete(void*) (vg_replace_malloc.c:1051)
+==519213==    by 0x41A301: run_in_fiber(run_in_fiber()::_Z12run_in_fiberv.Frame*) [clone .actor] (main.cpp:39)
+==519213==    by 0x493724A: std::__n4861::coroutine_handle<server::CoRet::promise_type>::resume() const (coroutine:240)
+==519213==    by 0x493685B: server::CoRet::operator()() (fiber.h:87)
+==519213==    by 0x4936235: server::Fiber_::swapIn() (fiber.cpp:251)
+==519213==    by 0x49401EC: server::Scheduler_::run() (scheduler_.cpp:71)
+==519213==    by 0x4943C5B: void std::__invoke_impl<void, void (server::Scheduler_::*&)(), server::Scheduler_*&>(std::__invoke_memfun_deref, void (server::Scheduler_::*&)(), server::Scheduler_*&) (invoke.h:74)
+==519213==    by 0x4943989: std::__invoke_result<void (server::Scheduler_::*&)(), server::Scheduler_*&>::type std::__invoke<void (server::Scheduler_::*&)(), server::Scheduler_*&>(void (server::Scheduler_::*&)(), server::Scheduler_*&) (invoke.h:96)
+==519213==    by 0x4943787: std::invoke_result<void (server::Scheduler_::*&)(), server::Scheduler_*&>::type std::invoke<void (server::Scheduler_::*&)(), server::Scheduler_*&>(void (server::Scheduler_::*&)(), server::Scheduler_*&) (functional:113)
+==519213==    by 0x494344F: decltype(auto) std::_Bind_front<void (server::Scheduler_::*)(), server::Scheduler_*>::_S_call<std::_Bind_front<void (server::Scheduler_::*)(), server::Scheduler_*>&, 0ul>(std::_Bind_front<void (server::Scheduler_::*)(), server::Scheduler_*>&, std::integer_sequence<unsigned long, 0ul>) (functional:989)
+==519213==    by 0x494346F: std::invoke_result<void (server::Scheduler_::*&)(), server::Scheduler_*&>::type std::_Bind_front<void (server::Scheduler_::*)(), server::Scheduler_*>::operator()<>() & (functional:945)
+==519213==    by 0x494318D: void std::__invoke_impl<void, std::_Bind_front<void (server::Scheduler_::*)(), server::Scheduler_*>&>(std::__invoke_other, std::_Bind_front<void (server::Scheduler_::*)(), server::Scheduler_*>&) (invoke.h:61)
+==519213==  Block was alloc'd at
+==519213==    at 0x483CED1: operator new(unsigned long) (vg_replace_malloc.c:483)
+==519213==    by 0x419DD9: run_in_fiber() (main.cpp:39)
+==519213==    by 0x420DD0: server::CoRet std::__invoke_impl<server::CoRet, server::CoRet (*&)()>(std::__invoke_other, server::CoRet (*&)()) (invoke.h:61)
+==519213==    by 0x4204DC: std::enable_if<is_invocable_r_v<server::CoRet, server::CoRet (*&)()>, server::CoRet>::type std::__invoke_r<server::CoRet, server::CoRet (*&)()>(server::CoRet (*&)()) (invoke.h:114)
+==519213==    by 0x41FA21: std::_Function_handler<server::CoRet (), server::CoRet (*)()>::_M_invoke(std::_Any_data const&) (std_function.h:290)
+==519213==    by 0x4937AD5: std::function<server::CoRet ()>::operator()() const (std_function.h:591)
+==519213==    by 0x4936007: server::Fiber_::Fiber_(std::function<server::CoRet ()>) (fiber.cpp:233)
+==519213==    by 0x41AFB8: test2() (main.cpp:90)
+==519213==    by 0x41A55A: main (main.cpp:44)
+==519213== 
+==519213== 
+==519213== HEAP SUMMARY:
+==519213==     in use at exit: 0 bytes in 0 blocks
+==519213==   total heap usage: 1,927 allocs, 1,927 frees, 1,313,068 bytes allocated
+==519213== 
+==519213== All heap blocks were freed -- no leaks are possible
+==519213== 
+==519213== For lists of detected and suppressed errors, rerun with: -s
+==519213== ERROR SUMMARY: 2 errors from 1 contexts (suppressed: 0 from 0)

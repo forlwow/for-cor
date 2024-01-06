@@ -23,6 +23,7 @@ public:
 
     virtual void start();
     virtual void stop();
+    virtual void wait();
 
     template<typename T>
     void schedule(T fc, int thread = -2){
@@ -64,8 +65,8 @@ private:
     }
 
 protected:
-    void tickle();
     void run();             // 调度方法
+    virtual void tickle();
     virtual bool stopping();
     virtual void idle();        // 协程空闲时执行的方法
 
