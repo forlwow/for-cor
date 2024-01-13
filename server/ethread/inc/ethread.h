@@ -74,7 +74,8 @@ struct ReadLockGuard{
         m_locked = true;
     }
     ~ReadLockGuard(){
-        unlock();
+        if(m_locked)
+            unlock();
     }
 
     void lock(){
@@ -102,7 +103,8 @@ struct WriteLockGuard{
         m_locked = true;
     }
     ~WriteLockGuard(){
-        unlock();
+        if(m_locked)
+            unlock();
     }
 
     void lock(){

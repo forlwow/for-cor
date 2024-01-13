@@ -1,4 +1,5 @@
 #include "ethread.h"
+#include "iomanager_.h"
 #include "fiber.h"
 #include "iomanager.h"
 #include "range.h"
@@ -20,7 +21,6 @@
 #include <netinet/in.h>
 #include <string>
 #include <sys/socket.h>
-#include <vector>
 #include <unistd.h>
 #include <string>
 
@@ -30,9 +30,11 @@ using namespace std;
 
 auto logger = SERVER_LOGGER_SYSTEM;
 auto slog = SERVER_LOGGER("system");
+server::CoRet fiber_timer_cir();
 void test1();
 void test2();
 void test3();
+void test4();
 void fib_func(){
     auto fib = server::Fiber::GetThis();
     SERVER_LOG_INFO(slog) << "before yield 1";
@@ -51,7 +53,7 @@ server::CoRet run_in_fiber(){
 
 
 int main(){
-    test1();
+    test4();
     return 0;
 }
 
@@ -126,3 +128,20 @@ void test3(){
     // }
 }
 
+void test4(){
+    server::IOManager_ iom(2);
+    // iom.schedule(make_shared<server::Fiber_>(run_in_fiber));
+
+    iom.addTimer(1000, fiber_timer_cir);
+    iom.addTimer(5000, fiber_timer_cir);
+    iom.start();
+    iom.wait();
+    iom.stop();
+}
+
+server::CoRet fiber_timer_cir(){
+    while(1){
+        SERVER_LOG_DEBUG(logger) << "circulate timer trigger";
+        co_yield server::HOLD;
+    }
+}

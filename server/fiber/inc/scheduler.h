@@ -2,12 +2,15 @@
 #define SERVER_SCHEDULER_H
 
 #include <cstddef>
+#include <cstdint>
 #include <functional>
+#include <iterator>
 #include <list>
 #include <memory>
 #include <vector>
 #include "fiber.h"
 #include "ethread.h"
+#include "timer.h"
 
 namespace server {
 
@@ -23,7 +26,7 @@ public:
 
     virtual void start();
     virtual void stop();
-    virtual void wait();
+    virtual void wait(uint64_t = UINT64_MAX);
 
     template<typename T>
     void schedule(T fc, int thread = -2){
@@ -40,12 +43,12 @@ public:
     }
 
     template<typename T>
-    void schedule(T begin, T end){
+    void schedule(T begin, T end, int thread = -2){
         bool need_tickle = false;
         {
             LockGuard lock(m_mutex);
             while (begin != end){
-                need_tickle = scheduleNoLock(&*(begin++)) || need_tickle;
+                need_tickle = scheduleNoLock(*(begin++), thread) || need_tickle;
             }
         }
         if(need_tickle){
@@ -61,6 +64,15 @@ private:
         if(ft.fiber || ft.cb){
             m_fibers.push_back(ft);
         }
+        return need_tickle;
+    }
+
+    bool scheduleNoLock(Timer::ptr iter, int thread){
+        bool need_tickle = m_fibers.empty();
+        FiberAndThread ft;
+        ft = FiberAndThread(iter->GetFunc(), thread);
+        if(ft.fiber || ft.cb)
+            m_fibers.push_back(ft);
         return need_tickle;
     }
 

@@ -75,7 +75,7 @@ IOManager::IOManager(size_t threads, bool usr_caller, const std::string& name)
 
     contextResize(32);
 
-    start();
+    // start();
 
 }
 
@@ -256,6 +256,7 @@ void IOManager::tickle(){
 }
 
 bool IOManager::stopping(){
+    AutoStop();
     return true;
 }
 
@@ -264,17 +265,23 @@ void IOManager::idle(){
     epoll_event* events = new epoll_event[MAX_EVENTS];
     std::shared_ptr<epoll_event> shared_events(events, [](epoll_event* ptr){delete [] ptr;});
     while (true){
-        uint64_t next_timeout = 0;
+        uint64_t next_timeout = UINT64_MAX;
         if(m_stopping) break;
         int rt = 0;
         do{
-            static const int MAX_TIMEOUT = 3000;
+            const int MAX_TIMEOUT = 3000;
+            next_timeout = GetNextTimeDuration();
+            if(MAX_TIMEOUT < next_timeout)
+                next_timeout = MAX_TIMEOUT;
             rt = epoll_wait(m_epfd, events, MAX_EVENTS, (int)MAX_TIMEOUT);
-            SERVER_LOG_INFO(g_logger) << "epoll wait result=" << rt;
+            // SERVER_LOG_INFO(g_logger) << "epoll wait result=" << rt;
             if(rt < 0 && errno == EINTR){}
             else break;
         }while(true);
 
+        auto timers = GetExpireTimers();
+        if(!timers.empty())
+            schedule(timers.begin(), timers.end());
 
         for(int i = 0; i < rt; ++i){
             epoll_event& event = events[i];

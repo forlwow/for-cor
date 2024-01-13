@@ -4,10 +4,12 @@
 #include "log.h"
 #include <cassert>
 #include <cstddef>
+#include <cstdint>
 #include <cstdio>
 #include <functional>
 #include <sched.h>
 #include <string>
+#include <unistd.h>
 
 namespace server{
 
@@ -165,10 +167,12 @@ void Scheduler::run(){
     }
 }
 
-void Scheduler::wait(){
+void Scheduler::wait(uint64_t time_){
     const char* s = "";
-    do{
-    }while(s != "q");
+    if (time_ != UINT64_MAX)
+        sleep(time_);
+    else
+        do{}while(s != "q");
 }
 
 void Scheduler::tickle(){

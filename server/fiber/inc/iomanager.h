@@ -4,6 +4,7 @@
 #include "ethread.h"
 #include "fiber.h"
 #include "scheduler.h"
+#include "timer.h"
 #include <cstddef>
 #include <functional>
 #include <memory>
@@ -13,7 +14,7 @@
 
 namespace server{
 
-class IOManager: public Scheduler{
+class IOManager: public Scheduler, public TimerManager{
 public:
     typedef std::shared_ptr<IOManager> ptr;
     typedef RWMutex RWMutexType;
