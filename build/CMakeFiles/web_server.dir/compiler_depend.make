@@ -4,11 +4,13 @@
 CMakeFiles/web_server.dir/server/main.cpp.o: /home/webserver/web_server/server/main.cpp \
   /home/webserver/web_server/server/ethread/inc/ethread.h \
   /home/webserver/web_server/server/fiber/inc/fiber.h \
+  /home/webserver/web_server/server/fiber/inc/fiber_.h \
   /home/webserver/web_server/server/fiber/inc/iomanager.h \
   /home/webserver/web_server/server/fiber/inc/iomanager_.h \
   /home/webserver/web_server/server/fiber/inc/scheduler.h \
   /home/webserver/web_server/server/fiber/inc/scheduler_.h \
   /home/webserver/web_server/server/log/inc/log.h \
+  /home/webserver/web_server/server/util/inc/enums.h \
   /home/webserver/web_server/server/util/inc/range.h \
   /home/webserver/web_server/server/util/inc/singleton.h \
   /home/webserver/web_server/server/util/inc/threadsafe_deque.h \
@@ -253,7 +255,6 @@ CMakeFiles/web_server.dir/server/main.cpp.o: /home/webserver/web_server/server/m
   /usr/local/include/c++/13.1.0/bits/stl_tree.h \
   /usr/local/include/c++/13.1.0/bits/stl_uninitialized.h \
   /usr/local/include/c++/13.1.0/bits/stl_vector.h \
-  /usr/local/include/c++/13.1.0/bits/stream_iterator.h \
   /usr/local/include/c++/13.1.0/bits/streambuf.tcc \
   /usr/local/include/c++/13.1.0/bits/streambuf_iterator.h \
   /usr/local/include/c++/13.1.0/bits/string_view.tcc \
@@ -304,7 +305,6 @@ CMakeFiles/web_server.dir/server/main.cpp.o: /home/webserver/web_server/server/m
   /usr/local/include/c++/13.1.0/iosfwd \
   /usr/local/include/c++/13.1.0/iostream \
   /usr/local/include/c++/13.1.0/istream \
-  /usr/local/include/c++/13.1.0/iterator \
   /usr/local/include/c++/13.1.0/limits \
   /usr/local/include/c++/13.1.0/list \
   /usr/local/include/c++/13.1.0/locale \
@@ -484,8 +484,6 @@ CMakeFiles/web_server.dir/server/main.cpp.o: /home/webserver/web_server/server/m
 
 /usr/local/include/c++/13.1.0/bits/this_thread_sleep.h:
 
-/usr/include/x86_64-linux-gnu/asm/errno.h:
-
 /home/webserver/web_server/server/util/inc/timer.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h:
@@ -594,8 +592,6 @@ CMakeFiles/web_server.dir/server/main.cpp.o: /home/webserver/web_server/server/m
 
 /usr/local/include/c++/13.1.0/bits/hashtable_policy.h:
 
-/usr/local/include/c++/13.1.0/iterator:
-
 /usr/include/x86_64-linux-gnu/bits/types/wint_t.h:
 
 /usr/local/include/c++/13.1.0/bits/stl_bvector.h:
@@ -612,9 +608,11 @@ CMakeFiles/web_server.dir/server/main.cpp.o: /home/webserver/web_server/server/m
 
 /usr/include/x86_64-linux-gnu/bits/byteswap.h:
 
-/usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h:
+/usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h:
 
-/usr/include/wchar.h:
+/usr/include/locale.h:
+
+/usr/include/x86_64-linux-gnu/asm/unistd.h:
 
 /usr/include/errno.h:
 
@@ -640,6 +638,12 @@ CMakeFiles/web_server.dir/server/main.cpp.o: /home/webserver/web_server/server/m
 
 /usr/include/x86_64-linux-gnu/bits/fcntl.h:
 
+/usr/include/x86_64-linux-gnu/asm/unistd_64.h:
+
+/usr/include/alloca.h:
+
+/usr/local/include/c++/13.1.0/bits/ostream_insert.h:
+
 /usr/local/include/c++/13.1.0/cassert:
 
 /usr/include/asm-generic/posix_types.h:
@@ -653,6 +657,8 @@ CMakeFiles/web_server.dir/server/main.cpp.o: /home/webserver/web_server/server/m
 /usr/local/include/c++/13.1.0/unordered_map:
 
 /usr/include/x86_64-linux-gnu/bits/endian.h:
+
+/home/webserver/web_server/server/util/inc/enums.h:
 
 /usr/include/string.h:
 
@@ -678,6 +684,10 @@ CMakeFiles/web_server.dir/server/main.cpp.o: /home/webserver/web_server/server/m
 
 /usr/include/x86_64-linux-gnu/bits/posix2_lim.h:
 
+/usr/local/include/c++/13.1.0/bits/stringfwd.h:
+
+/usr/include/linux/limits.h:
+
 /usr/include/fcntl.h:
 
 /usr/include/ucontext.h:
@@ -694,6 +704,26 @@ CMakeFiles/web_server.dir/server/main.cpp.o: /home/webserver/web_server/server/m
 
 /usr/include/syscall.h:
 
+/usr/include/asm-generic/errno-base.h:
+
+/usr/local/include/c++/13.1.0/bits/chrono.h:
+
+/usr/local/include/c++/13.1.0/bits/ranges_base.h:
+
+/usr/include/x86_64-linux-gnu/bits/struct_rwlock.h:
+
+/usr/include/strings.h:
+
+/usr/include/arpa/telnet.h:
+
+/usr/local/include/c++/13.1.0/variant:
+
+/usr/local/include/c++/13.1.0/bits/unordered_map.h:
+
+/usr/include/x86_64-linux-gnu/asm/posix_types_64.h:
+
+/usr/include/x86_64-linux-gnu/bits/cpu-set.h:
+
 /usr/local/include/c++/13.1.0/mutex:
 
 /usr/include/x86_64-linux-gnu/bits/environments.h:
@@ -706,23 +736,7 @@ CMakeFiles/web_server.dir/server/main.cpp.o: /home/webserver/web_server/server/m
 
 /usr/local/include/c++/13.1.0/bits/stl_heap.h:
 
-/usr/include/asm-generic/errno-base.h:
-
-/usr/local/include/c++/13.1.0/bits/chrono.h:
-
-/usr/local/include/c++/13.1.0/bits/ranges_base.h:
-
-/usr/include/x86_64-linux-gnu/bits/pthreadtypes.h:
-
-/usr/local/include/c++/13.1.0/bits/codecvt.h:
-
-/usr/include/x86_64-linux-gnu/bits/timesize.h:
-
-/usr/include/x86_64-linux-gnu/bits/getopt_core.h:
-
-/usr/local/include/c++/13.1.0/span:
-
-/usr/include/stdlib.h:
+/usr/local/include/c++/13.1.0/bits/std_function.h:
 
 /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h:
 
@@ -739,6 +753,8 @@ CMakeFiles/web_server.dir/server/main.cpp.o: /home/webserver/web_server/server/m
 /usr/include/x86_64-linux-gnu/bits/stdio_lim.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/FILE.h:
+
+/usr/include/x86_64-linux-gnu/asm/errno.h:
 
 /usr/local/lib/gcc/x86_64-pc-linux-gnu/13.1.0/include/limits.h:
 
@@ -764,19 +780,21 @@ CMakeFiles/web_server.dir/server/main.cpp.o: /home/webserver/web_server/server/m
 
 /usr/include/x86_64-linux-gnu/asm/posix_types.h:
 
-/usr/include/x86_64-linux-gnu/bits/struct_rwlock.h:
+/usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h:
 
-/usr/include/strings.h:
+/usr/include/wchar.h:
 
-/usr/include/arpa/telnet.h:
+/usr/include/x86_64-linux-gnu/bits/pthreadtypes.h:
 
-/usr/local/include/c++/13.1.0/variant:
+/usr/local/include/c++/13.1.0/bits/codecvt.h:
 
-/usr/local/include/c++/13.1.0/bits/unordered_map.h:
+/usr/include/x86_64-linux-gnu/bits/timesize.h:
 
-/usr/include/x86_64-linux-gnu/asm/posix_types_64.h:
+/usr/include/x86_64-linux-gnu/bits/getopt_core.h:
 
-/usr/include/x86_64-linux-gnu/bits/cpu-set.h:
+/usr/local/include/c++/13.1.0/span:
+
+/usr/include/stdlib.h:
 
 /usr/local/include/c++/13.1.0/ext/numeric_traits.h:
 
@@ -791,10 +809,6 @@ CMakeFiles/web_server.dir/server/main.cpp.o: /home/webserver/web_server/server/m
 /usr/include/x86_64-linux-gnu/bits/getopt_posix.h:
 
 /usr/include/stdio.h:
-
-/usr/include/locale.h:
-
-/usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h:
 
 /usr/include/x86_64-linux-gnu/bits/socket_type.h:
 
@@ -826,13 +840,9 @@ CMakeFiles/web_server.dir/server/main.cpp.o: /home/webserver/web_server/server/m
 
 /usr/local/include/c++/13.1.0/bits/stl_algobase.h:
 
-/usr/include/x86_64-linux-gnu/bits/types/struct_tm.h:
-
-/usr/local/include/c++/13.1.0/compare:
-
-/usr/local/include/c++/13.1.0/bits/char_traits.h:
-
 /usr/include/x86_64-linux-gnu/bits/sockaddr.h:
+
+/home/webserver/web_server/server/fiber/inc/fiber_.h:
 
 /usr/include/semaphore.h:
 
@@ -842,13 +852,11 @@ CMakeFiles/web_server.dir/server/main.cpp.o: /home/webserver/web_server/server/m
 
 /usr/include/x86_64-linux-gnu/asm/sockios.h:
 
-/usr/include/x86_64-linux-gnu/asm/unistd.h:
+/usr/include/x86_64-linux-gnu/bits/types/struct_tm.h:
 
-/usr/include/alloca.h:
+/usr/local/include/c++/13.1.0/compare:
 
-/usr/local/include/c++/13.1.0/bits/ostream_insert.h:
-
-/usr/include/x86_64-linux-gnu/asm/unistd_64.h:
+/usr/local/include/c++/13.1.0/bits/char_traits.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/timer_t.h:
 
@@ -1022,8 +1030,6 @@ CMakeFiles/web_server.dir/server/main.cpp.o: /home/webserver/web_server/server/m
 
 /usr/local/include/c++/13.1.0/bits/parse_numbers.h:
 
-/usr/local/include/c++/13.1.0/bits/stream_iterator.h:
-
 /usr/local/include/c++/13.1.0/bits/predefined_ops.h:
 
 /usr/local/include/c++/13.1.0/bits/ptr_traits.h:
@@ -1039,8 +1045,6 @@ CMakeFiles/web_server.dir/server/main.cpp.o: /home/webserver/web_server/server/m
 /usr/local/include/c++/13.1.0/bits/shared_ptr_base.h:
 
 /usr/local/include/c++/13.1.0/bits/std_abs.h:
-
-/usr/local/include/c++/13.1.0/bits/std_function.h:
 
 /usr/local/include/c++/13.1.0/bits/std_mutex.h:
 
@@ -1069,7 +1073,3 @@ CMakeFiles/web_server.dir/server/main.cpp.o: /home/webserver/web_server/server/m
 /usr/local/include/c++/13.1.0/bits/stl_set.h:
 
 /usr/local/include/c++/13.1.0/bits/stl_vector.h:
-
-/usr/include/linux/limits.h:
-
-/usr/local/include/c++/13.1.0/bits/stringfwd.h:

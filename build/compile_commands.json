@@ -49,6 +49,12 @@
 },
 {
   "directory": "/home/webserver/web_server/build/server/fiber",
+  "command": "/usr/local/bin/g++ -Dfiber_EXPORTS -I/home/webserver/web_server/server/log/inc -I/home/webserver/web_server/server/util/inc -I/home/webserver/web_server/server/ethread/inc -I/home/webserver/web_server/server/ecoroutine/inc -I/home/webserver/web_server/server/fiber/inc -I/home/webserver/web_server/server/ThirdModule/include  -O0 -w -g2 -ggdb -std=c++20 -std=gnu++20 -fPIC -o CMakeFiles/fiber.dir/src/fiber_.cpp.o -c /home/webserver/web_server/server/fiber/src/fiber_.cpp",
+  "file": "/home/webserver/web_server/server/fiber/src/fiber_.cpp",
+  "output": "server/fiber/CMakeFiles/fiber.dir/src/fiber_.cpp.o"
+},
+{
+  "directory": "/home/webserver/web_server/build/server/fiber",
   "command": "/usr/local/bin/g++ -Dfiber_EXPORTS -I/home/webserver/web_server/server/log/inc -I/home/webserver/web_server/server/util/inc -I/home/webserver/web_server/server/ethread/inc -I/home/webserver/web_server/server/ecoroutine/inc -I/home/webserver/web_server/server/fiber/inc -I/home/webserver/web_server/server/ThirdModule/include  -O0 -w -g2 -ggdb -std=c++20 -std=gnu++20 -fPIC -o CMakeFiles/fiber.dir/src/iomanager.cpp.o -c /home/webserver/web_server/server/fiber/src/iomanager.cpp",
   "file": "/home/webserver/web_server/server/fiber/src/iomanager.cpp",
   "output": "server/fiber/CMakeFiles/fiber.dir/src/iomanager.cpp.o"

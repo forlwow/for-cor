@@ -1,5 +1,6 @@
 #include "scheduler.h"
 #include "ethread.h"
+#include "enums.h"
 #include "fiber.h"
 #include "log.h"
 #include <cassert>

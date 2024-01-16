@@ -36,7 +36,9 @@ server/log/CMakeFiles/log.dir/src/log.cpp.o
  /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/yaml.h
  /home/webserver/web_server/server/ethread/inc/ethread.h
  /home/webserver/web_server/server/fiber/inc/fiber.h
+ /home/webserver/web_server/server/fiber/inc/fiber_.h
  /home/webserver/web_server/server/log/inc/log.h
+ /home/webserver/web_server/server/util/inc/enums.h
  /home/webserver/web_server/server/util/inc/singleton.h
  /usr/include/alloca.h
  /usr/include/asm-generic/errno-base.h

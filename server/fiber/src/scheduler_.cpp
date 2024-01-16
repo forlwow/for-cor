@@ -83,5 +83,11 @@ void Scheduler_::run(){
     }
 }
 
+void Scheduler_::wait(int time){
+    if (time < 0)
+        while(1);
+    sleep(time);
+}
+
 
 } // namespace server

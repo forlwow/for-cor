@@ -2,8 +2,9 @@
 #define SERVER_SCHEDULER__H
 
 #include "ethread.h"
-#include "fiber.h"
 #include "threadsafe_deque.h"
+#include "enums.h"
+#include "fiber_.h"
 #include <atomic>
 #include <cstddef>
 #include <memory>
@@ -21,6 +22,7 @@ public:
     virtual void start();
     virtual void wait_stop();
     virtual void stop();
+    virtual void wait(int time = -1);
 
     // 传入的参数为Fiber对象，或函数对象
     bool schedule(task_type task_);

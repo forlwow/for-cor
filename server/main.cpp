@@ -26,6 +26,8 @@
 
 #include <timer.h>
 
+#define in :
+
 using namespace std;
 
 auto logger = SERVER_LOGGER_SYSTEM;
@@ -35,6 +37,8 @@ void test1();
 void test2();
 void test3();
 void test4();
+void test5();
+
 void fib_func(){
     auto fib = server::Fiber::GetThis();
     SERVER_LOG_INFO(slog) << "before yield 1";
@@ -47,13 +51,14 @@ server::CoRet run_in_fiber(){
     SERVER_LOG_INFO(logger) << "begin run in fiber";
     co_yield server::HOLD;
     SERVER_LOG_INFO(logger) << "before end run in fiber";
-    co_return server::TERM;
+    co_yield server::HOLD;
     SERVER_LOG_INFO(logger) << "end run in fiber";
+    co_return server::TERM;
 }
 
 
 int main(){
-    test4();
+    test5();
     return 0;
 }
 
@@ -89,23 +94,13 @@ void test1(){
 }
 
 void test2(){
-    Timer counter;
-    server::Fiber::GetThis();
-    server::Scheduler sc(4);
-    server::Scheduler_ sc_(4);
-    for(auto i : range<int>(2e0)){
-        //server::Fiber_::ptr fib(new server::Fiber_(run_in_fiber));
-        //sc_.schedule(fib);
-        auto fib = make_shared<server::Fiber_1>(fib_func);
-        sc.schedule(fib);
+    server::Fiber_::ptr task(new server::Fiber_(run_in_fiber));
+    for(auto i in range(10)){
+        SERVER_LOG_DEBUG(logger) << task->done();
+        if(!task->done()){
+            task->swapIn();
+        }
     }
-    counter.start_count();
-    sc.start();
-    sc.stop();
-    //sc_.start();
-    //sc_.wait_stop();
-    counter.end_count();
-    cout << counter.get_duration() << endl;
 }
 
 void test3(){
@@ -144,4 +139,16 @@ server::CoRet fiber_timer_cir(){
         SERVER_LOG_DEBUG(logger) << "circulate timer trigger";
         co_yield server::HOLD;
     }
+}
+void p(){SERVER_LOG_INFO(logger) << "test";}
+
+void test5(){
+    server::IOManager_ iom(6);
+    server::Fiber_2::ptr fib(new server::Fiber_2(run_in_fiber, true)); 
+    fib->setCbBeforeYield(p);
+    for(auto i in range(100)){
+        iom.schedule(fib);
+    }
+    iom.start();
+    iom.wait();
 }

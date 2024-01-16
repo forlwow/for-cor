@@ -267,8 +267,10 @@ server/ethread/CMakeFiles/ethread.dir/src/ethread.cpp.o: \
  /usr/local/include/c++/13.1.0/bits/list.tcc \
  /home/webserver/web_server/server/util/inc/singleton.h \
  /home/webserver/web_server/server/fiber/inc/fiber.h \
- /usr/local/include/c++/13.1.0/coroutine \
  /usr/include/x86_64-linux-gnu/sys/ucontext.h \
  /usr/include/x86_64-linux-gnu/bits/types/stack_t.h \
  /usr/include/ucontext.h \
- /usr/include/x86_64-linux-gnu/bits/indirect-return.h
+ /usr/include/x86_64-linux-gnu/bits/indirect-return.h \
+ /home/webserver/web_server/server/util/inc/enums.h \
+ /home/webserver/web_server/server/fiber/inc/fiber_.h \
+ /usr/local/include/c++/13.1.0/coroutine

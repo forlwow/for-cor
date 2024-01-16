@@ -1,6 +1,7 @@
 #include "iomanager_.h"
 #include "ethread.h"
 #include "fiber.h"
+#include "fiber_.h"
 #include "log.h"
 #include "scheduler_.h"
 #include <cassert>
@@ -13,6 +14,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <memory>
+#include <utility>
 
 
 namespace server{
@@ -21,7 +23,7 @@ static Logger::ptr g_logger = SERVER_LOGGER_SYSTEM;
 
 IOManager_::IOManager_(size_t threads_, const std::string& name_)
     : Scheduler_(threads_, name_), m_fdContexts(),
-        m_idleFiber(new Fiber_(std::bind_front(&IOManager_::idle, this)))
+        m_idleFiber(new Fiber_2(std::bind_front(&IOManager_::idle, this), false))
 {
     m_epfd = epoll_create(1024);
     assert(m_epfd > 0);
@@ -31,13 +33,16 @@ IOManager_::~IOManager_(){
     close(m_epfd);
 }
 
-int IOManager_::AddEvent(int fd, Event event, TaskType cb){
+int IOManager_::AddEvent(int fd, Event event, TaskType cb, bool drop){
     WriteLockGuard wlock(m_mutex);
+    // 是否已经含有该描述符 没有则新建
     FdContext::ptr nfd = m_fdContexts.contains(fd) ? 
         m_fdContexts[fd] : std::make_shared<FdContext>(fd);
 
+    // 如果已经有对应事件则返回错误
     if(m_fdContexts.contains(fd) && (event & nfd->events))
         return 1;
+    // 判断操作符
     int op = nfd->events == NONE ? EPOLL_CTL_ADD : EPOLL_CTL_ADD;
     epoll_event evt;
     memset(&evt, 0, sizeof(evt));
@@ -51,8 +56,9 @@ int IOManager_::AddEvent(int fd, Event event, TaskType cb){
     }
 
     nfd->events = (Event)(event | nfd->events);
+    // 拿到对应事件的处理对象
     auto con = event == READ ? nfd->read : nfd->write;
-    con.fiber = std::make_shared<Fiber_>(cb); 
+    con.fiber = std::move(Fiber_2::ptr(new Fiber_2(cb, drop))); 
     return 0;
 }
 
@@ -169,10 +175,7 @@ void IOManager_::run(){
     static bool expect = false;
 
     while (!m_stopping){
-        if(!m_idleLock.test_and_set()){
-            m_idleFiber->swapIn();
-            if(!m_idleFiber->done())
-                m_idleLock.clear();
+        if(m_idleFiber->swapIn()){
             continue;
         }
 
@@ -180,7 +183,9 @@ void IOManager_::run(){
         if(m_tasks.pop_front(ta)){
             if(ta->done()) continue;
             ++m_working_thread;
-            ta->swapIn();
+            auto tb = std::dynamic_pointer_cast<Fiber_2>(ta);
+            if(!tb->swapIn() && !tb->isDrop())
+                schedule(ta);
             --m_working_thread;
         }
         else if(m_autoStop){
@@ -193,13 +198,6 @@ void IOManager_::run(){
     }
 
 }
-
-void IOManager_::wait(int time){
-    if (time < 0)
-        while(1);
-    sleep(time);
-}
-
 
 bool Timer_::Compare::operator()(const Timer_::ptr& lp, const Timer_::ptr& rp) const {
     if(!lp && !rp)
@@ -219,16 +217,12 @@ Timer_::Timer_(uint64_t ms, TaskType cb, Timer_Manager* manager)
     : m_ms(ms), m_manager(manager)
 {
     m_next = Timer_Manager::GetCurTimeStamp() + ms;
-    m_cb = Fiber_::ptr(new Fiber_([cb, this]()->CoRet{
-        Fiber_::ptr inner(new Fiber_(cb));
-        while(1){
-            inner->swapIn();
-            if(inner->done())
-                break;
-            refresh();
-            m_manager->addTimer(shared_from_this());
-        }
-    }));
+    Fiber_2::ptr task(new Fiber_2(cb));
+    task->setCbBeforeYield([this]{
+        this->refresh();
+        // this->m_manager->addTimer(m_ms, this->GetFunc());
+        });
+    m_cb = task;
 }
 
 Timer_::Timer_(uint64_t next_time)
@@ -262,18 +256,16 @@ void Timer_Manager::OnInsertAtFront(){
 }
 
 Timer_::ptr Timer_Manager::addTimer(uint64_t ms, TaskType cb){
-    Timer_::ptr Timer_(new class Timer_(ms, cb, this));
+    Timer_::ptr timer(new Timer_(ms, cb, this));
     WriteLockGuard wlock(m_mutex);
 
-    auto it = m_timers.insert(Timer_).first;
-    bool tri = it == m_timers.begin();
+    m_timers.insert(timer);
     wlock.unlock();
-    if(tri)
-        OnInsertAtFront();
-    return Timer_;
+    return timer;
 }
 
 void Timer_Manager::addTimer(Timer_::ptr Timer_){
+    SERVER_LOG_INFO(g_logger) << "add timer";
     WriteLockGuard wlock(m_mutex);
     m_timers.insert(Timer_);
 }

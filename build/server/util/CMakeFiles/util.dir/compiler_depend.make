@@ -557,7 +557,9 @@ server/util/CMakeFiles/util.dir/src/timer.cpp.o: /home/webserver/web_server/serv
 server/util/CMakeFiles/util.dir/src/util.cpp.o: /home/webserver/web_server/server/util/src/util.cpp \
   /home/webserver/web_server/server/ethread/inc/ethread.h \
   /home/webserver/web_server/server/fiber/inc/fiber.h \
+  /home/webserver/web_server/server/fiber/inc/fiber_.h \
   /home/webserver/web_server/server/log/inc/log.h \
+  /home/webserver/web_server/server/util/inc/enums.h \
   /home/webserver/web_server/server/util/inc/range.h \
   /home/webserver/web_server/server/util/inc/singleton.h \
   /home/webserver/web_server/server/util/inc/util.h \
@@ -868,6 +870,8 @@ server/util/CMakeFiles/util.dir/src/util.cpp.o: /home/webserver/web_server/serve
 /usr/include/x86_64-linux-gnu/bits/indirect-return.h:
 
 /usr/include/ucontext.h:
+
+/home/webserver/web_server/server/util/inc/enums.h:
 
 /home/webserver/web_server/server/fiber/inc/fiber.h:
 
@@ -1508,6 +1512,8 @@ server/util/CMakeFiles/util.dir/src/util.cpp.o: /home/webserver/web_server/serve
 /usr/include/asm-generic/sockios.h:
 
 /usr/include/linux/posix_types.h:
+
+/home/webserver/web_server/server/fiber/inc/fiber_.h:
 
 /usr/include/semaphore.h:
 

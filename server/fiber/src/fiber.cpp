@@ -1,12 +1,10 @@
 #include "fiber.h"
-#include <algorithm>
+#include "shared_vars.h"
 #include <cassert>
-#include <coroutine>
 #include <cstddef>
 #include <cstdint>
 #include <cstdio>
 #include <cstdlib>
-#include <atomic>
 #include <functional>
 #include <ucontext.h>
 
@@ -14,11 +12,7 @@
 
 namespace server{
 
-static std::atomic<uint64_t> s_fiber_id = 0;        // 协程号 跨线程
-static std::atomic<uint64_t> s_fiber_count = 0;     // 协程数量 跨线程
 thread_local Fiber_1* t_fiber_1 = nullptr;          // 当前执行的协程
-thread_local Fiber_* t_fiber_ = nullptr;            // 当前执行的协程
-thread_local Fiber_::ptr t_threadIber_ = nullptr;   // 主协程
 thread_local Fiber_1::ptr t_threadIber_1 = nullptr; // 主协程
 
 struct MallocStackAllocator{
@@ -80,7 +74,7 @@ Fiber_1::~Fiber_1(){
         }
     }
     
-    SERVER_LOG_INFO(SERVER_LOGGER_SYSTEM) << "Fiber destroy id:" << m_id;
+    SERVER_LOG_INFO2(SERVER_LOGGER_SYSTEM) << "Fiber destroy id:" << m_id;
 }
 
 void Fiber_1::reset(std::function<void()> cb){
@@ -178,7 +172,7 @@ void Fiber_1::MainFunc(){
     }
     catch(...){
         cur->m_state = EXCEPT;
-        SERVER_LOG_ERROR(SERVER_LOGGER_SYSTEM) << "fiber main err";
+        SERVER_LOG_ERROR2(SERVER_LOGGER_SYSTEM) << "fiber main err";
     }
         // cur.reset();
         auto raw_ptr = cur.get();
@@ -186,82 +180,6 @@ void Fiber_1::MainFunc(){
         raw_ptr->swapOut();
 }
 
-
-// c++20
-
-std::suspend_always CoRet::promise_type::initial_suspend() const noexcept{
-    return {};
-}
-
-std::suspend_never CoRet::promise_type::final_suspend() const noexcept{
-    return {};
-}
-
-void CoRet::promise_type::unhandled_exception() {
-
-}
-
-CoRet CoRet::promise_type::get_return_object(){
-    return {std::coroutine_handle<promise_type>::from_promise(*this)};
-}
-
-std::suspend_always CoRet::promise_type::yield_void() {
-    t_fiber_ = t_threadIber_.get();
-    return {};
-}
-
-std::suspend_always CoRet::promise_type::yield_value(State s) {
-    t_fiber_ = t_threadIber_.get();
-    m_state = s;
-    return {};
-}
-
-void CoRet::promise_type::return_value(State s){
-    m_done = true;
-    t_fiber_ = t_threadIber_.get();
-    m_state = s;
-}
-
-
-
-Fiber_::Fiber_(){
-    SetThis(this);
-    ++s_fiber_count;
-}
-
-Fiber_::Fiber_(std::function<CoRet()> cb)
-    :m_id(++s_fiber_id), m_cb(cb())
-{
-    ++s_fiber_count;
-}
-
-Fiber_::~Fiber_(){
-    --s_fiber_count;    
-
-    SERVER_LOG_INFO(SERVER_LOGGER_SYSTEM) << "fiber destroy id:" << m_id;
-}
-
-void Fiber_::reset(std::function<CoRet()> cb){
-    m_cb = cb();
-}
-
-void Fiber_::swapIn(){
-    if(!m_cb.done()){
-        t_fiber_ = this;
-        m_cb();
-    }
-}
-
-bool Fiber_::done(){
-    return m_cb.done();
-}
-
-uint64_t Fiber_::GetCurFiberId(){
-    if(t_fiber_){
-        return t_fiber_->getId();
-    }
-    return 0;
-}
 
 
 } // namespace server

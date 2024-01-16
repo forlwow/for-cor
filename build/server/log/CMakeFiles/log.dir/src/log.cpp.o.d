@@ -266,11 +266,13 @@ server/log/CMakeFiles/log.dir/src/log.cpp.o: \
  /usr/local/include/c++/13.1.0/bits/unique_lock.h \
  /home/webserver/web_server/server/util/inc/singleton.h \
  /home/webserver/web_server/server/fiber/inc/fiber.h \
- /usr/local/include/c++/13.1.0/coroutine \
  /usr/include/x86_64-linux-gnu/sys/ucontext.h \
  /usr/include/x86_64-linux-gnu/bits/types/stack_t.h \
  /usr/include/ucontext.h \
  /usr/include/x86_64-linux-gnu/bits/indirect-return.h \
+ /home/webserver/web_server/server/util/inc/enums.h \
+ /home/webserver/web_server/server/fiber/inc/fiber_.h \
+ /usr/local/include/c++/13.1.0/coroutine \
  /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/exceptions.h \
  /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/mark.h \
  /home/webserver/web_server/server/ThirdModule/include/yaml-cpp/dll.h \

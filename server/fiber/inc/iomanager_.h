@@ -2,7 +2,6 @@
 #define IOMANAGER__H
 
 #include "ethread.h"
-#include "fiber.h"
 #include "scheduler_.h"
 #include <atomic>
 #include <cassert>
@@ -76,6 +75,9 @@ private:
     std::set<Timer_::ptr, Timer_::Compare> m_timers;
 };
 
+
+// 由于每个Fiber对象可能会在短时间内被多次调度
+// 因此使用Fiber2
 class IOManager_: public Scheduler_, public Timer_Manager{
 public:
     typedef std::shared_ptr<IOManager_> ptr;
@@ -129,16 +131,17 @@ public:
     IOManager_(size_t threads_ = 1, const std::string& name_ = "Sche");
     ~IOManager_() override;
 
-    int AddEvent(int fd, Event event, TaskType cb);
+    int AddEvent(int fd, Event event, TaskType cb, bool drop = false);
     bool DelEvent(int fd, Event event);
     bool CancelEvent(int fd, Event event);
-
-    void wait(int time = -1);
 
 protected:
     bool stopping() override;
     CoRet idle() override;
     void run() override;
+
+    // 将schedule修改为protected禁止外界访问
+//    using Scheduler_::schedule;
 
 private:
     int m_epfd = -1;
@@ -146,7 +149,6 @@ private:
     std::unordered_map<int, FdContext::ptr> m_fdContexts;
 
     Fiber_::ptr m_idleFiber;
-    std::atomic_flag m_idleLock = ATOMIC_FLAG_INIT;
 
 };
  

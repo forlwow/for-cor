@@ -13,7 +13,8 @@
 
 #include <ethread.h>
 #include <singleton.h>
-#include <fiber.h>
+#include "fiber.h"
+#include "fiber_.h"
 
 namespace server{
 
@@ -27,6 +28,13 @@ extern thread_local const char* t_thread_name;
         0, server::t_thread_id, server::Fiber_::GetCurFiberId(), \
         time(0), server::t_thread_name\
         )))
+#define SERVER_LOG_LEVEL2(logger, level)  \
+    server::LogEventWrap(server::LogEvent::ptr(\
+        new server::LogEvent(logger, level, \
+        __FILE__, __LINE__, \
+        0, server::t_thread_id, server::Fiber_1::GetCurFiberId(), \
+        time(0), server::t_thread_name\
+        )))
 
 #define SERVER_LOGGER_SYSTEM server::LogManager::GetInstance()->getLogger("system")
 #define SERVER_LOGGER(name) server::LogManager::GetInstance()->getLogger(name)
@@ -37,6 +45,11 @@ extern thread_local const char* t_thread_name;
 #define SERVER_LOG_ERROR(logger) SERVER_LOG_LEVEL(logger, server::LogLevel::ERROR)
 #define SERVER_LOG_FATAL(logger) SERVER_LOG_LEVEL(logger, server::LogLevel::FATAL)
 
+#define SERVER_LOG_DEBUG2(logger) SERVER_LOG_LEVEL2(logger, server::LogLevel::DEBUG)
+#define SERVER_LOG_INFO2(logger) SERVER_LOG_LEVEL2(logger, server::LogLevel::INFO)
+#define SERVER_LOG_WARN2(logger) SERVER_LOG_LEVEL2(logger, server::LogLevel::WARN)
+#define SERVER_LOG_ERROR2(logger) SERVER_LOG_LEVEL2(logger, server::LogLevel::ERROR)
+#define SERVER_LOG_FATAL2(logger) SERVER_LOG_LEVEL2(logger, server::LogLevel::FATAL)
 
 class Logger;
 
