@@ -1,4 +1,4 @@
-# Install script for directory: /home/webserver/web_server/server/log
+# Install script for directory: /home/worker/webserver/server/log
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

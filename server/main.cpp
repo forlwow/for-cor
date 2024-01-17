@@ -1,4 +1,6 @@
+#include "enums.h"
 #include "ethread.h"
+#include "fiber_.h"
 #include "iomanager_.h"
 #include "fiber.h"
 #include "iomanager.h"
@@ -48,12 +50,26 @@ void fib_func(){
     //SERVER_LOG_INFO(slog) << "after yield 2";
 }
 server::CoRet run_in_fiber(){
+    SERVER_LOG_INFO(logger) << "enter fiber";
+    sleep(9);
     SERVER_LOG_INFO(logger) << "begin run in fiber";
+    co_yield server::HOLD;
+    SERVER_LOG_INFO(logger) << "before end run in fiber";
+    co_yield server::HOLD;
+    SERVER_LOG_INFO(logger) << "before end run in fiber";
     co_yield server::HOLD;
     SERVER_LOG_INFO(logger) << "before end run in fiber";
     co_yield server::HOLD;
     SERVER_LOG_INFO(logger) << "end run in fiber";
     co_return server::TERM;
+}
+
+server::CoRet count_in_fiber(){
+    uint i = 0;
+    while (1) {
+        SERVER_LOG_INFO(logger) << "count:" << i++;
+        co_yield server::HOLD;
+    }
 }
 
 
@@ -143,12 +159,11 @@ server::CoRet fiber_timer_cir(){
 void p(){SERVER_LOG_INFO(logger) << "test";}
 
 void test5(){
-    server::IOManager_ iom(6);
-    server::Fiber_2::ptr fib(new server::Fiber_2(run_in_fiber, true)); 
-    fib->setCbBeforeYield(p);
-    for(auto i in range(100)){
-        iom.schedule(fib);
-    }
+    server::IOManager_ iom(5);
+    server::Fiber_2::ptr fib(new server::Fiber_2(run_in_fiber, false)); 
+    server::Fiber_2::ptr fib2(new server::Fiber_2(p)); 
     iom.start();
-    iom.wait();
+    iom.addTimer(5000, run_in_fiber, true);
+    iom.addTimer(1000, count_in_fiber, false);
+    iom.wait(100);
 }

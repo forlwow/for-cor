@@ -2,6 +2,7 @@
 #define IOMANAGER__H
 
 #include "ethread.h"
+#include "fiber_.h"
 #include "scheduler_.h"
 #include <atomic>
 #include <cassert>
@@ -22,7 +23,7 @@ class Timer_: public std::enable_shared_from_this<server::Timer_>{
 friend class Timer_Manager;
 public:
     typedef std::shared_ptr<Timer_> ptr;
-    typedef std::function<CoRet()> TaskType;
+    typedef Fiber_::ptr TaskType;
     Fiber_::ptr GetFunc(){return m_cb;}
     inline void refresh();
     static bool InsertIntoManager(Timer_::ptr Timer_);
@@ -39,7 +40,7 @@ private:
     uint64_t m_ms;              // 周期
     uint64_t m_next;            // 执行的时间点
     Timer_Manager* m_manager;    // 
-    Fiber_::ptr m_cb; // 
+    TaskType m_cb; // 
 };
 
 
@@ -48,7 +49,8 @@ friend class Timer_;
 public:
     typedef std::shared_ptr<Timer_Manager> ptr;
     typedef RWMutex RWMutexType;
-    typedef std::function<CoRet()> TaskType;
+    typedef std::function<void()> TaskType1;
+    typedef std::function<CoRet()> TaskType2;
 
     Timer_Manager();
     virtual ~Timer_Manager();
@@ -60,9 +62,9 @@ public:
             return (uint64_t)now;
     }
 
-    Timer_::ptr addTimer(uint64_t ms, TaskType);
+    Timer_::ptr addTimer(uint64_t ms, TaskType1);
+    Timer_::ptr addTimer(uint64_t ms, TaskType2, bool drop);
     void addTimer(Timer_::ptr Timer_);
-    Timer_::ptr addConditionTimer(uint64_t ms, TaskType, std::weak_ptr<void> weak_cond);
     std::vector<Timer_::ptr> GetExpireTimers();          // 获取已经到期的Timer_
     uint64_t GetNextTimeDuration();                     // 获取下个定时器触发的剩余时间
 protected:
@@ -141,7 +143,7 @@ protected:
     void run() override;
 
     // 将schedule修改为protected禁止外界访问
-//    using Scheduler_::schedule;
+    // using Scheduler_::schedule;
 
 private:
     int m_epfd = -1;

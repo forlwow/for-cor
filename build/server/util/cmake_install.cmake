@@ -1,4 +1,4 @@
-# Install script for directory: /home/webserver/web_server/server/util
+# Install script for directory: /home/worker/webserver/server/util
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

@@ -1,4 +1,4 @@
-# Install script for directory: /home/webserver/web_server
+# Install script for directory: /home/worker/webserver
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -44,7 +44,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/webserver/web_server/build/server/cmake_install.cmake")
+  include("/home/worker/webserver/build/server/cmake_install.cmake")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -55,5 +55,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/webserver/web_server/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/worker/webserver/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/webserver/web_server/lib/liblog.pdb"
-  "/home/webserver/web_server/lib/liblog.so"
+  "/home/worker/webserver/lib/liblog.pdb"
+  "/home/worker/webserver/lib/liblog.so"
   "CMakeFiles/log.dir/src/log.cpp.o"
   "CMakeFiles/log.dir/src/log.cpp.o.d"
 )

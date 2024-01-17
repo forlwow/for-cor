@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/webserver/web_server/lib/libutil.pdb"
-  "/home/webserver/web_server/lib/libutil.so"
+  "/home/worker/webserver/lib/libutil.pdb"
+  "/home/worker/webserver/lib/libutil.so"
   "CMakeFiles/util.dir/src/range.cpp.o"
   "CMakeFiles/util.dir/src/range.cpp.o.d"
   "CMakeFiles/util.dir/src/timer.cpp.o"

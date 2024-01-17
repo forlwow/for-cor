@@ -1,4 +1,4 @@
-# Install script for directory: /home/webserver/web_server/server/ethread
+# Install script for directory: /home/worker/webserver/server/ethread
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

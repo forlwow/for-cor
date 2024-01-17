@@ -8,11 +8,11 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/webserver/web_server/server/log/src/log.cpp" "server/log/CMakeFiles/log.dir/src/log.cpp.o" "gcc" "server/log/CMakeFiles/log.dir/src/log.cpp.o.d"
+  "/home/worker/webserver/server/log/src/log.cpp" "server/log/CMakeFiles/log.dir/src/log.cpp.o" "gcc" "server/log/CMakeFiles/log.dir/src/log.cpp.o.d"
   )
 
-# Targets to which this target links which contain Fortran sources.
-set(CMAKE_Fortran_TARGET_LINKED_INFO_FILES
+# Targets to which this target links.
+set(CMAKE_TARGET_LINKED_INFO_FILES
   )
 
 # Fortran module output directory.

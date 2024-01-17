@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/webserver/web_server/lib/libethread.pdb"
-  "/home/webserver/web_server/lib/libethread.so"
+  "/home/worker/webserver/lib/libethread.pdb"
+  "/home/worker/webserver/lib/libethread.so"
   "CMakeFiles/ethread.dir/src/ethread.cpp.o"
   "CMakeFiles/ethread.dir/src/ethread.cpp.o.d"
 )

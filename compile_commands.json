@@ -1,1 +1,67 @@
-/home/webserver/web_server/build/compile_commands.json
+[
+{
+  "directory": "/home/worker/webserver/build",
+  "command": "/usr/local/bin/g++  -I/home/worker/webserver/server/log/inc -I/home/worker/webserver/server/util/inc -I/home/worker/webserver/server/ethread/inc -I/home/worker/webserver/server/ecoroutine/inc -I/home/worker/webserver/server/fiber/inc -I/home/worker/webserver/server/ThirdModule/include  -O0 -w -g2 -ggdb -std=c++20 -std=gnu++20 -o CMakeFiles/web_server.dir/server/main.cpp.o -c /home/worker/webserver/server/main.cpp",
+  "file": "/home/worker/webserver/server/main.cpp"
+},
+{
+  "directory": "/home/worker/webserver/build/server/log",
+  "command": "/usr/local/bin/g++ -Dlog_EXPORTS -I/home/worker/webserver/server/log/inc -I/home/worker/webserver/server/util/inc -I/home/worker/webserver/server/ethread/inc -I/home/worker/webserver/server/ecoroutine/inc -I/home/worker/webserver/server/fiber/inc -I/home/worker/webserver/server/ThirdModule/include  -O0 -w -g2 -ggdb -std=c++20 -fPIC -std=gnu++20 -o CMakeFiles/log.dir/src/log.cpp.o -c /home/worker/webserver/server/log/src/log.cpp",
+  "file": "/home/worker/webserver/server/log/src/log.cpp"
+},
+{
+  "directory": "/home/worker/webserver/build/server/util",
+  "command": "/usr/local/bin/g++ -Dutil_EXPORTS -I/home/worker/webserver/server/log/inc -I/home/worker/webserver/server/util/inc -I/home/worker/webserver/server/ethread/inc -I/home/worker/webserver/server/ecoroutine/inc -I/home/worker/webserver/server/fiber/inc -I/home/worker/webserver/server/ThirdModule/include  -O0 -w -g2 -ggdb -std=c++20 -fPIC -std=gnu++20 -o CMakeFiles/util.dir/src/range.cpp.o -c /home/worker/webserver/server/util/src/range.cpp",
+  "file": "/home/worker/webserver/server/util/src/range.cpp"
+},
+{
+  "directory": "/home/worker/webserver/build/server/util",
+  "command": "/usr/local/bin/g++ -Dutil_EXPORTS -I/home/worker/webserver/server/log/inc -I/home/worker/webserver/server/util/inc -I/home/worker/webserver/server/ethread/inc -I/home/worker/webserver/server/ecoroutine/inc -I/home/worker/webserver/server/fiber/inc -I/home/worker/webserver/server/ThirdModule/include  -O0 -w -g2 -ggdb -std=c++20 -fPIC -std=gnu++20 -o CMakeFiles/util.dir/src/timer.cpp.o -c /home/worker/webserver/server/util/src/timer.cpp",
+  "file": "/home/worker/webserver/server/util/src/timer.cpp"
+},
+{
+  "directory": "/home/worker/webserver/build/server/util",
+  "command": "/usr/local/bin/g++ -Dutil_EXPORTS -I/home/worker/webserver/server/log/inc -I/home/worker/webserver/server/util/inc -I/home/worker/webserver/server/ethread/inc -I/home/worker/webserver/server/ecoroutine/inc -I/home/worker/webserver/server/fiber/inc -I/home/worker/webserver/server/ThirdModule/include  -O0 -w -g2 -ggdb -std=c++20 -fPIC -std=gnu++20 -o CMakeFiles/util.dir/src/util.cpp.o -c /home/worker/webserver/server/util/src/util.cpp",
+  "file": "/home/worker/webserver/server/util/src/util.cpp"
+},
+{
+  "directory": "/home/worker/webserver/build/server/ethread",
+  "command": "/usr/local/bin/g++ -Dethread_EXPORTS -I/home/worker/webserver/server/log/inc -I/home/worker/webserver/server/util/inc -I/home/worker/webserver/server/ethread/inc -I/home/worker/webserver/server/ecoroutine/inc -I/home/worker/webserver/server/fiber/inc -I/home/worker/webserver/server/ThirdModule/include  -O0 -w -g2 -ggdb -std=c++20 -fPIC -std=gnu++20 -o CMakeFiles/ethread.dir/src/ethread.cpp.o -c /home/worker/webserver/server/ethread/src/ethread.cpp",
+  "file": "/home/worker/webserver/server/ethread/src/ethread.cpp"
+},
+{
+  "directory": "/home/worker/webserver/build/server/ecoroutine",
+  "command": "/usr/local/bin/g++ -Decoroutine_EXPORTS -I/home/worker/webserver/server/log/inc -I/home/worker/webserver/server/util/inc -I/home/worker/webserver/server/ethread/inc -I/home/worker/webserver/server/ecoroutine/inc -I/home/worker/webserver/server/fiber/inc -I/home/worker/webserver/server/ThirdModule/include  -O0 -w -g2 -ggdb -std=c++20 -fPIC -std=gnu++20 -o CMakeFiles/ecoroutine.dir/src/ecoroutine.cpp.o -c /home/worker/webserver/server/ecoroutine/src/ecoroutine.cpp",
+  "file": "/home/worker/webserver/server/ecoroutine/src/ecoroutine.cpp"
+},
+{
+  "directory": "/home/worker/webserver/build/server/fiber",
+  "command": "/usr/local/bin/g++ -Dfiber_EXPORTS -I/home/worker/webserver/server/log/inc -I/home/worker/webserver/server/util/inc -I/home/worker/webserver/server/ethread/inc -I/home/worker/webserver/server/ecoroutine/inc -I/home/worker/webserver/server/fiber/inc -I/home/worker/webserver/server/ThirdModule/include  -O0 -w -g2 -ggdb -std=c++20 -fPIC -std=gnu++20 -o CMakeFiles/fiber.dir/src/fiber.cpp.o -c /home/worker/webserver/server/fiber/src/fiber.cpp",
+  "file": "/home/worker/webserver/server/fiber/src/fiber.cpp"
+},
+{
+  "directory": "/home/worker/webserver/build/server/fiber",
+  "command": "/usr/local/bin/g++ -Dfiber_EXPORTS -I/home/worker/webserver/server/log/inc -I/home/worker/webserver/server/util/inc -I/home/worker/webserver/server/ethread/inc -I/home/worker/webserver/server/ecoroutine/inc -I/home/worker/webserver/server/fiber/inc -I/home/worker/webserver/server/ThirdModule/include  -O0 -w -g2 -ggdb -std=c++20 -fPIC -std=gnu++20 -o CMakeFiles/fiber.dir/src/fiber_.cpp.o -c /home/worker/webserver/server/fiber/src/fiber_.cpp",
+  "file": "/home/worker/webserver/server/fiber/src/fiber_.cpp"
+},
+{
+  "directory": "/home/worker/webserver/build/server/fiber",
+  "command": "/usr/local/bin/g++ -Dfiber_EXPORTS -I/home/worker/webserver/server/log/inc -I/home/worker/webserver/server/util/inc -I/home/worker/webserver/server/ethread/inc -I/home/worker/webserver/server/ecoroutine/inc -I/home/worker/webserver/server/fiber/inc -I/home/worker/webserver/server/ThirdModule/include  -O0 -w -g2 -ggdb -std=c++20 -fPIC -std=gnu++20 -o CMakeFiles/fiber.dir/src/iomanager.cpp.o -c /home/worker/webserver/server/fiber/src/iomanager.cpp",
+  "file": "/home/worker/webserver/server/fiber/src/iomanager.cpp"
+},
+{
+  "directory": "/home/worker/webserver/build/server/fiber",
+  "command": "/usr/local/bin/g++ -Dfiber_EXPORTS -I/home/worker/webserver/server/log/inc -I/home/worker/webserver/server/util/inc -I/home/worker/webserver/server/ethread/inc -I/home/worker/webserver/server/ecoroutine/inc -I/home/worker/webserver/server/fiber/inc -I/home/worker/webserver/server/ThirdModule/include  -O0 -w -g2 -ggdb -std=c++20 -fPIC -std=gnu++20 -o CMakeFiles/fiber.dir/src/iomanager_.cpp.o -c /home/worker/webserver/server/fiber/src/iomanager_.cpp",
+  "file": "/home/worker/webserver/server/fiber/src/iomanager_.cpp"
+},
+{
+  "directory": "/home/worker/webserver/build/server/fiber",
+  "command": "/usr/local/bin/g++ -Dfiber_EXPORTS -I/home/worker/webserver/server/log/inc -I/home/worker/webserver/server/util/inc -I/home/worker/webserver/server/ethread/inc -I/home/worker/webserver/server/ecoroutine/inc -I/home/worker/webserver/server/fiber/inc -I/home/worker/webserver/server/ThirdModule/include  -O0 -w -g2 -ggdb -std=c++20 -fPIC -std=gnu++20 -o CMakeFiles/fiber.dir/src/scheduler.cpp.o -c /home/worker/webserver/server/fiber/src/scheduler.cpp",
+  "file": "/home/worker/webserver/server/fiber/src/scheduler.cpp"
+},
+{
+  "directory": "/home/worker/webserver/build/server/fiber",
+  "command": "/usr/local/bin/g++ -Dfiber_EXPORTS -I/home/worker/webserver/server/log/inc -I/home/worker/webserver/server/util/inc -I/home/worker/webserver/server/ethread/inc -I/home/worker/webserver/server/ecoroutine/inc -I/home/worker/webserver/server/fiber/inc -I/home/worker/webserver/server/ThirdModule/include  -O0 -w -g2 -ggdb -std=c++20 -fPIC -std=gnu++20 -o CMakeFiles/fiber.dir/src/scheduler_.cpp.o -c /home/worker/webserver/server/fiber/src/scheduler_.cpp",
+  "file": "/home/worker/webserver/server/fiber/src/scheduler_.cpp"
+}
+]

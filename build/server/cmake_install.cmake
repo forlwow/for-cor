@@ -1,4 +1,4 @@
-# Install script for directory: /home/webserver/web_server/server
+# Install script for directory: /home/worker/webserver/server
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -44,26 +44,26 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/webserver/web_server/build/server/log/cmake_install.cmake")
+  include("/home/worker/webserver/build/server/log/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/webserver/web_server/build/server/util/cmake_install.cmake")
+  include("/home/worker/webserver/build/server/util/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/webserver/web_server/build/server/ethread/cmake_install.cmake")
+  include("/home/worker/webserver/build/server/ethread/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/webserver/web_server/build/server/ecoroutine/cmake_install.cmake")
+  include("/home/worker/webserver/build/server/ecoroutine/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/webserver/web_server/build/server/fiber/cmake_install.cmake")
+  include("/home/worker/webserver/build/server/fiber/cmake_install.cmake")
 endif()
 

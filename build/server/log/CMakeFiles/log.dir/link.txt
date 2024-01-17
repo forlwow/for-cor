@@ -1,1 +1,1 @@
-/usr/local/bin/g++ -fPIC  -O0 -w -g2 -ggdb -std=c++20 -shared -Wl,-soname,liblog.so -o /home/webserver/web_server/lib/liblog.so CMakeFiles/log.dir/src/log.cpp.o   -L/home/webserver/web_server/server/ThirdModule/lib  -L/home/webserver/web_server/lib 
+/usr/local/bin/g++ -fPIC  -O0 -w -g2 -ggdb -std=c++20 -shared -Wl,-soname,liblog.so -o /home/worker/webserver/lib/liblog.so CMakeFiles/log.dir/src/log.cpp.o   -L/home/worker/webserver/server/ThirdModule/lib  -L/home/worker/webserver/lib 

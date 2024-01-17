@@ -4,6 +4,8 @@
 #include <cstdint>
 #include <functional>
 #include <sys/types.h>
+#include <tuple>
+#include <utility>
 
 namespace server{
 
@@ -100,7 +102,13 @@ uint64_t Fiber_::GetCurFiberId(){
 
 
 Fiber_2::Fiber_2(std::function<CoRet()> cb, bool drop_)
-    : Fiber_(cb), m_drop(drop_)
+    : m_cb(cb()), m_drop(drop_)
+{
+    std::get<COROUTINE>(m_cb).h_.promise().m_done = &m_done;
+}
+
+Fiber_2::Fiber_2(std::function<void()> cb)
+    : m_cb(cb)
 {
 
 }
@@ -110,21 +118,32 @@ Fiber_2::~Fiber_2(){
 }
 
 bool Fiber_2::swapIn(){
-    if(m_cbBeforeSwapIn)
-        m_cbBeforeSwapIn();
-    if(m_flag.test_and_set())   // 已被其他线程调用
+    if(m_cb.index() == COROUTINE){
+        if(m_cbBeforeSwapIn)
+            m_cbBeforeSwapIn();
+        if(m_flag.test_and_set())   // 已被其他线程调用
+            return false;
+        if(!m_done){
+            t_fiber_ = this;
+            std::get<COROUTINE>(m_cb)();
+            m_flag.clear();
+            return true;
+        }
         return false;
-    if(!m_done){
-        t_fiber_ = this;
-        m_cb();
-        m_flag.clear();
+    }
+    else if (m_cb.index() == FUNCTION){
+        if(m_cbBeforeSwapIn)
+            m_cbBeforeSwapIn();
+        std::get<FUNCTION>(m_cb)();
         return true;
     }
-    return false;
+    else
+        return false;
 }
 
 void Fiber_2::setCbBeforeReturn(std::function<void()> cb){
-    m_cb.h_.promise().m_cbBeforeReturn = cb;
+    if(m_cb.index() == COROUTINE)
+        std::get<COROUTINE>(m_cb).h_.promise().m_cbBeforeReturn = cb;
 }
 
 void Fiber_2::setCbBeforeSwapIn(std::function<void()> cb){
@@ -132,7 +151,8 @@ void Fiber_2::setCbBeforeSwapIn(std::function<void()> cb){
 }
 
 void Fiber_2::setCbBeforeYield(std::function<void()> cb){
-    m_cb.h_.promise().m_cbBeforeYield = cb;
+    if(m_cb.index() == COROUTINE)
+        std::get<COROUTINE>(m_cb).h_.promise().m_cbBeforeYield = cb;
 }
 
 } // namespace server

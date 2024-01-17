@@ -4,6 +4,7 @@
 #include "fiber_.h"
 #include "log.h"
 #include "scheduler_.h"
+#include "timer.h"
 #include <cassert>
 #include <cerrno>
 #include <cstdint>
@@ -148,7 +149,11 @@ CoRet IOManager_::idle(){
         }while(true);
 
         for(auto exp : GetExpireTimers()){
-            schedule(exp->GetFunc());
+            if(!exp->GetFunc()->done()){
+                schedule(exp->GetFunc());
+                exp->refresh();
+                addTimer(exp);
+            }
         }
 
         for(int i = 0; i < ret; ++i){
@@ -184,8 +189,11 @@ void IOManager_::run(){
             if(ta->done()) continue;
             ++m_working_thread;
             auto tb = std::dynamic_pointer_cast<Fiber_2>(ta);
-            if(!tb->swapIn() && !tb->isDrop())
+            if(!tb->swapIn() && !tb->isDrop()){
                 schedule(ta);
+            }
+            else{
+            }
             --m_working_thread;
         }
         else if(m_autoStop){
@@ -217,12 +225,7 @@ Timer_::Timer_(uint64_t ms, TaskType cb, Timer_Manager* manager)
     : m_ms(ms), m_manager(manager)
 {
     m_next = Timer_Manager::GetCurTimeStamp() + ms;
-    Fiber_2::ptr task(new Fiber_2(cb));
-    task->setCbBeforeYield([this]{
-        this->refresh();
-        // this->m_manager->addTimer(m_ms, this->GetFunc());
-        });
-    m_cb = task;
+    m_cb = cb;
 }
 
 Timer_::Timer_(uint64_t next_time)
@@ -255,29 +258,23 @@ void Timer_Manager::OnInsertAtFront(){
 
 }
 
-Timer_::ptr Timer_Manager::addTimer(uint64_t ms, TaskType cb){
-    Timer_::ptr timer(new Timer_(ms, cb, this));
-    WriteLockGuard wlock(m_mutex);
-
-    m_timers.insert(timer);
-    wlock.unlock();
+Timer_::ptr Timer_Manager::addTimer(uint64_t ms, TaskType1 cb){
+    Fiber_2::ptr fib(new Fiber_2(cb));
+    Timer_::ptr timer(new Timer_(ms, fib, this));
+    addTimer(timer);
+    return timer;
+}
+   
+Timer_::ptr Timer_Manager::addTimer(uint64_t ms, TaskType2 cb, bool drop){
+    Fiber_2::ptr fib(new Fiber_2(cb, drop));
+    Timer_::ptr timer(new Timer_(ms, fib, this));
+    addTimer(timer);
     return timer;
 }
 
 void Timer_Manager::addTimer(Timer_::ptr Timer_){
-    SERVER_LOG_INFO(g_logger) << "add timer";
     WriteLockGuard wlock(m_mutex);
     m_timers.insert(Timer_);
-}
-
-Timer_::ptr Timer_Manager::addConditionTimer(uint64_t ms, TaskType cb, std::weak_ptr<void> weak_cond){
-    WriteLockGuard wlock(m_mutex);
-    return addTimer(ms, 
-            [=]->CoRet{
-            if(weak_cond.lock())
-                cb().h_.resume();
-            } 
-    );
 }
 
 std::vector<Timer_::ptr> Timer_Manager::GetExpireTimers(){
