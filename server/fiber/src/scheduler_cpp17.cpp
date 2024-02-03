@@ -1,4 +1,6 @@
-#include "scheduler.h"
+#if __cplusplus < 202002L
+
+#include "scheduler_cpp17.h"
 #include "ethread.h"
 #include "enums.h"
 #include "fiber.h"
@@ -190,4 +192,7 @@ void Scheduler::idle(){
 }
 
 }
+
+
+#endif
 

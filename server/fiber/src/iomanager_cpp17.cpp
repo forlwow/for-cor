@@ -1,6 +1,7 @@
-#include "iomanager.h"
+#if __cplusplus < 202002L
+#include "iomanager_cpp17.h"
 #include "ethread.h"
-#include "fiber.h"
+#include "fiber_cpp17.h"
 #include "log.h"
 #include "scheduler.h"
 #include <cassert>
@@ -326,3 +327,6 @@ void IOManager::idle(){
 
 
 } // namespace server
+
+#endif
+

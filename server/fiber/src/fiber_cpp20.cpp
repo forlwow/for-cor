@@ -1,4 +1,5 @@
-#include "fiber_.h"
+#if __cplusplus >= 202002L
+#include "fiber_cpp20.h"
 #include "log.h"
 #include "shared_vars.h"
 #include <cstdint>
@@ -9,8 +10,7 @@
 
 namespace server{
 
-thread_local Fiber_* t_fiber_ = nullptr;            // 当前执行的协程
-thread_local Fiber_::ptr t_threadIber_ = nullptr;   // 主协程
+thread_local Fiber_::ptr t_fiber_ = nullptr;            // 当前执行的协程
 
 auto g_logger = SERVER_LOGGER_SYSTEM;
 
@@ -35,14 +35,12 @@ CoRet CoRet::promise_type::get_return_object(){
 std::suspend_always CoRet::promise_type::yield_void() {
     if(m_cbBeforeYield)
         m_cbBeforeYield();
-    t_fiber_ = t_threadIber_.get();
     return {};
 }
 
 std::suspend_always CoRet::promise_type::yield_value(State s) {
     if(m_cbBeforeYield)
         m_cbBeforeYield();
-    t_fiber_ = t_threadIber_.get();
     m_state = s;
     return {};
 }
@@ -52,7 +50,6 @@ void CoRet::promise_type::return_value(State s){
         m_cbBeforeReturn();
     if(m_done)
         *m_done = true;
-    t_fiber_ = t_threadIber_.get();
     m_state = s;
 }
 
@@ -71,7 +68,7 @@ Fiber_::Fiber_(std::function<CoRet()> cb)
 Fiber_::~Fiber_(){
     --s_fiber_count;    
 
-    SERVER_LOG_INFO(g_logger) << "fiber  destroy id:" << m_id;
+    // SERVER_LOG_INFO(g_logger) << "fiber  destroy id:" << m_id;
 }
 
 void Fiber_::reset(std::function<CoRet()> cb){
@@ -82,8 +79,9 @@ void Fiber_::reset(std::function<CoRet()> cb){
 
 bool Fiber_::swapIn(){
     if(!m_done){
-        t_fiber_ = this;
+        t_fiber_ = shared_from_this();
         m_cb();
+        t_fiber_.reset();
         return true;
     }
     return false;
@@ -93,6 +91,10 @@ bool Fiber_::done(){
     return m_done;
 }
 
+Fiber_::ptr Fiber_::GetThis(){
+    return t_fiber_;
+}
+
 uint64_t Fiber_::GetCurFiberId(){
     if(t_fiber_){
         return t_fiber_->getId();
@@ -100,6 +102,18 @@ uint64_t Fiber_::GetCurFiberId(){
     return 0;
 }
 
+
+Fiber_2::Fiber_2(co_fun cb, bool drop_)
+    : m_cb(cb()), m_drop(drop_)
+{
+    std::get<COROUTINE>(m_cb).h_.promise().m_done = &m_done;
+}
+
+Fiber_2::Fiber_2(void_fun cb)
+    : m_cb(cb)
+{
+
+}
 
 Fiber_2::Fiber_2(std::function<CoRet()> cb, bool drop_)
     : m_cb(cb()), m_drop(drop_)
@@ -113,6 +127,7 @@ Fiber_2::Fiber_2(std::function<void()> cb)
 
 }
 
+
 Fiber_2::~Fiber_2(){
     
 }
@@ -124,9 +139,10 @@ bool Fiber_2::swapIn(){
         if(m_flag.test_and_set())   // 已被其他线程调用
             return false;
         if(!m_done){
-            t_fiber_ = this;
+            t_fiber_ = shared_from_this();
             std::get<COROUTINE>(m_cb)();
             m_flag.clear();
+            t_fiber_.reset();
             return true;
         }
         return false;
@@ -134,7 +150,9 @@ bool Fiber_2::swapIn(){
     else if (m_cb.index() == FUNCTION){
         if(m_cbBeforeSwapIn)
             m_cbBeforeSwapIn();
+        t_fiber_ = shared_from_this();
         std::get<FUNCTION>(m_cb)();
+        t_fiber_.reset();
         return true;
     }
     else
@@ -158,4 +176,5 @@ void Fiber_2::setCbBeforeYield(std::function<void()> cb){
 } // namespace server
 
 
+#endif
 

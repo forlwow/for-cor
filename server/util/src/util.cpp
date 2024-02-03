@@ -17,7 +17,7 @@ void Backtrace(std::vector<std::string> &bt, int size, int skip){
 
     }
 
-    for(auto i: range<int>(skip, s)){
+    for(auto i = skip; i < s; ++i){
         bt.push_back(strings[i]);
     }
 

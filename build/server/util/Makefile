@@ -130,6 +130,30 @@ util/fast:
 	cd /home/worker/webserver/build && $(MAKE) $(MAKESILENT) -f server/util/CMakeFiles/util.dir/build.make server/util/CMakeFiles/util.dir/build
 .PHONY : util/fast
 
+src/hook.o: src/hook.cpp.o
+.PHONY : src/hook.o
+
+# target to build an object file
+src/hook.cpp.o:
+	cd /home/worker/webserver/build && $(MAKE) $(MAKESILENT) -f server/util/CMakeFiles/util.dir/build.make server/util/CMakeFiles/util.dir/src/hook.cpp.o
+.PHONY : src/hook.cpp.o
+
+src/hook.i: src/hook.cpp.i
+.PHONY : src/hook.i
+
+# target to preprocess a source file
+src/hook.cpp.i:
+	cd /home/worker/webserver/build && $(MAKE) $(MAKESILENT) -f server/util/CMakeFiles/util.dir/build.make server/util/CMakeFiles/util.dir/src/hook.cpp.i
+.PHONY : src/hook.cpp.i
+
+src/hook.s: src/hook.cpp.s
+.PHONY : src/hook.s
+
+# target to generate assembly for a file
+src/hook.cpp.s:
+	cd /home/worker/webserver/build && $(MAKE) $(MAKESILENT) -f server/util/CMakeFiles/util.dir/build.make server/util/CMakeFiles/util.dir/src/hook.cpp.s
+.PHONY : src/hook.cpp.s
+
 src/range.o: src/range.cpp.o
 .PHONY : src/range.o
 
@@ -211,6 +235,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... util"
+	@echo "... src/hook.o"
+	@echo "... src/hook.i"
+	@echo "... src/hook.s"
 	@echo "... src/range.o"
 	@echo "... src/range.i"
 	@echo "... src/range.s"

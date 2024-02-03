@@ -1,10 +1,11 @@
-#ifndef SERVER_SCHEDULER__H
-#define SERVER_SCHEDULER__H
+#if __cplusplus >= 202002L
+#ifndef SERVER_SCHEDULER_20_H
+#define SERVER_SCHEDULER_20_H
 
 #include "ethread.h"
 #include "threadsafe_deque.h"
 #include "enums.h"
-#include "fiber_.h"
+#include "fiber_cpp20.h"
 #include <atomic>
 #include <cstddef>
 #include <memory>
@@ -27,6 +28,7 @@ public:
     // 传入的参数为Fiber对象，或函数对象
     bool schedule(task_type task_);
     using submit = decltype(&Scheduler_::schedule);
+    static Scheduler_* GetScheduler();
 protected:
     virtual void run();
     virtual CoRet idle(){co_return TERM;}
@@ -44,4 +46,5 @@ protected:
 
 }
 
-#endif // SERVER_SCHEDULER__H
+#endif // SERVER_SCHEDULER_20_H
+#endif 

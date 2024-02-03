@@ -1,10 +1,10 @@
-#ifndef IOMANAGER__H
-#define IOMANAGER__H
+#if __cplusplus >= 202002L
+#ifndef IOMANAGER_20_H
+#define IOMANAGER_20_H
 
 #include "ethread.h"
-#include "fiber_.h"
-#include "scheduler_.h"
-#include <atomic>
+#include "fiber_cpp20.h"
+#include "scheduler_cpp20.h"
 #include <cassert>
 #include <cstddef>
 #include <functional>
@@ -26,11 +26,12 @@ public:
     typedef Fiber_::ptr TaskType;
     Fiber_::ptr GetFunc(){return m_cb;}
     inline void refresh();
+    bool isCirculate(){return m_circulate;}
     static bool InsertIntoManager(Timer_::ptr Timer_);
 
     ~Timer_()=default;
 private:
-    Timer_(uint64_t ms, TaskType cb, Timer_Manager* manager = nullptr);
+    Timer_(uint64_t ms, TaskType cb, Timer_Manager* manager = nullptr, bool cur = true);
     Timer_(uint64_t next_time);
     struct Compare{
         bool operator()(const Timer_::ptr& lp, const Timer_::ptr& rp) const;
@@ -39,6 +40,7 @@ private:
 private:
     uint64_t m_ms;              // 周期
     uint64_t m_next;            // 执行的时间点
+    bool m_circulate;             // 是否周期执行 只对含有void()的协程有效
     Timer_Manager* m_manager;    // 
     TaskType m_cb; // 
 };
@@ -62,7 +64,7 @@ public:
             return (uint64_t)now;
     }
 
-    Timer_::ptr addTimer(uint64_t ms, TaskType1);
+    Timer_::ptr addTimer(uint64_t ms, TaskType1, bool circulate);
     Timer_::ptr addTimer(uint64_t ms, TaskType2, bool drop);
     void addTimer(Timer_::ptr Timer_);
     std::vector<Timer_::ptr> GetExpireTimers();          // 获取已经到期的Timer_
@@ -137,6 +139,8 @@ public:
     bool DelEvent(int fd, Event event);
     bool CancelEvent(int fd, Event event);
 
+    static IOManager_* GetIOManager(){return dynamic_cast<IOManager_*>(Scheduler_::GetScheduler());}
+
 protected:
     bool stopping() override;
     CoRet idle() override;
@@ -156,4 +160,5 @@ private:
  
 } // namespace server
 
-#endif // IOMANAGER__H
+#endif // IOMANAGER_20_H
+#endif

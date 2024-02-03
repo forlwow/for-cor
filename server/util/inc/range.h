@@ -1,6 +1,8 @@
 #ifndef RANGE_H
 #define RANGE_H
 
+#if __cplusplus >= 202002L
+
 #include <coroutine>
 #include <memory>
 
@@ -69,4 +71,11 @@ template<typename T = int>
 CoRet<T> range(T begin, T end, T step){return _range(begin, end, step);}
 
 
+
+#else
+    #define range(n) std::vector<int>(n)
+    
+
 #endif
+
+#endif // RANGE_H

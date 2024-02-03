@@ -15,6 +15,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/home/worker/webserver/server/ethread/CMakeLists.txt"
   "/home/worker/webserver/server/fiber/CMakeLists.txt"
   "/home/worker/webserver/server/log/CMakeLists.txt"
+  "/home/worker/webserver/server/socket/CMakeLists.txt"
   "/home/worker/webserver/server/util/CMakeLists.txt"
   "/usr/share/cmake-3.25/Modules/CMakeCXXInformation.cmake"
   "/usr/share/cmake-3.25/Modules/CMakeCommonLanguageInclude.cmake"
@@ -47,6 +48,7 @@ set(CMAKE_MAKEFILE_PRODUCTS
   "server/ethread/CMakeFiles/CMakeDirectoryInformation.cmake"
   "server/ecoroutine/CMakeFiles/CMakeDirectoryInformation.cmake"
   "server/fiber/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "server/socket/CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
 # Dependency information for all targets:
@@ -57,4 +59,5 @@ set(CMAKE_DEPEND_INFO_FILES
   "server/ethread/CMakeFiles/ethread.dir/DependInfo.cmake"
   "server/ecoroutine/CMakeFiles/ecoroutine.dir/DependInfo.cmake"
   "server/fiber/CMakeFiles/fiber.dir/DependInfo.cmake"
+  "server/socket/CMakeFiles/socket.dir/DependInfo.cmake"
   )

@@ -1,4 +1,5 @@
-#include "scheduler_.h"
+#if __cplusplus >= 202002L
+#include "scheduler_cpp20.h"
 #include "ethread.h"
 #include "range.h"
 #include <algorithm>
@@ -13,7 +14,12 @@ namespace server{
 auto s_log = SERVER_LOGGER_SYSTEM;
 
 extern thread_local const char* t_thread_name;
+static Scheduler_* s_scheduler = nullptr;
 extern thread_local int t_thread_id;
+
+Scheduler_* Scheduler_::GetScheduler(){
+    return s_scheduler;
+}
 
 Scheduler_::Scheduler_(size_t max_, const std::string& name_)
     : m_name(name_)
@@ -22,6 +28,7 @@ Scheduler_::Scheduler_(size_t max_, const std::string& name_)
             (max_ < std::thread::hardware_concurrency() ?
                 max_ : std::thread::hardware_concurrency()));
     m_thread_count = max_; 
+    s_scheduler = this;
 }
 Scheduler_::~Scheduler_(){
     m_stopping = true;
@@ -91,3 +98,5 @@ void Scheduler_::wait(int time){
 
 
 } // namespace server
+
+#endif 

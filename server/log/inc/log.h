@@ -14,27 +14,40 @@
 #include <ethread.h>
 #include <singleton.h>
 #include "fiber.h"
-#include "fiber_.h"
 
-namespace server{
-
-extern thread_local int t_thread_id;
-extern thread_local const char* t_thread_name;
+#if __cplusplus > 202002L
 
 #define SERVER_LOG_LEVEL(logger, level)  \
     server::LogEventWrap(server::LogEvent::ptr(\
         new server::LogEvent(logger, level, \
         __FILE__, __LINE__, \
-        0, server::t_thread_id, server::Fiber_::GetCurFiberId(), \
+        0, server::t_thread_id, server::Fiber::GetCurFiberId(), \
         time(0), server::t_thread_name\
         )))
+#else
+
 #define SERVER_LOG_LEVEL2(logger, level)  \
     server::LogEventWrap(server::LogEvent::ptr(\
         new server::LogEvent(logger, level, \
         __FILE__, __LINE__, \
-        0, server::t_thread_id, server::Fiber_1::GetCurFiberId(), \
+        0, server::t_thread_id, server::Fiber::GetCurFiberId(), \
         time(0), server::t_thread_name\
         )))
+#endif
+
+namespace server{
+#define SERVER_LOG_LEVEL(logger, level)  \
+    server::LogEventWrap(server::LogEvent::ptr(\
+        new server::LogEvent(logger, level, \
+        __FILE__, __LINE__, \
+        0, server::t_thread_id, server::Fiber::GetCurFiberId(), \
+        time(0), server::t_thread_name\
+        )))
+
+extern thread_local int t_thread_id;
+extern thread_local const char* t_thread_name;
+
+
 
 #define SERVER_LOGGER_SYSTEM server::LogManager::GetInstance()->getLogger("system")
 #define SERVER_LOGGER(name) server::LogManager::GetInstance()->getLogger(name)

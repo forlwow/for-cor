@@ -18,3 +18,6 @@
 /home/worker/webserver/build/server/fiber/CMakeFiles/fiber.dir
 /home/worker/webserver/build/server/fiber/CMakeFiles/edit_cache.dir
 /home/worker/webserver/build/server/fiber/CMakeFiles/rebuild_cache.dir
+/home/worker/webserver/build/server/socket/CMakeFiles/socket.dir
+/home/worker/webserver/build/server/socket/CMakeFiles/edit_cache.dir
+/home/worker/webserver/build/server/socket/CMakeFiles/rebuild_cache.dir

@@ -69,10 +69,10 @@ omap ic <Plug>(coc-classobj-i)
 xmap ic <Plug>(coc-classobj-i)
 omap if <Plug>(coc-funcobj-i)
 xmap if <Plug>(coc-funcobj-i)
-snoremap <silent> <BS> c
-snoremap <silent> <Del> c
-snoremap <silent> <C-H> c
 snoremap <C-R> "_c
+snoremap <silent> <C-H> c
+snoremap <silent> <Del> c
+snoremap <silent> <BS> c
 xnoremap <silent> <Plug>NetrwBrowseXVis :call netrw#BrowseXVis()
 nnoremap <silent> <Plug>NetrwBrowseX :call netrw#BrowseX(netrw#GX(),netrw#CheckIfRemote(netrw#GX()))
 onoremap <silent> <Plug>(coc-classobj-a) :call CocAction('selectSymbolRange', v:false, '', ['Interface', 'Struct', 'Class'])
@@ -159,7 +159,7 @@ set runtimepath=~/.vim,/etc/vim/plugged/lightline.vim,/etc/vim/plugged/gruvbox,/
 set scrolloff=5
 set shiftwidth=4
 set showcmd
-set statusline=%{coc#status()}%{get(b:,'coc_current_function','')}%{coc#status()}%{get(b:,'coc_current_function','')}
+set statusline=%{coc#status()}%{get(b:,'coc_current_function','')}
 set suffixes=.bak,~,.swp,.o,.info,.aux,.log,.dvi,.bbl,.blg,.brf,.cb,.ind,.idx,.ilg,.inx,.out,.toc
 set tabline=%!lightline#tabline()
 set tabstop=4
@@ -181,23 +181,14 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +80 fiber/inc/fiber_.h
-badd +120 fiber/src/fiber_.cpp
-badd +148 main.cpp
-badd +97 fiber/inc/iomanager_.h
-badd +69 fiber/src/iomanager_.cpp
-badd +93 fiber/src/scheduler_.cpp
-badd +1 ../info/IOManager_.md
+badd +59 socket/inc/address.h
+badd +95 socket/src/address.cpp
 argglobal
 %argdel
-edit fiber/src/iomanager_.cpp
+edit socket/src/address.cpp
 let s:save_splitbelow = &splitbelow
 let s:save_splitright = &splitright
 set splitbelow splitright
-wincmd _ | wincmd |
-vsplit
-1wincmd h
-wincmd w
 wincmd _ | wincmd |
 split
 1wincmd k
@@ -211,25 +202,10 @@ set winminheight=0
 set winheight=1
 set winminwidth=0
 set winwidth=1
-exe 'vert 1resize ' . ((&columns * 105 + 105) / 210)
-exe '2resize ' . ((&lines * 26 + 27) / 55)
-exe 'vert 2resize ' . ((&columns * 104 + 105) / 210)
-exe '3resize ' . ((&lines * 26 + 27) / 55)
-exe 'vert 3resize ' . ((&columns * 104 + 105) / 210)
+exe '1resize ' . ((&lines * 26 + 27) / 54)
+exe '2resize ' . ((&lines * 25 + 27) / 54)
 argglobal
-balt fiber/inc/iomanager_.h
-let s:cpo_save=&cpo
-set cpo&vim
-inoremap <buffer> <nowait> <silent> <C-K> =coc#snippet#jump(0, 0)
-inoremap <buffer> <nowait> <silent> <C-J> =coc#snippet#jump(1, 0)
-snoremap <buffer> <nowait> <silent> <NL> :call coc#snippet#jump(1, 0)
-snoremap <buffer> <nowait> <silent>  :call coc#snippet#jump(0, 0)
-snoremap <buffer> <nowait> <silent> <C-K> :call coc#snippet#jump(0, 0)
-snoremap <buffer> <nowait> <silent> <C-J> :call coc#snippet#jump(1, 0)
-inoremap <buffer> <nowait> <silent> <NL> =coc#snippet#jump(1, 0)
-inoremap <buffer> <nowait> <silent>  =coc#snippet#jump(0, 0)
-let &cpo=s:cpo_save
-unlet s:cpo_save
+balt socket/inc/address.h
 setlocal keymap=
 setlocal noarabic
 setlocal autoindent
@@ -304,7 +280,7 @@ setlocal makeprg=
 setlocal matchpairs=(:),{:},[:]
 setlocal nomodeline
 setlocal modifiable
-setlocal nrformats=bin,octal,hex
+setlocal nrformats=bin,hex
 set number
 setlocal number
 setlocal numberwidth=4
@@ -362,158 +338,16 @@ setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 69 - ((47 * winheight(0) + 26) / 53)
+let s:l = 187 - ((19 * winheight(0) + 13) / 26)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 69
-normal! 022|
-wincmd w
-argglobal
-if bufexists(fnamemodify("fiber/inc/iomanager_.h", ":p")) | buffer fiber/inc/iomanager_.h | else | edit fiber/inc/iomanager_.h | endif
-balt fiber/inc/fiber_.h
-setlocal keymap=
-setlocal noarabic
-setlocal autoindent
-setlocal backupcopy=
-setlocal balloonexpr=
-setlocal nobinary
-setlocal nobreakindent
-setlocal breakindentopt=
-setlocal bufhidden=
-setlocal buflisted
-setlocal buftype=
-setlocal cindent
-setlocal cinkeys=0{,0},0),0],:,0#,!^F,o,O,e
-setlocal cinoptions=
-setlocal cinscopedecls=public,protected,private
-setlocal cinwords=if,else,while,do,for,switch
-setlocal colorcolumn=
-setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,:///,://
-setlocal commentstring=/*%s*/
-setlocal complete=.,w,b,u,t,i
-setlocal concealcursor=inc
-setlocal conceallevel=2
-setlocal completefunc=
-setlocal nocopyindent
-setlocal cryptmethod=
-setlocal nocursorbind
-setlocal nocursorcolumn
-setlocal nocursorline
-setlocal cursorlineopt=both
-setlocal define=^\\s*#\\s*define
-setlocal dictionary=
-setlocal nodiff
-setlocal equalprg=
-setlocal errorformat=
-setlocal expandtab
-if &filetype != 'cpp'
-setlocal filetype=cpp
-endif
-setlocal fillchars=
-setlocal fixendofline
-setlocal foldcolumn=0
-setlocal foldenable
-setlocal foldexpr=0
-setlocal foldignore=#
-setlocal foldlevel=0
-setlocal foldmarker={{{,}}}
-setlocal foldmethod=manual
-setlocal foldminlines=1
-setlocal foldnestmax=20
-setlocal foldtext=foldtext()
-setlocal formatexpr=
-setlocal formatoptions=croql
-setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
-setlocal formatprg=
-setlocal grepprg=
-setlocal iminsert=0
-setlocal imsearch=-1
-setlocal include=^\\s*#\\s*include
-setlocal includeexpr=
-setlocal indentexpr=
-setlocal indentkeys=0{,0},0),0],:,0#,!^F,o,O,e
-setlocal noinfercase
-setlocal iskeyword=@,48-57,_,192-255
-setlocal keywordprg=
-setlocal nolinebreak
-setlocal nolisp
-setlocal lispwords=
-setlocal nolist
-setlocal listchars=
-setlocal makeencoding=
-setlocal makeprg=
-setlocal matchpairs=(:),{:},[:]
-setlocal nomodeline
-setlocal modifiable
-setlocal nrformats=bin,octal,hex
-set number
-setlocal number
-setlocal numberwidth=4
-setlocal omnifunc=ccomplete#Complete
-setlocal path=
-setlocal nopreserveindent
-setlocal nopreviewwindow
-setlocal quoteescape=\\
-setlocal noreadonly
-setlocal norelativenumber
-setlocal norightleft
-setlocal rightleftcmd=search
-setlocal noscrollbind
-setlocal scrolloff=-1
-setlocal shiftwidth=4
-setlocal noshortname
-setlocal showbreak=
-setlocal sidescrolloff=-1
-set signcolumn=yes
-setlocal signcolumn=yes
-setlocal nosmartindent
-setlocal nosmoothscroll
-setlocal softtabstop=0
-setlocal nospell
-setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
-setlocal spellfile=
-setlocal spelllang=en
-setlocal spelloptions=
-setlocal statusline=%{lightline#link()}%#LightlineLeft_inactive_0#%(\ %t\ %)%#LightlineLeft_inactive_0_1#%#LightlineMiddle_inactive#%=%#LightlineRight_inactive_1_2#%#LightlineRight_inactive_1#%(\ %3p%%\ %)%#LightlineRight_inactive_0_1#%#LightlineRight_inactive_0#%(\ %3l:%-2c\ %)
-setlocal suffixesadd=
-setlocal swapfile
-setlocal synmaxcol=3000
-if &syntax != 'cpp'
-setlocal syntax=cpp
-endif
-setlocal tabstop=4
-setlocal tagcase=
-setlocal tagfunc=
-setlocal tags=
-setlocal termwinkey=
-setlocal termwinscroll=10000
-setlocal termwinsize=
-setlocal textwidth=0
-setlocal thesaurus=
-setlocal thesaurusfunc=
-setlocal noundofile
-setlocal undolevels=-123456
-setlocal varsofttabstop=
-setlocal vartabstop=
-setlocal virtualedit=
-setlocal wincolor=
-setlocal nowinfixheight
-setlocal nowinfixwidth
-setlocal wrap
-setlocal wrapmargin=0
-silent! normal! zE
-let &fdl = &fdl
-let s:l = 97 - ((14 * winheight(0) + 13) / 26)
-if s:l < 1 | let s:l = 1 | endif
-keepjumps exe s:l
-normal! zt
-keepjumps 97
+keepjumps 187
 normal! 0
 wincmd w
 argglobal
-if bufexists(fnamemodify("main.cpp", ":p")) | buffer main.cpp | else | edit main.cpp | endif
-balt fiber/inc/iomanager_.h
+if bufexists(fnamemodify("socket/inc/address.h", ":p")) | buffer socket/inc/address.h | else | edit socket/inc/address.h | endif
+balt socket/src/address.cpp
 setlocal keymap=
 setlocal noarabic
 setlocal autoindent
@@ -646,18 +480,15 @@ setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 148 - ((19 * winheight(0) + 13) / 26)
+let s:l = 109 - ((16 * winheight(0) + 12) / 25)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 148
-normal! 0
+keepjumps 109
+normal! 040|
 wincmd w
-exe 'vert 1resize ' . ((&columns * 105 + 105) / 210)
-exe '2resize ' . ((&lines * 26 + 27) / 55)
-exe 'vert 2resize ' . ((&columns * 104 + 105) / 210)
-exe '3resize ' . ((&lines * 26 + 27) / 55)
-exe 'vert 3resize ' . ((&columns * 104 + 105) / 210)
+exe '1resize ' . ((&lines * 26 + 27) / 54)
+exe '2resize ' . ((&lines * 25 + 27) / 54)
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0
   silent exe 'bwipe ' . s:wipebuf
@@ -672,6 +503,7 @@ if filereadable(s:sx)
   exe "source " . fnameescape(s:sx)
 endif
 let &g:so = s:so_save | let &g:siso = s:siso_save
+nohlsearch
 doautoall SessionLoadPost
 unlet SessionLoad
 " vim: set ft=vim :

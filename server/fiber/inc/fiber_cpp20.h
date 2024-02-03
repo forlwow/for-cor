@@ -1,5 +1,7 @@
-#ifndef SERVER_FIBER__H
-#define SERVER_FIBER__H
+#if __cplusplus >= 202002L // 判断标准
+
+#ifndef SERVER_FIBER_20_H
+#define SERVER_FIBER_20_H
 
 #include <coroutine>
 #include <memory>
@@ -34,7 +36,8 @@ struct CoRet{
     bool done(){return h_.promise().m_done;}
 };
 
-class Fiber_{
+
+class Fiber_: public std::enable_shared_from_this<Fiber_>{
 public:
     typedef std::shared_ptr<Fiber_> ptr;
 
@@ -48,7 +51,7 @@ public:
     virtual bool done();
     uint64_t getId(){return m_id;}
 public:
-    static Fiber_::ptr GetThis(){return {};}     // 返回当前执行的协程
+    static Fiber_::ptr GetThis();                // 返回当前执行的协程
     static uint64_t TotalFibers(){}              // 返回总协程数
     static uint64_t GetCurFiberId();             // 获取当前协程号
 
@@ -65,14 +68,18 @@ private:
 class Fiber_2 :public Fiber_{
 public:
     typedef std::shared_ptr<Fiber_2> ptr;
+    typedef CoRet(*co_fun)();
+    typedef void(*void_fun)();
     enum {
         FUNCTION = 0,
         COROUTINE,
     };
 
 public:
-    Fiber_2(std::function<CoRet()> cb, bool drop_ = false);
-    Fiber_2(std::function<void()> cb);
+    Fiber_2(co_fun cb, bool drop_ = false);
+    explicit Fiber_2(std::function<CoRet()> cb, bool drop_ = false);
+    Fiber_2(void_fun cb);
+    explicit Fiber_2(std::function<void()> cb);
     ~Fiber_2() override;
 
     bool swapIn() override;                               // 切换到当前协程执行
@@ -96,4 +103,7 @@ private:
 
 } // namespace server
 
-#endif SERVER_FIBER__H
+#endif // SERVER_FIBER_20_H
+
+
+#endif

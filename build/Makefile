@@ -194,6 +194,19 @@ fiber/fast:
 	$(MAKE) $(MAKESILENT) -f server/fiber/CMakeFiles/fiber.dir/build.make server/fiber/CMakeFiles/fiber.dir/build
 .PHONY : fiber/fast
 
+#=============================================================================
+# Target rules for targets named socket
+
+# Build rule for target.
+socket: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 socket
+.PHONY : socket
+
+# fast build rule for target.
+socket/fast:
+	$(MAKE) $(MAKESILENT) -f server/socket/CMakeFiles/socket.dir/build.make server/socket/CMakeFiles/socket.dir/build
+.PHONY : socket/fast
+
 server/main.o: server/main.cpp.o
 .PHONY : server/main.o
 
@@ -218,6 +231,54 @@ server/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/web_server.dir/build.make CMakeFiles/web_server.dir/server/main.cpp.s
 .PHONY : server/main.cpp.s
 
+server/test17.o: server/test17.cpp.o
+.PHONY : server/test17.o
+
+# target to build an object file
+server/test17.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/web_server.dir/build.make CMakeFiles/web_server.dir/server/test17.cpp.o
+.PHONY : server/test17.cpp.o
+
+server/test17.i: server/test17.cpp.i
+.PHONY : server/test17.i
+
+# target to preprocess a source file
+server/test17.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/web_server.dir/build.make CMakeFiles/web_server.dir/server/test17.cpp.i
+.PHONY : server/test17.cpp.i
+
+server/test17.s: server/test17.cpp.s
+.PHONY : server/test17.s
+
+# target to generate assembly for a file
+server/test17.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/web_server.dir/build.make CMakeFiles/web_server.dir/server/test17.cpp.s
+.PHONY : server/test17.cpp.s
+
+server/test20.o: server/test20.cpp.o
+.PHONY : server/test20.o
+
+# target to build an object file
+server/test20.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/web_server.dir/build.make CMakeFiles/web_server.dir/server/test20.cpp.o
+.PHONY : server/test20.cpp.o
+
+server/test20.i: server/test20.cpp.i
+.PHONY : server/test20.i
+
+# target to preprocess a source file
+server/test20.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/web_server.dir/build.make CMakeFiles/web_server.dir/server/test20.cpp.i
+.PHONY : server/test20.cpp.i
+
+server/test20.s: server/test20.cpp.s
+.PHONY : server/test20.s
+
+# target to generate assembly for a file
+server/test20.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/web_server.dir/build.make CMakeFiles/web_server.dir/server/test20.cpp.s
+.PHONY : server/test20.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -230,11 +291,18 @@ help:
 	@echo "... ethread"
 	@echo "... fiber"
 	@echo "... log"
+	@echo "... socket"
 	@echo "... util"
 	@echo "... web_server"
 	@echo "... server/main.o"
 	@echo "... server/main.i"
 	@echo "... server/main.s"
+	@echo "... server/test17.o"
+	@echo "... server/test17.i"
+	@echo "... server/test17.s"
+	@echo "... server/test20.o"
+	@echo "... server/test20.i"
+	@echo "... server/test20.s"
 .PHONY : help
 
 

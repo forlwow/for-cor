@@ -1,4 +1,5 @@
-#include "fiber.h"
+#if __cplusplus < 202002L
+#include "fiber_cpp17.h"
 #include "shared_vars.h"
 #include <cassert>
 #include <cstddef>
@@ -183,3 +184,5 @@ void Fiber_1::MainFunc(){
 
 
 } // namespace server
+
+#endif

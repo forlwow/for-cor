@@ -5,4 +5,5 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/util)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/ethread)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/ecoroutine)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/fiber)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/socket)
 

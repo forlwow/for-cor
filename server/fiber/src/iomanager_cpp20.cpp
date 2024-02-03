@@ -1,9 +1,9 @@
-#include "iomanager_.h"
+#if __cplusplus >= 202002L
+#include "iomanager_cpp20.h"
 #include "ethread.h"
 #include "fiber.h"
-#include "fiber_.h"
 #include "log.h"
-#include "scheduler_.h"
+#include "scheduler_cpp20.h"
 #include "timer.h"
 #include <cassert>
 #include <cerrno>
@@ -151,8 +151,10 @@ CoRet IOManager_::idle(){
         for(auto exp : GetExpireTimers()){
             if(!exp->GetFunc()->done()){
                 schedule(exp->GetFunc());
-                exp->refresh();
-                addTimer(exp);
+                if(exp->isCirculate()){
+                    exp->refresh();
+                    addTimer(exp);
+                }
             }
         }
 
@@ -181,6 +183,7 @@ void IOManager_::run(){
 
     while (!m_stopping){
         if(m_idleFiber->swapIn()){
+            std::this_thread::yield();
             continue;
         }
 
@@ -221,8 +224,8 @@ bool Timer_::Compare::operator()(const Timer_::ptr& lp, const Timer_::ptr& rp) c
     return lp < rp;
 }
 
-Timer_::Timer_(uint64_t ms, TaskType cb, Timer_Manager* manager)
-    : m_ms(ms), m_manager(manager)
+Timer_::Timer_(uint64_t ms, TaskType cb, Timer_Manager* manager, bool cir)
+    : m_ms(ms), m_manager(manager), m_circulate(cir)
 {
     m_next = Timer_Manager::GetCurTimeStamp() + ms;
     m_cb = cb;
@@ -258,9 +261,9 @@ void Timer_Manager::OnInsertAtFront(){
 
 }
 
-Timer_::ptr Timer_Manager::addTimer(uint64_t ms, TaskType1 cb){
+Timer_::ptr Timer_Manager::addTimer(uint64_t ms, TaskType1 cb, bool circulate){
     Fiber_2::ptr fib(new Fiber_2(cb));
-    Timer_::ptr timer(new Timer_(ms, fib, this));
+    Timer_::ptr timer(new Timer_(ms, fib, this, circulate));
     addTimer(timer);
     return timer;
 }
@@ -310,3 +313,5 @@ void Timer_Manager::AutoStop(){
 
 
 } // namespace server
+  //
+#endif

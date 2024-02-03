@@ -6,6 +6,7 @@
 #include <functional>
 #include <memory>
 #include <set>
+#include <string>
 #include <sys/types.h>
 #include "ethread.h"
 #include <stdio.h>
@@ -38,6 +39,21 @@ private:
     std::chrono::time_point<std::chrono::high_resolution_clock> end_time;
 
 };
+
+namespace std {
+inline string to_string(chrono::milliseconds dur){
+    return to_string(dur.count()) + "ms";
+}
+inline string to_string(chrono::seconds dur){
+    return to_string(dur.count()) + "s";
+}
+inline string to_string(chrono::microseconds dur){
+    return to_string(dur.count()) + "us";
+}
+inline string to_string(chrono::nanoseconds dur){
+    return to_string(dur.count()) + "ns";
+}
+}
 
 namespace server {
 

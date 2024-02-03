@@ -6,6 +6,7 @@
 #include <thread>
 #include <functional>
 #include <memory>
+#include <semaphore.h>
 #include <pthread.h>
 #include <mutex>
 #include <atomic>
