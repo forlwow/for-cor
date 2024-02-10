@@ -1,3 +1,8 @@
+#include "address.h"
+#include "socket.h"
+#include "socketfunc_cpp20.h"
+#include <cerrno>
+#include <cstddef>
 #if __cplusplus >= 202002L
 #include "enums.h"
 #include "ethread.h"
@@ -72,13 +77,84 @@ server::CoRet test_Fiber(){
 }
 
 
+server::CoRet test_Fiber2(int i_){
+    for(auto i in range(i_)){
+        SERVER_LOG_DEBUG(logger) << "test2 swapIn=" << i;
+        co_yield server::HOLD;
+    }
+    ++g_count;
+    co_return server::TERM;
+}
 
+server::CoRet test_sock(){
+    auto sock = server::Socket::ptr(new server::Socket(AF_INET, SOCK_STREAM));
+    auto address = server::IPv4Address::CreateAddress("192.168.2.18", 9999);
+    SERVER_LOG_DEBUG(logger) << "start connect";
+    int res = co_await server::connect(sock, address);
+    SERVER_LOG_DEBUG(logger) << res;
+    if(res)
+        co_return server::TERM;
+    char* buff = "write example";
+    SERVER_LOG_DEBUG(logger) << "start write";
+    int left = strlen(buff);
+    auto writer = server::send(sock, buff, 11);
+    while(1){
+        int res = co_await writer;
+        if(res == server::SOCK_SUCCESS){
+            SERVER_LOG_DEBUG(logger) << "write success";
+            break;
+        }
+        else if(res == server::SOCK_REMAIN_DATA || res == server::SOCK_EAGAIN){
+            continue;
+        }
+        else {
+            SERVER_LOG_DEBUG(logger) << "write failed";
+            break;
+        }
+    }
+    char buf[10];
+    std::string recvData;
+    auto recver = server::recv(sock, buf, 10);
+    while (1) {
+        int res = co_await recver;
+        if(res > 0){
+            recvData.append(buf, res);
+            SERVER_LOG_DEBUG(logger) << "recved:" << std::string(buf, res);
+            if (recvData.back() == '\0') {
+                SERVER_LOG_DEBUG(logger) << "recv success";
+                break;
+            }
+        }
+        else {
+            if(res == server::SOCK_EAGAIN){
+                continue;
+            }
+            else{
+                SERVER_LOG_DEBUG(logger) << "recv fail";
+                break;
+            }
+        }
+
+    }
+
+    co_return server::TERM;
+}
+
+int main(){
+    test1();
+}
 
 void test1(){
+    server::IOManager_ iom(3);
+    iom.start();
+    auto task = server::Fiber_2::ptr(new server::Fiber_2(test_sock));
+    iom.schedule(task);
+
+    iom.wait();
 }
 
 void test2(){
-    server::Fiber_::ptr task(new server::Fiber_(run_in_fiber));
+    server::Fiber_::ptr task(new server::Fiber_(test_Fiber2, 10));
     for(auto i in range(10)){
         SERVER_LOG_DEBUG(logger) << task->done();
         if(!task->done()){
@@ -103,7 +179,7 @@ void test4(){
     sc.start();
     sc.wait_stop();
     timer.end_count();
-    SERVER_LOG_INFO(logger) << timer.get_duration();
+    SERVER_LOG_INFO(logger) << timer.get_duration().count();
     SERVER_LOG_INFO(logger) << g_count.load();
 }
 

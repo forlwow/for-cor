@@ -1,3 +1,8 @@
+#include "shared_vars.h"
+#include <concepts>
+#include <numeric>
+#include <type_traits>
+#include <utility>
 #if __cplusplus >= 202002L // 判断标准
 
 #ifndef SERVER_FIBER_20_H
@@ -36,6 +41,8 @@ struct CoRet{
     bool done(){return h_.promise().m_done;}
 };
 
+template<typename T>
+concept FunctionPointer = std::is_function_v<std::remove_pointer_t<std::decay_t<T>>>;
 
 class Fiber_: public std::enable_shared_from_this<Fiber_>{
 public:
@@ -43,6 +50,16 @@ public:
 
 public:
     Fiber_(std::function<CoRet()> cb);
+    template<typename Func, typename... Args>
+    requires std::invocable<Func, Args...> 
+        && std::same_as<std::invoke_result_t<Func, Args...>, CoRet>
+    Fiber_(Func &&func, Args &&...args){
+        m_cb = std::forward<Func>(func)(std::forward<Args>(args)...);
+        m_id = ++s_fiber_id;
+        m_cb.h_.promise().m_done = &m_done;
+        ++s_fiber_count;
+    }
+
     Fiber_();
     virtual ~Fiber_();
 

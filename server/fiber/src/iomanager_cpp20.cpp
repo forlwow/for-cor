@@ -1,3 +1,8 @@
+#include <asm-generic/errno.h>
+#include <asm-generic/socket.h>
+#include <cstddef>
+#include <string>
+#include <sys/socket.h>
 #if __cplusplus >= 202002L
 #include "iomanager_cpp20.h"
 #include "ethread.h"
@@ -35,7 +40,19 @@ IOManager_::~IOManager_(){
 }
 
 int IOManager_::AddEvent(int fd, Event event, TaskType cb, bool drop){
+    AddEvent(fd, event, Fiber_2::ptr(new Fiber_2(cb, drop)));
+}
+
+int IOManager_::AddEvent(int fd, Event event, Fiber_2::ptr cb){
     WriteLockGuard wlock(m_mutex);
+        // 获取socket上的错误状态
+    int error = 0;
+    socklen_t errlen = sizeof(error);
+    if (getsockopt(fd, SOL_SOCKET, SO_ERROR, &error, &errlen) < 0){
+        SERVER_LOG_ERROR(g_logger) << "sock err:" << std::string(strerror(errno));
+        return -1;
+    }
+
     // 是否已经含有该描述符 没有则新建
     FdContext::ptr nfd = m_fdContexts.contains(fd) ? 
         m_fdContexts[fd] : std::make_shared<FdContext>(fd);
@@ -43,33 +60,45 @@ int IOManager_::AddEvent(int fd, Event event, TaskType cb, bool drop){
     // 如果已经有对应事件则返回错误
     if(m_fdContexts.contains(fd) && (event & nfd->events))
         return 1;
+
     // 判断操作符
-    int op = nfd->events == NONE ? EPOLL_CTL_ADD : EPOLL_CTL_ADD;
+    int op = nfd->events == NONE ? EPOLL_CTL_ADD : EPOLL_CTL_MOD;
     epoll_event evt;
     memset(&evt, 0, sizeof(evt));
     evt.events = EPOLLET | nfd->events | event; 
     evt.data.fd = fd;
     int ret = epoll_ctl(m_epfd, op, fd, &evt);
     if (ret){
-        SERVER_LOG_ERROR(g_logger) << "epoll ctl error " << m_epfd << ", "
-                                           << op << ", " << fd << ", " << evt.events;
+        SERVER_LOG_ERROR(g_logger) << "epoll ctl error " 
+            << "epoll fd:" << m_epfd << ", "
+            << "operator:" << op << ", " 
+            << "fd:"<< fd << ", " 
+             << "epoll_event:" << (evt.events & WRITE) << "-" << (evt.events & READ) << ", "
+             << "errno:" << errno << ", "
+             << "errstr:" << std::string(strerror(errno));
         return 2;
     }
 
     nfd->events = (Event)(event | nfd->events);
     // 拿到对应事件的处理对象
-    auto con = event == READ ? nfd->read : nfd->write;
-    con.fiber = std::move(Fiber_2::ptr(new Fiber_2(cb, drop))); 
+    auto &con = event == READ ? nfd->read : nfd->write;
+    con.fiber = std::move(cb); 
+    con.scheduler = this;
+    if(!m_fdContexts.contains(fd)){
+        m_fdContexts[fd] = std::move(nfd);
+    }
+
     return 0;
+
 }
 
 bool IOManager_::DelEvent(int fd, Event event){
     WriteLockGuard wlock(m_mutex);
     if(!m_fdContexts.contains(fd))
-        return 1;
+        return false;
     auto tarfd = m_fdContexts[fd];
     if(!(tarfd->events & event))
-        return 2;
+        return false;
     // 获取新的event
     Event new_event = (Event)(tarfd->events & ~event);
     int op = new_event ? EPOLL_CTL_MOD : EPOLL_CTL_DEL;
@@ -82,14 +111,29 @@ bool IOManager_::DelEvent(int fd, Event event){
     if(ret){
         SERVER_LOG_ERROR(g_logger) << "epoll ctl error " << m_epfd << ", "
                                            << op << ", " << fd << ", " << epevent.events;
-        return 2;
+        return false;
     }
     // 更改原event
     m_fdContexts[fd]->events = new_event;
     // 清除对应Context
     m_fdContexts[fd]->ResetEventContext(event);
     
-    return 0;
+    return true;
+}
+
+bool IOManager_::DelFd(int fd){
+    int res = epoll_ctl(m_epfd, EPOLL_CTL_DEL, fd, NULL);
+    if(res < 0 && errno != EBADF){
+        SERVER_LOG_ERROR(g_logger) << "epoll ctl error " << m_epfd << ", " << fd 
+                                            << ", errno: " << errno << ", error:"
+                                            << std::string(strerror(errno));
+        return false;
+    }
+    WriteLockGuard wlock(m_mutex);
+    if(m_fdContexts.contains(fd)){
+        m_fdContexts.erase(m_fdContexts.find(fd));
+    }
+    return true;
 }
 
 bool IOManager_::CancelEvent(int fd, Event event){
@@ -157,20 +201,22 @@ CoRet IOManager_::idle(){
                 }
             }
         }
-
-        for(int i = 0; i < ret; ++i){
-            epoll_event cur_evt = events[i];
-            SERVER_LOG_INFO(g_logger) << "epoll accept fd:" << cur_evt.data.fd;
-            auto cur_fdcont = m_fdContexts[cur_evt.data.fd];
-            assert(cur_fdcont);
-            if((cur_evt.events & EPOLLHUP) || (cur_evt.events & EPOLLERR)){
-                m_fdContexts.erase(m_fdContexts.find(cur_evt.data.fd));
-                continue;
+        {
+            ReadLockGuard rlock(m_mutex);
+            for(int i = 0; i < ret; ++i){
+                epoll_event cur_evt = events[i];
+                SERVER_LOG_INFO(g_logger) << "epoll accept fd:" << cur_evt.data.fd;
+                auto cur_fdcont = m_fdContexts[cur_evt.data.fd];
+                assert(cur_fdcont);
+                if((cur_evt.events & EPOLLHUP) || (cur_evt.events & EPOLLERR)){
+                    m_fdContexts.erase(m_fdContexts.find(cur_evt.data.fd));
+                    continue;
+                }
+                if(cur_evt.events & EPOLLIN)
+                    cur_fdcont->TriggerEvent(READ);
+                if(cur_evt.events & EPOLLOUT)
+                    cur_fdcont->TriggerEvent(WRITE);
             }
-            if(cur_evt.events & EPOLLIN)
-                cur_fdcont->TriggerEvent(READ);
-            if(cur_evt.events & EPOLLOUT)
-                cur_fdcont->TriggerEvent(WRITE);
         }
 
         co_yield HOLD;

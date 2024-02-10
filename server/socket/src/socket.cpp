@@ -1,5 +1,6 @@
 #include "socket.h"
 #include "address.h"
+#include "iomanager.h"
 #include "log.h"
 #include <asm-generic/socket.h>
 #include <bits/types/error_t.h>
@@ -7,21 +8,29 @@
 #include <cerrno>
 #include <cstddef>
 #include <cstring>
+#include <fcntl.h>
 #include <netinet/in.h>
+#include <ostream>
+#include <stdexcept>
+#include <string>
 #include <sys/socket.h>
 #include <sys/stat.h>
 #include <netinet/tcp.h>
+#include <csignal>
 #include <unistd.h>
 
 namespace server {
 
 static Logger::ptr s_log = SERVER_LOGGER_SYSTEM;
 
-Socket::Socket(int family, int type, int protocol)
-    :m_sock(-1), m_family(family), m_type(type), m_protocol(protocol),
+auto res = signal(SIGPIPE, SIG_IGN);
+
+Socket::Socket(int family, int type, int protocol, void(*handle)(int))
+    :m_sock(-1), m_family(family), m_type(type), 
+    m_protocol(protocol), m_err_handler(handle),
     m_isConnected(false)
 {
-
+    newSock();
 }
 
 Socket::~Socket(){
@@ -31,7 +40,7 @@ Socket::~Socket(){
 
 int64_t Socket::getSendTimeOut(){
     timeval tv;
-    if(getOption(SOL_SOCKET, SO_SNDTIMEO, &tv) == -1)
+    if(getOption(SOL_SOCKET, SO_SNDTIMEO, tv) == -1)
         return -1;
     return tv.tv_sec * 1000 + tv.tv_usec / 1000;
 }
@@ -45,7 +54,7 @@ bool Socket::setSendTimeOut(int64_t v){
 
 int64_t Socket::getRecvTimeOut(){
     timeval tv;
-    if(getOption(SOL_SOCKET, SO_RCVTIMEO, &tv) == -1)
+    if(getOption(SOL_SOCKET, SO_RCVTIMEO, tv) == -1)
         return -1;
     return tv.tv_sec * 1000 + tv.tv_usec / 1000;
 }
@@ -57,25 +66,25 @@ bool Socket::setRecvTimeOut(int64_t v){
     return setOption(SOL_SOCKET, SO_RCVTIMEO, &tv);
 }
 
-bool Socket::getOption(int level, int option, void *result, size_t *len){
+bool Socket::getOption(int level, int option, void *result, socklen_t *len){
     int res = getsockopt(m_sock, level, option, result, (socklen_t*)len);
 
     if(res){
         SERVER_LOG_DEBUG(s_log) << "getSockOpt error sock=" << m_sock
             << " level=" << level << " option=" << option
-            << " errno=" << errno << " errstr=" << strerror(errno);
+            << " errno=" << errno << " errstr=" << std::string(strerror(errno));
         return false;
     }
     return true;
 }
 
-bool Socket::setOption(int level, int option, const void *result, size_t len){
+bool Socket::setOption(int level, int option, const void *result, socklen_t len){
     int res = setsockopt(m_sock, level, option, result, (socklen_t)len);
 
     if(res){
         SERVER_LOG_DEBUG(s_log) << "setSockOpt error sock=" << m_sock
             << " level=" << level << " option=" << option
-            << " errno=" << errno << " errstr=" << strerror(errno);
+            << " errno=" << errno << " errstr=" << std::string(strerror(errno));
         return false;
     }
     return true;
@@ -86,7 +95,7 @@ Socket::ptr Socket::accept(){
     int newsock = ::accept(m_sock, nullptr, nullptr);
     if(newsock != -1){
         SERVER_LOG_DEBUG(s_log) << "accept error sock=" << m_sock
-            << " errno=" << errno << " errstr=" << strerror(errno);
+            << " errno=" << errno << " errstr=" << std::string(strerror(errno));
         return {};
     }
     Socket::ptr sock(new Socket(m_family, m_type, m_protocol));
@@ -126,32 +135,34 @@ bool Socket::bind(const Address::ptr addr){
     if(::bind(m_sock, addr->getAddr(), addr->getAddrLen())){
         SERVER_LOG_ERROR(s_log) 
             << "bind sock error: bind error errno=" << errno
-            << "errstr=" << strerror(errno);
+            << "errstr=" << std::string(strerror(errno));
         return false;
     }
     return true;
 }
 
-bool Socket::connect(const Address::ptr addr){
+int Socket::connect(const Address::ptr addr){
     if(!isVaild()){
         newSock();
         if(!isVaild())
-            return false;
+            return ENOTSOCK;
     }
     if(addr->getFamily() != m_family){
         SERVER_LOG_ERROR(s_log) 
             << "connect sock error: family different addr.family=" << addr->getFamily()
             << "sock.family=" << m_family;
-        return false;
+        return EAFNOSUPPORT;
     }
     if(::connect(m_sock, addr->getAddr(), addr->getAddrLen())){
+        if(errno == EINPROGRESS)
+            return EINPROGRESS;
         SERVER_LOG_ERROR(s_log) 
-            << "connect sock error: bind error errno=" << errno
-            << "errstr=" << strerror(errno);
-        return false;
+            << "connect sock error: errno=" << errno
+            << " errstr=" << std::string(strerror(errno));
+        return errno;
     }
     m_isConnected = true;
-    return true;
+    return 0;
 }
 
 bool Socket::listen(int backlog){
@@ -165,14 +176,33 @@ bool Socket::listen(int backlog){
 }
 
 void Socket::close(){
+    SERVER_LOG_DEBUG(s_log) << "socket close:" << m_sock;
     if(!m_isConnected && m_sock == -1)
         return ;
     if(m_sock != -1){
         ::close(m_sock);
+        if(IOManager::GetIOManager){
+            IOManager::GetIOManager()->DelFd(m_sock);
+        }
         m_sock = -1;
     }
     m_isConnected = false;
     return ;
+}
+
+std::ostream& Socket::dump(std::ostream& os){
+    os << "[Socket sock=" << m_sock
+      << " is_connect=" << m_isConnected
+      << " family=" << m_family
+      << " type=" << m_type
+      << " protocol= " << m_protocol;
+    if(m_localAddress){
+        os << " local address=" << m_localAddress->toString();
+    }
+    if(m_remoteAddress){
+        os << " remote address=" << m_remoteAddress->toString();
+    }
+    return os << "]";
 }
 
 int Socket::send(const void* buffer, size_t length, int flags){
@@ -305,31 +335,28 @@ bool Socket::isVaild() const{
 }
 
 int Socket::getError(){
-
+    int err = 0;
+    socklen_t len = sizeof(err);
+    if(!getOption(SOL_SOCKET, SO_ERROR, &err, &len))
+        err = errno;
+    return err;
 }
 
-bool Socket::cancelRead(){
-
-}
-
-bool Socket::cancelWrite(){
-
-}
-
-bool Socket::cancelAccept(){
-
-}
-
-bool Socket::cancelAll(){
-
-}
 
 void Socket::initSock(){
     int val = 1;
     setOption(SOL_SOCKET, SO_REUSEADDR, &val);
+
     if(m_type == SOCK_STREAM){
         setOption(IPPROTO_TCP, TCP_NODELAY, &val);
     }
+
+    // 获取已有flags
+    int flag = fcntl(m_sock, F_GETFL, 0);
+    if(flag == -1)
+        throw std::logic_error("initSock getAddrFlag err");
+    if(fcntl(m_sock, F_SETFL, flag | O_NONBLOCK) == -1)
+        throw std::logic_error("initSock set nonblock err");
 }
 
 void Socket::newSock(){
@@ -338,8 +365,8 @@ void Socket::newSock(){
         initSock();    
     }
     else{
-        SERVER_LOG_DEBUG(s_log) << "getSockOpt error sock=" << m_sock
-            << " errno=" << errno << " errstr=" << strerror(errno);
+        SERVER_LOG_DEBUG(s_log) << "newSock error sock=" << m_sock
+            << " errno=" << errno << " errstr=" << std::string(strerror(errno));
     }
 }
 

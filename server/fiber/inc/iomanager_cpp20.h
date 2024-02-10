@@ -1,3 +1,4 @@
+#include "scheduler.h"
 #if __cplusplus >= 202002L
 #ifndef IOMANAGER_20_H
 #define IOMANAGER_20_H
@@ -107,7 +108,7 @@ private:
         };
         FdContext()=delete;
         FdContext(int fd_):fd(fd_){}
-        ~FdContext(){close(fd);}
+        ~FdContext(){}
         int fd = -1;
         Event events = NONE;
         EventContext read;
@@ -128,15 +129,18 @@ private:
         void TriggerEvent(Event event){
             EventContext& evt = GetEventContext(event);
             evt.scheduler->schedule(evt.fiber);
+            // events = (Event)(events & ~event);
         }
         // 只在一个线程中操作 不需要锁
     };
 public:
-    IOManager_(size_t threads_ = 1, const std::string& name_ = "Sche");
+    IOManager_(size_t threads_ = 1, const std::string& name_ = "Schedule");
     ~IOManager_() override;
 
     int AddEvent(int fd, Event event, TaskType cb, bool drop = false);
+    int AddEvent(int fd, Event event, Fiber_2::ptr cb);
     bool DelEvent(int fd, Event event);
+    bool DelFd(int fd);
     bool CancelEvent(int fd, Event event);
 
     static IOManager_* GetIOManager(){return dynamic_cast<IOManager_*>(Scheduler_::GetScheduler());}

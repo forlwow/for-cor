@@ -93,7 +93,7 @@ bool Address::operator==(const Address& r) const{
 IPv4Address::ptr IPv4Address::CreateAddress(const char *address, uint16_t port){
     sockaddr_in addr;
     memset(&addr, 0, sizeof(addr));
-    addr.sin_port = port;
+    addr.sin_port = htons(port);
     addr.sin_family = AF_INET;
     int result = inet_pton(AF_INET, address, &addr.sin_addr);
     if(result <= 0){

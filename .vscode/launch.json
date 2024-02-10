@@ -5,10 +5,35 @@
     "version": "0.2.0",
     // 调试配置数组
     "configurations": [
+        {
+            "name": "(gdb) 启动",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/bin/web_server",
+            "args": [],
+            "stopAtEntry": false,
+            "preLaunchTask": "Build",
+            "cwd": "${workspaceFolder}/bin",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "为 gdb 启用整齐打印",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "将反汇编风格设置为 Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
+        },
         // 直接启动调试
         {
-            "name": "(gbg) 启动",
-            "type": "cppdbg",
+            "name": "(gbg) 启动2",
+            "type": "gdb",
             // 直接运行调试
             "request": "launch",
             // 当program指定为该变量时，CMake插件会弹出一个对话框，让用户在可执行的Target中选择一个执行
@@ -21,7 +46,7 @@
             // "cwd": "${command:cmake.launchTargetDirectory}",
             "cwd": "${workspaceRoot}",
             "environment": [],
-            "externalConsole": false,
+            "externalConsole": true,
             "preLaunchTask": "Build",
             "MIMode": "gdb",
             "miDebuggerPath": "/usr/bin/gdb",
@@ -31,11 +56,11 @@
                     "text": "-enable-pretty-printing",
                     "ignoreFailures": true
                 },
-                {
-                    "description": "防止 gdb 打开标准库函数",
-                    "text": "-interpreter-exec console \"skip -gfi **/bits/*.h\"",
-                    "ignoreFailures": false
-                }
+                // {
+                //     "description": "防止 gdb 打开标准库函数",
+                //     "text": "-interpreter-exec console \"skip -gfi **/bits/*.h\"",
+                //     "ignoreFailures": false
+                // }
             ]
         }
     ]

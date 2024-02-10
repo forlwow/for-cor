@@ -88,5 +88,10 @@
   "directory": "/home/worker/webserver/build/server/socket",
   "command": "/usr/local/bin/g++ -Dsocket_EXPORTS -I/home/worker/webserver/server/log/inc -I/home/worker/webserver/server/util/inc -I/home/worker/webserver/server/ethread/inc -I/home/worker/webserver/server/ecoroutine/inc -I/home/worker/webserver/server/fiber/inc -I/home/worker/webserver/server/socket/inc -I/home/worker/webserver/server/ThirdModule/include  -O0 -w -g2 -ggdb -ldl -fPIC -std=gnu++20 -o CMakeFiles/socket.dir/src/address.cpp.o -c /home/worker/webserver/server/socket/src/address.cpp",
   "file": "/home/worker/webserver/server/socket/src/address.cpp"
+},
+{
+  "directory": "/home/worker/webserver/build/server/socket",
+  "command": "/usr/local/bin/g++ -Dsocket_EXPORTS -I/home/worker/webserver/server/log/inc -I/home/worker/webserver/server/util/inc -I/home/worker/webserver/server/ethread/inc -I/home/worker/webserver/server/ecoroutine/inc -I/home/worker/webserver/server/fiber/inc -I/home/worker/webserver/server/socket/inc -I/home/worker/webserver/server/ThirdModule/include  -O0 -w -g2 -ggdb -ldl -fPIC -std=gnu++20 -o CMakeFiles/socket.dir/src/socket.cpp.o -c /home/worker/webserver/server/socket/src/socket.cpp",
+  "file": "/home/worker/webserver/server/socket/src/socket.cpp"
 }
 ]
