@@ -1,6 +1,9 @@
 #include <asm-generic/errno.h>
 #include <asm-generic/socket.h>
 #include <cstddef>
+#include <initializer_list>
+#include <iterator>
+#include <list>
 #include <string>
 #include <sys/socket.h>
 #if __cplusplus >= 202002L
@@ -9,13 +12,11 @@
 #include "fiber.h"
 #include "log.h"
 #include "scheduler_cpp20.h"
-#include "timer.h"
 #include <cassert>
 #include <cerrno>
 #include <cstdint>
 #include <cstring>
 #include <functional>
-#include <iterator>
 #include <sys/epoll.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -40,7 +41,7 @@ IOManager_::~IOManager_(){
 }
 
 int IOManager_::AddEvent(int fd, Event event, TaskType cb, bool drop){
-    AddEvent(fd, event, Fiber_2::ptr(new Fiber_2(cb, drop)));
+    return AddEvent(fd, event, Fiber_2::ptr(new Fiber_2(cb, drop)));
 }
 
 int IOManager_::AddEvent(int fd, Event event, Fiber_2::ptr cb){
@@ -58,14 +59,14 @@ int IOManager_::AddEvent(int fd, Event event, Fiber_2::ptr cb){
         m_fdContexts[fd] : std::make_shared<FdContext>(fd);
 
     // 如果已经有对应事件则返回错误
-    if(m_fdContexts.contains(fd) && (event & nfd->events))
-        return 1;
+    // if(m_fdContexts.contains(fd) && (event & nfd->events))
+    //     return 1;
 
     // 判断操作符
     int op = nfd->events == NONE ? EPOLL_CTL_ADD : EPOLL_CTL_MOD;
     epoll_event evt;
     memset(&evt, 0, sizeof(evt));
-    evt.events = EPOLLET | nfd->events | event; 
+    evt.events = (uint32_t)EPOLLET | nfd->events | event; 
     evt.data.fd = fd;
     int ret = epoll_ctl(m_epfd, op, fd, &evt);
     if (ret){
@@ -82,14 +83,13 @@ int IOManager_::AddEvent(int fd, Event event, Fiber_2::ptr cb){
     nfd->events = (Event)(event | nfd->events);
     // 拿到对应事件的处理对象
     auto &con = event == READ ? nfd->read : nfd->write;
-    con.fiber = std::move(cb); 
+    con.fiber = std::move(cb);
     con.scheduler = this;
     if(!m_fdContexts.contains(fd)){
         m_fdContexts[fd] = std::move(nfd);
     }
 
     return 0;
-
 }
 
 bool IOManager_::DelEvent(int fd, Event event){
@@ -205,7 +205,9 @@ CoRet IOManager_::idle(){
             ReadLockGuard rlock(m_mutex);
             for(int i = 0; i < ret; ++i){
                 epoll_event cur_evt = events[i];
-                SERVER_LOG_INFO(g_logger) << "epoll accept fd:" << cur_evt.data.fd;
+                SERVER_LOG_INFO(g_logger) << "epoll accept fd:" << cur_evt.data.fd 
+                                                << " write:" << (bool)(cur_evt.events & EPOLLOUT)
+                                                << " read:" << (bool)(cur_evt.events & EPOLLIN);
                 auto cur_fdcont = m_fdContexts[cur_evt.data.fd];
                 assert(cur_fdcont);
                 if((cur_evt.events & EPOLLHUP) || (cur_evt.events & EPOLLERR)){
@@ -225,8 +227,6 @@ CoRet IOManager_::idle(){
 }
 
 void IOManager_::run(){
-    static bool expect = false;
-
     while (!m_stopping){
         if(m_idleFiber->swapIn()){
             std::this_thread::yield();

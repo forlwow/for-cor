@@ -59,7 +59,8 @@ public:
 class IPv4Address: public IPAddress{
 public:
     typedef std::shared_ptr<IPv4Address> ptr;
-    static ptr CreateAddress(const char* address, uint16_t port = 0);
+    static IPv4Address CreateAddress(const char* address, uint16_t port = 0);
+    static ptr CreateAddressPtr(const char* address, uint16_t port = 0);
     IPv4Address(const sockaddr_in&);
     IPv4Address(uint32_t address = INADDR_ANY, uint32_t port = 0);
 

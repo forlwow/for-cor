@@ -1,6 +1,4 @@
 #include "shared_vars.h"
-#include <concepts>
-#include <numeric>
 #include <type_traits>
 #include <utility>
 #if __cplusplus >= 202002L // 判断标准
@@ -13,6 +11,7 @@
 #include <functional>
 #include <atomic>
 #include <variant>
+#include <sys/epoll.h>
 #include "enums.h"
 
 namespace server {
@@ -68,9 +67,9 @@ public:
     virtual bool done();
     uint64_t getId(){return m_id;}
 public:
-    static Fiber_::ptr GetThis();                // 返回当前执行的协程
-    static uint64_t TotalFibers(){}              // 返回总协程数
-    static uint64_t GetCurFiberId();             // 获取当前协程号
+    static Fiber_::ptr GetThis();                                   // 返回当前执行的协程
+    static uint64_t TotalFibers(){return s_fiber_count;}            // 返回总协程数
+    static uint64_t GetCurFiberId();                                // 获取当前协程号
 
 protected:
     uint64_t m_id = 0;
@@ -113,8 +112,26 @@ private:
     bool m_drop = false;                        // 当协程被多进程操作时是否要丢弃
     std::function<void()> m_cbBeforeSwapIn;
     std::atomic_flag m_flag = ATOMIC_FLAG_INIT;
+};
 
+class FiberIO: public Fiber_2{
+public:
+    FiberIO(co_fun cb, bool drop_ = false):Fiber_2(cb, drop_){}
+    explicit FiberIO(std::function<CoRet()> cb, bool drop_ = false):Fiber_2(cb, drop_){}
+    FiberIO(void_fun cb):Fiber_2(cb){}
+    explicit FiberIO(std::function<void()> cb):Fiber_2(cb){}
+    bool isRead(){
+        return events & EPOLLIN;
+    }
+    bool isWrite(){ return events & EPOLLOUT;}
+    void setRead() {events |= EPOLLIN;}
+    void setWrite() {events |= EPOLLOUT;}
+    void resetRead() {events &= ~EPOLLIN;}
+    void resetWrite() {events &= ~EPOLLOUT;}
+    
 
+private:
+    int events;
 };
 
 

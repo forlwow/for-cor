@@ -30,7 +30,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include <string>
-
+#include <signal.h>
 #include <timer.h>
 #include <vector>
 #include "fiberfunc_cpp20.h"
@@ -88,15 +88,14 @@ server::CoRet test_Fiber2(int i_){
 
 server::CoRet test_sock(){
     auto sock = server::Socket::ptr(new server::Socket(AF_INET, SOCK_STREAM));
-    auto address = server::IPv4Address::CreateAddress("192.168.2.18", 9999);
+    auto address = server::IPv4Address::CreateAddressPtr("192.168.2.18", 9999);
     SERVER_LOG_DEBUG(logger) << "start connect";
     int res = co_await server::connect(sock, address);
     SERVER_LOG_DEBUG(logger) << res;
     if(res)
         co_return server::TERM;
-    char* buff = "write example";
+    const char* buff = "write example";
     SERVER_LOG_DEBUG(logger) << "start write";
-    int left = strlen(buff);
     auto writer = server::send(sock, buff, 11);
     while(1){
         int res = co_await writer;
@@ -140,14 +139,44 @@ server::CoRet test_sock(){
     co_return server::TERM;
 }
 
+server::CoRet test_sock2(){
+    auto sock = server::Socket::ptr(new server::Socket(AF_INET, SOCK_STREAM));
+    auto address = server::IPv4Address::CreateAddressPtr("192.168.2.110", 9999);
+    sock->bind(address);
+    sock->listen();
+    auto res_sock = co_await server::accept(sock);
+    if (!res_sock){
+        co_return server::TERM;
+    }
+    SERVER_LOG_DEBUG(logger) << "accept sock:" << res_sock->getFd();
+    const char* buff = "write example";
+    auto writer = server::send(res_sock, buff, 11);
+    while(1){
+        int res = co_await writer;
+        if(res == server::SOCK_SUCCESS){
+            SERVER_LOG_DEBUG(logger) << "write success";
+            break;
+        }
+        else if(res == server::SOCK_REMAIN_DATA || res == server::SOCK_EAGAIN){
+            continue;
+        }
+        else {
+            SERVER_LOG_DEBUG(logger) << "write failed";
+            break;
+        }
+    }
+    co_return server::TERM;
+}
+
 int main(){
+    auto res = signal(SIGPIPE, SIG_IGN);
     test1();
 }
 
 void test1(){
     server::IOManager_ iom(3);
     iom.start();
-    auto task = server::Fiber_2::ptr(new server::Fiber_2(test_sock));
+    auto task = server::FiberIO::ptr(new server::FiberIO(test_sock2));
     iom.schedule(task);
 
     iom.wait();

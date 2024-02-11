@@ -23,8 +23,6 @@ namespace server {
 
 static Logger::ptr s_log = SERVER_LOGGER_SYSTEM;
 
-auto res = signal(SIGPIPE, SIG_IGN);
-
 Socket::Socket(int family, int type, int protocol, void(*handle)(int))
     :m_sock(-1), m_family(family), m_type(type), 
     m_protocol(protocol), m_err_handler(handle),
@@ -34,8 +32,7 @@ Socket::Socket(int family, int type, int protocol, void(*handle)(int))
 }
 
 Socket::~Socket(){
-    if(m_isConnected)
-        close();
+    close();
 }
 
 int64_t Socket::getSendTimeOut(){
@@ -92,17 +89,20 @@ bool Socket::setOption(int level, int option, const void *result, socklen_t len)
 
 
 Socket::ptr Socket::accept(){
-    int newsock = ::accept(m_sock, nullptr, nullptr);
-    if(newsock != -1){
-        SERVER_LOG_DEBUG(s_log) << "accept error sock=" << m_sock
-            << " errno=" << errno << " errstr=" << std::string(strerror(errno));
+    auto addr = IPv4Address::ptr(new IPv4Address);
+    socklen_t len;
+    int newsock = ::accept(m_sock, addr->getAddr(), &len);
+    if(newsock == -1){
+        if (errno != EAGAIN){
+            SERVER_LOG_DEBUG(s_log) << "accept error sock=" << m_sock
+                << " errno=" << errno << " errstr=" << std::string(strerror(errno));
+        }
         return {};
     }
     Socket::ptr sock(new Socket(m_family, m_type, m_protocol));
     if(sock->init(newsock))
         return sock;
     return {};
-
 }
 
 bool Socket::init(int newsock){
@@ -110,7 +110,7 @@ bool Socket::init(int newsock){
     if(fstat(newsock,  &fileStat) == -1){
         return false;
     }
-    if(S_ISSOCK(fileStat.st_mode)){
+    if(!S_ISSOCK(fileStat.st_mode)){
         return false;
     }
     m_sock = newsock;
@@ -181,7 +181,7 @@ void Socket::close(){
         return ;
     if(m_sock != -1){
         ::close(m_sock);
-        if(IOManager::GetIOManager){
+        if(IOManager::GetIOManager()){
             IOManager::GetIOManager()->DelFd(m_sock);
         }
         m_sock = -1;

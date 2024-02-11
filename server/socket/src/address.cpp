@@ -90,7 +90,21 @@ bool Address::operator==(const Address& r) const{
         memcmp(getAddr(), r.getAddr(), getAddrLen()) == 0;
 }
 
-IPv4Address::ptr IPv4Address::CreateAddress(const char *address, uint16_t port){
+IPv4Address IPv4Address::CreateAddress(const char *address, uint16_t port){
+    sockaddr_in addr;
+    memset(&addr, 0, sizeof(addr));
+    addr.sin_port = htons(port);
+    addr.sin_family = AF_INET;
+    int result = inet_pton(AF_INET, address, &addr.sin_addr);
+    if(result <= 0){
+        SERVER_LOG_ERROR(s_log) << "IPv4Address Create Error:IP-" << address 
+            << "-Port-" << port;
+        return {};
+    }
+    return IPv4Address(addr);
+}
+
+IPv4Address::ptr IPv4Address::CreateAddressPtr(const char *address, uint16_t port){
     sockaddr_in addr;
     memset(&addr, 0, sizeof(addr));
     addr.sin_port = htons(port);
@@ -121,7 +135,7 @@ const sockaddr* IPv4Address::getAddr() const {
 }
 
 socklen_t IPv4Address::getAddrLen() const {
-    return  sizeof(m_addr);
+    return sizeof(m_addr);
 }
 
 std::ostream& IPv4Address::insert(std::ostream& os) const {

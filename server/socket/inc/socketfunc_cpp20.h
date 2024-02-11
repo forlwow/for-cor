@@ -42,16 +42,19 @@ struct connect{
         return false;
     }
     void await_suspend(std::coroutine_handle<CoRet::promise_type> handle){
-        auto fib = std::dynamic_pointer_cast<Fiber_2>(Fiber_::GetThis());
+        auto fib = std::dynamic_pointer_cast<FiberIO>(Fiber_::GetThis());
+        // auto fib = std::dynamic_pointer_cast<Fiber_2>(Fiber_::GetThis());
         auto iom = IOManager_::GetIOManager();
         if(!iom || !fib){
             throw std::logic_error("fib|iomanager not found");
             return;
         }
         int res = m_sock->connect(m_address);
+        fib->setWrite();
         if(res == EINPROGRESS){
             int res = iom->AddEvent(m_sock->getFd(), IOManager_::WRITE, fib);
-            printf("res: %d\n", res);
+            if(res)
+                handle.resume();
         }
         return;
     }
@@ -59,6 +62,7 @@ struct connect{
         int res = m_sock->getError();
         if(!res)
             m_sock->setConnected(true);
+        std::dynamic_pointer_cast<FiberIO>(Fiber_::GetThis())->resetWrite();
         return res;
     }
     Socket::ptr m_sock;
@@ -85,16 +89,19 @@ struct send{
         return false;
     }
     void await_suspend(std::coroutine_handle<CoRet::promise_type> handle){
-        auto fib = std::dynamic_pointer_cast<Fiber_2>(Fiber_::GetThis());
+        auto fib = std::dynamic_pointer_cast<FiberIO>(Fiber_::GetThis());
         auto iom = IOManager_::GetIOManager();
         if(!iom || !fib){
             throw std::logic_error("fib|iomanager not found");
             return;
         }
         res = m_sock->send(m_str.data(), m_len, m_flag);
+        fib->setWrite();
         if(res == - 1 && (errno == EAGAIN || errno == EWOULDBLOCK)){
             res = SOCK_EAGAIN;
-            iom->AddEvent(m_sock->getFd(), IOManager_::WRITE, fib);
+            int tr = iom->AddEvent(m_sock->getFd(), IOManager_::WRITE, fib);
+            if(tr)
+                handle.resume();
         }
         else if (res == 0){
             res = SOCK_CLOSE;
@@ -116,6 +123,7 @@ struct send{
 
     }
     int await_resume() {
+        std::dynamic_pointer_cast<FiberIO>(Fiber_::GetThis())->resetWrite();
         return res;
     }
     int m_len;
@@ -145,16 +153,19 @@ struct recv{
         return false;
     }
     void await_suspend(std::coroutine_handle<CoRet::promise_type> handle){
-        auto fib = std::dynamic_pointer_cast<Fiber_2>(Fiber_::GetThis());
+        auto fib = std::dynamic_pointer_cast<FiberIO>(Fiber_::GetThis());
         auto iom = IOManager_::GetIOManager();
         if(!iom || !fib){
             throw std::logic_error("fib|iomanager not found");
             return;
         }
         res = m_sock->recv(m_buf, m_len, m_flag);
+        fib->setRead();
         if(res == - 1 && (errno == EAGAIN || errno == EWOULDBLOCK)){
             res = SOCK_EAGAIN;
-            iom->AddEvent(m_sock->getFd(), IOManager_::READ, fib);
+            int res = iom->AddEvent(m_sock->getFd(), IOManager_::READ, fib);
+            if(res)
+                handle.resume();
         }
         else if (res == 0){
             res = SOCK_CLOSE;
@@ -170,6 +181,7 @@ struct recv{
 
     }
     int await_resume() {
+        std::dynamic_pointer_cast<FiberIO>(Fiber_::GetThis())->resetRead();
         return res;
     }
     size_t m_len;
@@ -178,6 +190,52 @@ struct recv{
     void* m_buf;
     Socket::ptr m_sock;
 };
+
+
+struct accept{
+    accept(const Socket::ptr& sock)
+    {
+        m_sock = sock;
+    }
+
+    ~accept(){
+    }
+
+    bool await_ready() {
+        return false;
+    }
+    void await_suspend(std::coroutine_handle<CoRet::promise_type> handle){
+        auto fib = std::dynamic_pointer_cast<FiberIO>(Fiber_::GetThis());
+        auto iom = IOManager_::GetIOManager();
+        if(!iom || !fib){
+            throw std::logic_error("fib|iomanager not found");
+            return;
+        }
+        m_res = m_sock->accept();
+        if (m_res){
+            handle.resume();
+            return;
+        }
+        fib->setRead();
+        if (errno == EAGAIN){
+            int res = iom->AddEvent(m_sock->getFd(), IOManager_::READ, fib);
+            printf("%d\n", res);
+        }
+        else{
+            handle.resume();
+        }
+    }
+    Socket::ptr await_resume() {
+        std::dynamic_pointer_cast<FiberIO>(Fiber_::GetThis())->resetRead();
+        if(!m_res)
+            m_res = m_sock->accept();
+        return m_res;
+    }
+
+    Socket::ptr m_sock;
+    Socket::ptr m_res;
+};
+
 } // namespace server
 
 #endif

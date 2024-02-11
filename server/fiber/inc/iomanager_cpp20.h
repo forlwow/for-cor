@@ -1,4 +1,6 @@
 #include "scheduler.h"
+#include <forward_list>
+#include <list>
 #if __cplusplus >= 202002L
 #ifndef IOMANAGER_20_H
 #define IOMANAGER_20_H
@@ -102,9 +104,11 @@ private:
             // fiber可能会被多线程调用
             Scheduler_* scheduler = nullptr;
             Fiber_::ptr fiber;
+            // std::forward_list<Fiber_::ptr> fibers;
             EventContext()=default;
             EventContext(TaskType task): fiber(new Fiber_(task)){}
             void reset() {scheduler = nullptr, fiber.reset();}
+            // void reset() {scheduler = nullptr, fibers.clear();}
         };
         FdContext()=delete;
         FdContext(int fd_):fd(fd_){}
@@ -128,7 +132,10 @@ private:
         }
         void TriggerEvent(Event event){
             EventContext& evt = GetEventContext(event);
-            evt.scheduler->schedule(evt.fiber);
+            auto fib = std::dynamic_pointer_cast<FiberIO>(evt.fiber);
+            bool issce = event & READ ? fib->isRead() : fib->isWrite();
+            if (issce)
+                evt.scheduler->schedule(evt.fiber);
             // events = (Event)(events & ~event);
         }
         // 只在一个线程中操作 不需要锁
