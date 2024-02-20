@@ -11,7 +11,7 @@
 
 namespace server{
 
-auto s_log = SERVER_LOGGER_SYSTEM;
+static auto s_log = SERVER_LOGGER_SYSTEM;
 
 extern thread_local const char* t_thread_name;
 static Scheduler_* s_scheduler = nullptr;

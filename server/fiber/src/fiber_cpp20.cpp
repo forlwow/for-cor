@@ -1,3 +1,5 @@
+#include "socketfunc_cpp20.h"
+#include <memory>
 #if __cplusplus >= 202002L
 #include "fiber_cpp20.h"
 #include "log.h"
@@ -10,7 +12,7 @@
 
 namespace server{
 
-thread_local Fiber_::ptr t_fiber_ = nullptr;            // 当前执行的协程
+thread_local std::weak_ptr<Fiber_> t_fiber_;            // 当前执行的协程
 
 auto g_logger = SERVER_LOGGER_SYSTEM;
 
@@ -53,52 +55,19 @@ void CoRet::promise_type::return_value(State s){
     m_state = s;
 }
 
-
-Fiber_::Fiber_(){
-    ++s_fiber_count;
-}
-
-Fiber_::Fiber_(std::function<CoRet()> cb)
-    :m_id(++s_fiber_id), m_cb(cb())
-{
-    m_cb.h_.promise().m_done = &m_done;
-    ++s_fiber_count;
-}
-
 Fiber_::~Fiber_(){
-    --s_fiber_count;    
-
-    // SERVER_LOG_INFO(g_logger) << "fiber  destroy id:" << m_id;
+    SERVER_LOG_DEBUG(g_logger) << "fiber destory";
 }
 
-void Fiber_::reset(std::function<CoRet()> cb){
-    m_cb = cb();
-    m_done = false;
-    m_cb.h_.promise().m_done = &m_done;
-}
-
-bool Fiber_::swapIn(){
-    if(!m_done){
-        t_fiber_ = shared_from_this();
-        m_cb();
-        t_fiber_.reset();
-        return true;
-    }
-    return false;
-}
-
-bool Fiber_::done(){
-    return m_done;
-}
-
-Fiber_::ptr Fiber_::GetThis(){
+std::weak_ptr<Fiber_> Fiber_::GetThis(){
     return t_fiber_;
 }
 
+void Fiber_::SetThis(std::weak_ptr<Fiber_> fib){
+    t_fiber_ = fib;
+}
+
 uint64_t Fiber_::GetCurFiberId(){
-    if(t_fiber_){
-        return t_fiber_->getId();
-    }
     return 0;
 }
 

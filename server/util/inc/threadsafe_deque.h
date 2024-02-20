@@ -144,14 +144,14 @@ public:
         return true;
     }
 
-    int size() const {
+    int size() const __attribute__((noinline)) {
         std::scoped_lock<std::mutex, std::mutex> lk(head_mutex, tail_mutex);
         if (head > tail){
             return true_tail - head + 1 + tail - true_head;
         }
         else
             return tail - head;
-    }
+    } 
 
 };
 

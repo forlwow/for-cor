@@ -64,7 +64,7 @@ bool Address::host2Address(std::vector<ptr>& v, const std::string& host, const s
 }
 
 std::ostream& Address::insert(std::ostream& os) const {
-
+    return os;
 }
 
 std::string Address::toString() const {
@@ -237,7 +237,7 @@ IPAddress::ptr IPv6Address::subnetMask(uint32_t prefix_len) {
     memset(&subnet, 0, sizeof(subnet));
     subnet.sin6_family = AF_INET6;
     subnet.sin6_addr.s6_addr[prefix_len / 8] = ~CreateMask<uint8_t>(prefix_len % 8);
-
+    return IPv6Address::ptr(new IPv6Address(subnet));
 }
 
 uint32_t IPv6Address::getPort() const {
@@ -279,7 +279,7 @@ socklen_t UnixAddress::getAddrLen() const {
 
 std::ostream& UnixAddress::insert(std::ostream& os) const {
     if(m_length > offsetof(sockaddr_un, sun_path) && m_addr.sun_path[0] == '\0')
-        return os << '\\0' 
+        return os << '\0' 
             << std::string(m_addr.sun_path + 1, m_length - offsetof(sockaddr_un, sun_path) - 1);
     return os << m_addr.sun_path;
 }

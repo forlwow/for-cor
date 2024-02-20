@@ -1,14 +1,17 @@
+#include "async.h"
+#include "enums.h"
 #include <asm-generic/errno.h>
 #include <asm-generic/socket.h>
 #include <cstddef>
-#include <initializer_list>
-#include <iterator>
-#include <list>
+#include <cstdio>
+#include <fcntl.h>
 #include <string>
 #include <sys/socket.h>
+#include <thread>
 #if __cplusplus >= 202002L
 #include "iomanager_cpp20.h"
 #include "ethread.h"
+#include "async.h"
 #include "fiber.h"
 #include "log.h"
 #include "scheduler_cpp20.h"
@@ -29,8 +32,7 @@ namespace server{
 static Logger::ptr g_logger = SERVER_LOGGER_SYSTEM;
 
 IOManager_::IOManager_(size_t threads_, const std::string& name_)
-    : Scheduler_(threads_, name_), m_fdContexts(),
-        m_idleFiber(new Fiber_2(std::bind_front(&IOManager_::idle, this), false))
+    : Scheduler_(threads_, name_), m_fdContexts()
 {
     m_epfd = epoll_create(1024);
     assert(m_epfd > 0);
@@ -40,17 +42,19 @@ IOManager_::~IOManager_(){
     close(m_epfd);
 }
 
-int IOManager_::AddEvent(int fd, Event event, TaskType cb, bool drop){
-    return AddEvent(fd, event, Fiber_2::ptr(new Fiber_2(cb, drop)));
+void IOManager_::start(){
+    Scheduler_::start();
+    handlerThread = EThread::ptr(new EThread(std::bind_front(&IOManager_::idle, this), "Handler"));
+    if(!addInterrupt()){
+        SERVER_LOG_ERROR(g_logger) << "Failed to add Interrupt";
+    }
 }
 
-int IOManager_::AddEvent(int fd, Event event, Fiber_2::ptr cb){
+int IOManager_::AddEvent(int fd, Event event, Fiber_::ptr cb){
     WriteLockGuard wlock(m_mutex);
-        // 获取socket上的错误状态
-    int error = 0;
-    socklen_t errlen = sizeof(error);
-    if (getsockopt(fd, SOL_SOCKET, SO_ERROR, &error, &errlen) < 0){
-        SERVER_LOG_ERROR(g_logger) << "sock err:" << std::string(strerror(errno));
+
+    if(fcntl(fd, F_GETFD) == -1){
+        SERVER_LOG_ERROR(g_logger) << "sock err: " << std::string(strerror(errno));
         return -1;
     }
 
@@ -105,7 +109,7 @@ bool IOManager_::DelEvent(int fd, Event event){
 
     epoll_event epevent;
     memset(&epevent, 0, sizeof(epevent));
-    epevent.events = EPOLLET | new_event;
+    epevent.events = (int)(EPOLLET) | new_event;
     epevent.data.fd = fd;
     int ret = epoll_ctl(m_epfd, op, fd, &epevent);
     if(ret){
@@ -149,7 +153,7 @@ bool IOManager_::CancelEvent(int fd, Event event){
 
     epoll_event epevent;
     memset(&epevent, 0, sizeof(epevent));
-    epevent.events = EPOLLET | new_event;
+    epevent.events = (int)(EPOLLET) | new_event;
     epevent.data.fd = fd;
     int ret = epoll_ctl(m_epfd, op, fd, &epevent);
     if(ret){
@@ -171,7 +175,7 @@ bool IOManager_::stopping(){
     return true;
 }
 
-CoRet IOManager_::idle(){
+void IOManager_::idle(){
     const uint64_t MAX_EVENTS = 256;
     epoll_event* events = new epoll_event[MAX_EVENTS];
     std::shared_ptr<epoll_event> shared_events(
@@ -193,12 +197,8 @@ CoRet IOManager_::idle(){
         }while(true);
 
         for(auto exp : GetExpireTimers()){
-            if(!exp->GetFunc()->done()){
+            if(exp->GetFunc() && !exp->GetFunc()->done()){
                 schedule(exp->GetFunc());
-                if(exp->isCirculate()){
-                    exp->refresh();
-                    addTimer(exp);
-                }
             }
         }
         {
@@ -221,27 +221,19 @@ CoRet IOManager_::idle(){
             }
         }
 
-        co_yield HOLD;
+        std::this_thread::yield();
     }
-    co_return TERM;
+    return;
 }
 
 void IOManager_::run(){
     while (!m_stopping){
-        if(m_idleFiber->swapIn()){
-            std::this_thread::yield();
-            continue;
-        }
-
         task_type ta;
         if(m_tasks.pop_front(ta)){
             if(ta->done()) continue;
             ++m_working_thread;
-            auto tb = std::dynamic_pointer_cast<Fiber_2>(ta);
-            if(!tb->swapIn() && !tb->isDrop()){
-                schedule(ta);
-            }
-            else{
+            if(!ta->swapIn()){
+
             }
             --m_working_thread;
         }
@@ -256,105 +248,23 @@ void IOManager_::run(){
 
 }
 
-bool Timer_::Compare::operator()(const Timer_::ptr& lp, const Timer_::ptr& rp) const {
-    if(!lp && !rp)
+bool IOManager_::addInterrupt(){
+    if(pipe(m_interruptFd) == -1){
         return false;
-    if(!lp)
-        return true;
-    if(!rp)
+    }
+    AddEvent(m_interruptFd[0], READ, FuncFiber::CreatePtr([fd = m_interruptFd[0]]{
+        char bytes;
+        while (read(fd, &bytes, 1) != 0);
+    }));
+    return true;
+}
+
+bool IOManager_::interruptEpoll(){
+    if(m_interruptFd[1] == -1){
         return false;
-    if(lp->m_next < rp->m_next)
-        return true;
-    if(rp->m_next < lp->m_next)
-        return false;
-    return lp < rp;
-}
-
-Timer_::Timer_(uint64_t ms, TaskType cb, Timer_Manager* manager, bool cir)
-    : m_ms(ms), m_manager(manager), m_circulate(cir)
-{
-    m_next = Timer_Manager::GetCurTimeStamp() + ms;
-    m_cb = cb;
-}
-
-Timer_::Timer_(uint64_t next_time)
-    :m_next(next_time)
-{
-
-}
-
-void Timer_::refresh(){
-    m_next = Timer_Manager::GetCurTimeStamp() + m_ms;
-}
-
-bool Timer_::InsertIntoManager(Timer_::ptr Timer_){
-    if(Timer_->m_manager){
-        Timer_->m_manager->addTimer(Timer_);
-        return true;
     }
-    return false;
-}
-
-Timer_Manager::Timer_Manager(){
-
-}
-
-Timer_Manager::~Timer_Manager(){
-
-}
-
-void Timer_Manager::OnInsertAtFront(){
-
-}
-
-Timer_::ptr Timer_Manager::addTimer(uint64_t ms, TaskType1 cb, bool circulate){
-    Fiber_2::ptr fib(new Fiber_2(cb));
-    Timer_::ptr timer(new Timer_(ms, fib, this, circulate));
-    addTimer(timer);
-    return timer;
-}
-   
-Timer_::ptr Timer_Manager::addTimer(uint64_t ms, TaskType2 cb, bool drop){
-    Fiber_2::ptr fib(new Fiber_2(cb, drop));
-    Timer_::ptr timer(new Timer_(ms, fib, this));
-    addTimer(timer);
-    return timer;
-}
-
-void Timer_Manager::addTimer(Timer_::ptr Timer_){
-    WriteLockGuard wlock(m_mutex);
-    m_timers.insert(Timer_);
-}
-
-std::vector<Timer_::ptr> Timer_Manager::GetExpireTimers(){
-    std::vector<Timer_::ptr> res;
-    Timer_::ptr ttime(new Timer_(GetCurTimeStamp()));
-    ReadLockGuard rlock(m_mutex);
-    auto iter = m_timers.upper_bound(ttime);
-    for(auto it = m_timers.begin(); it != iter;++it){
-        res.push_back(*it);
-    }
-    m_timers.erase(m_timers.begin(), iter);
-    return res;
-}
-
-uint64_t Timer_Manager::GetNextTimeDuration(){
-    ReadLockGuard rlock(m_mutex);
-    auto iter = m_timers.begin();
-    if(iter == m_timers.end())
-        return UINT64_MAX;
-    uint64_t now = GetCurTimeStamp(), next = (*iter)->m_next;
-    if(next > now)
-        return next - now;
-    else
-        return 0;
-}
-
-void Timer_Manager::AutoStop(){
-    WriteLockGuard wlock(m_mutex);
-    for(auto &Timer_ : m_timers){
-        Timer_->m_manager = nullptr;
-    }
+    write(m_interruptFd[1], "1", 1);
+    return true;
 }
 
 

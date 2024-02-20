@@ -48,34 +48,16 @@ public:
     typedef std::shared_ptr<Fiber_> ptr;
 
 public:
-    Fiber_(std::function<CoRet()> cb);
-    template<typename Func, typename... Args>
-    requires std::invocable<Func, Args...> 
-        && std::same_as<std::invoke_result_t<Func, Args...>, CoRet>
-    Fiber_(Func &&func, Args &&...args){
-        m_cb = std::forward<Func>(func)(std::forward<Args>(args)...);
-        m_id = ++s_fiber_id;
-        m_cb.h_.promise().m_done = &m_done;
-        ++s_fiber_count;
-    }
-
-    Fiber_();
     virtual ~Fiber_();
 
-    virtual void reset(std::function<CoRet()> cb);       // 重置协程函数和状态[INIT, TERM]
-    virtual bool swapIn();                               // 切换到当前协程执行
-    virtual bool done();
-    uint64_t getId(){return m_id;}
+    virtual bool swapIn() = 0;                               // 切换到当前协程执行
+    virtual bool done() = 0;
 public:
-    static Fiber_::ptr GetThis();                                   // 返回当前执行的协程
+    static std::weak_ptr<Fiber_> GetThis();                                   // 返回当前执行的协程
+    static void SetThis(std::weak_ptr<Fiber_>);                                   // 设置当前执行的协程
     static uint64_t TotalFibers(){return s_fiber_count;}            // 返回总协程数
     static uint64_t GetCurFiberId();                                // 获取当前协程号
 
-protected:
-    uint64_t m_id = 0;
-    bool m_done = false;
-private:
-    CoRet m_cb;
 };
 
 // 线程安全的协程
@@ -99,6 +81,7 @@ public:
     ~Fiber_2() override;
 
     bool swapIn() override;                               // 切换到当前协程执行
+    bool done() {return m_done;}
     bool isDrop() const {return m_drop; }
 
     void setCbBeforeYield(std::function<void()>);
@@ -106,12 +89,12 @@ public:
     void setCbBeforeReturn(std::function<void()>);
 private:
     Fiber_2();
-    using Fiber_::reset;
 private:
-    std::variant<std::function<void()>, CoRet> m_cb;
+    bool m_done;
     bool m_drop = false;                        // 当协程被多进程操作时是否要丢弃
-    std::function<void()> m_cbBeforeSwapIn;
     std::atomic_flag m_flag = ATOMIC_FLAG_INIT;
+    std::variant<std::function<void()>, CoRet> m_cb;
+    std::function<void()> m_cbBeforeSwapIn;
 };
 
 class FiberIO: public Fiber_2{
@@ -128,7 +111,7 @@ public:
     void setWrite() {events |= EPOLLOUT;}
     void resetRead() {events &= ~EPOLLIN;}
     void resetWrite() {events &= ~EPOLLOUT;}
-    
+
 
 private:
     int events;

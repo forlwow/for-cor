@@ -1,9 +1,12 @@
 #ifndef SERVER_SOCKETFUNC_20_H
 #define SERVER_SOCKETFUNC_20_H
+#include <cstdint>
+#if __cplusplus >= 202002L
 
 #include "address.h"
 #include "log.h"
 #include "socket.h"
+#include "concept.h"
 #include <algorithm>
 #include <bits/fs_fwd.h>
 #include <cerrno>
@@ -15,13 +18,13 @@
 #include <string_view>
 #include <sys/socket.h>
 #include <unistd.h>
-#if __cplusplus >= 202002L
 #include <coroutine>
 #include <fiber_cpp20.h>
 #include <iomanager_cpp20.h>
 
 namespace server {
 
+auto s_log = SERVER_LOGGER_SYSTEM;
 
 enum SOCK_RESULT{
     SOCK_REMAIN_DATA = -10,
@@ -38,21 +41,27 @@ struct connect{
         m_sock = sock;
         m_address = add;
     }
+    ~connect(){
+        if(m_isAddEvent){
+            IOManager_::GetIOManager()->DelEvent(m_sock->getFd(), IOManager_::WRITE);
+        }
+    }
     bool await_ready() {
         return false;
     }
-    void await_suspend(std::coroutine_handle<CoRet::promise_type> handle){
-        auto fib = std::dynamic_pointer_cast<FiberIO>(Fiber_::GetThis());
-        // auto fib = std::dynamic_pointer_cast<Fiber_2>(Fiber_::GetThis());
+    template<FiberPromise T>
+    void await_suspend(T handle){
+        // auto fib = std::dynamic_pointer_cast<FiberIO>(Fiber_::GetThis().lock());
+        auto fib = Fiber_::GetThis().lock();
         auto iom = IOManager_::GetIOManager();
         if(!iom || !fib){
             throw std::logic_error("fib|iomanager not found");
             return;
         }
         int res = m_sock->connect(m_address);
-        fib->setWrite();
         if(res == EINPROGRESS){
             int res = iom->AddEvent(m_sock->getFd(), IOManager_::WRITE, fib);
+            m_isAddEvent = true;
             if(res)
                 handle.resume();
         }
@@ -62,9 +71,9 @@ struct connect{
         int res = m_sock->getError();
         if(!res)
             m_sock->setConnected(true);
-        std::dynamic_pointer_cast<FiberIO>(Fiber_::GetThis())->resetWrite();
         return res;
     }
+    bool m_isAddEvent = false;
     Socket::ptr m_sock;
     Address::ptr m_address;
 };
@@ -83,23 +92,29 @@ struct send{
     }
 
     ~send(){
+        if(m_isAddEvent){
+            IOManager_::GetIOManager()->DelEvent(m_sock->getFd(), IOManager_::WRITE);
+        }
+        SERVER_LOG_DEBUG(s_log) << "sender destory";
     }
 
     bool await_ready() {
         return false;
     }
-    void await_suspend(std::coroutine_handle<CoRet::promise_type> handle){
-        auto fib = std::dynamic_pointer_cast<FiberIO>(Fiber_::GetThis());
+    template<FiberPromise T>
+    void await_suspend(T handle){
+        auto fib = Fiber_::GetThis().lock();
+        // auto fib = std::dynamic_pointer_cast<FiberIO>(Fiber_::GetThis().lock());
         auto iom = IOManager_::GetIOManager();
         if(!iom || !fib){
             throw std::logic_error("fib|iomanager not found");
             return;
         }
         res = m_sock->send(m_str.data(), m_len, m_flag);
-        fib->setWrite();
         if(res == - 1 && (errno == EAGAIN || errno == EWOULDBLOCK)){
             res = SOCK_EAGAIN;
             int tr = iom->AddEvent(m_sock->getFd(), IOManager_::WRITE, fib);
+            m_isAddEvent = true;
             if(tr)
                 handle.resume();
         }
@@ -123,9 +138,9 @@ struct send{
 
     }
     int await_resume() {
-        std::dynamic_pointer_cast<FiberIO>(Fiber_::GetThis())->resetWrite();
         return res;
     }
+    bool m_isAddEvent = false;
     int m_len;
     int m_flag;
     int res = 0;
@@ -147,20 +162,24 @@ struct recv{
     }
 
     ~recv(){
+        if(m_isAddEvent){
+            IOManager_::GetIOManager()->DelEvent(m_sock->getFd(), IOManager_::READ);
+        }
+        SERVER_LOG_DEBUG(s_log) << "recv destory";
     }
 
     bool await_ready() {
         return false;
     }
-    void await_suspend(std::coroutine_handle<CoRet::promise_type> handle){
-        auto fib = std::dynamic_pointer_cast<FiberIO>(Fiber_::GetThis());
+    template<FiberPromise T>
+    void await_suspend(T handle){
+        auto fib = Fiber_::GetThis().lock();
         auto iom = IOManager_::GetIOManager();
         if(!iom || !fib){
             throw std::logic_error("fib|iomanager not found");
             return;
         }
         res = m_sock->recv(m_buf, m_len, m_flag);
-        fib->setRead();
         if(res == - 1 && (errno == EAGAIN || errno == EWOULDBLOCK)){
             res = SOCK_EAGAIN;
             int res = iom->AddEvent(m_sock->getFd(), IOManager_::READ, fib);
@@ -181,9 +200,9 @@ struct recv{
 
     }
     int await_resume() {
-        std::dynamic_pointer_cast<FiberIO>(Fiber_::GetThis())->resetRead();
         return res;
     }
+    bool m_isAddEvent = false;
     size_t m_len;
     int res = 0;
     int m_flag;
@@ -199,13 +218,18 @@ struct accept{
     }
 
     ~accept(){
+        if(m_isAddEvent){
+            IOManager_::GetIOManager()->DelEvent(m_sock->getFd(), IOManager_::READ);
+        }
+        SERVER_LOG_DEBUG(s_log) << "accepter destory";
     }
 
     bool await_ready() {
         return false;
     }
-    void await_suspend(std::coroutine_handle<CoRet::promise_type> handle){
-        auto fib = std::dynamic_pointer_cast<FiberIO>(Fiber_::GetThis());
+    template<FiberPromise T>
+    void await_suspend(T handle){
+        auto fib = Fiber_::GetThis().lock();
         auto iom = IOManager_::GetIOManager();
         if(!iom || !fib){
             throw std::logic_error("fib|iomanager not found");
@@ -216,22 +240,20 @@ struct accept{
             handle.resume();
             return;
         }
-        fib->setRead();
         if (errno == EAGAIN){
             int res = iom->AddEvent(m_sock->getFd(), IOManager_::READ, fib);
-            printf("%d\n", res);
         }
         else{
             handle.resume();
         }
     }
     Socket::ptr await_resume() {
-        std::dynamic_pointer_cast<FiberIO>(Fiber_::GetThis())->resetRead();
         if(!m_res)
             m_res = m_sock->accept();
         return m_res;
     }
 
+    bool m_isAddEvent = false;
     Socket::ptr m_sock;
     Socket::ptr m_res;
 };

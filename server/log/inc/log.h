@@ -15,7 +15,7 @@
 #include <singleton.h>
 #include "fiber.h"
 
-#if __cplusplus > 202002L
+#if __cplusplus >= 202002L
 
 #define SERVER_LOG_LEVEL(logger, level)  \
     server::LogEventWrap(server::LogEvent::ptr(\

@@ -4,6 +4,7 @@
 
 #include "ethread.h"
 #include "threadsafe_deque.h"
+#include "async.h"
 #include "enums.h"
 #include "fiber_cpp20.h"
 #include <atomic>
@@ -31,7 +32,7 @@ public:
     static Scheduler_* GetScheduler();
 protected:
     virtual void run();
-    virtual CoRet idle(){co_return TERM;}
+    virtual void idle(){}
     virtual bool stopping(){return true;}
 protected:
     bool m_stopping = true;                 // 当前状态 停止或运行
@@ -39,8 +40,8 @@ protected:
     std::string m_name;                     // 调度器名
     int m_thread_count;
     std::atomic_int m_working_thread = 0;       // 正在工作的线程的数量 
-    std::vector<EThread::ptr> m_threads;      // 所有线程
-    threadsafe_deque<task_type> m_tasks;      // 工作队列 
+    std::vector<EThread::ptr> m_threads;          // 所有线程
+    threadsafe_deque<task_type> m_tasks;          // 工作队列 
 
 };
 

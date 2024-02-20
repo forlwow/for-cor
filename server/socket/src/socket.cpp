@@ -25,8 +25,8 @@ static Logger::ptr s_log = SERVER_LOGGER_SYSTEM;
 
 Socket::Socket(int family, int type, int protocol, void(*handle)(int))
     :m_sock(-1), m_family(family), m_type(type), 
-    m_protocol(protocol), m_err_handler(handle),
-    m_isConnected(false)
+    m_protocol(protocol), 
+    m_isConnected(false), m_err_handler(handle)
 {
     newSock();
 }
@@ -37,7 +37,7 @@ Socket::~Socket(){
 
 int64_t Socket::getSendTimeOut(){
     timeval tv;
-    if(getOption(SOL_SOCKET, SO_SNDTIMEO, tv) == -1)
+    if(!getOption(SOL_SOCKET, SO_SNDTIMEO, tv))
         return -1;
     return tv.tv_sec * 1000 + tv.tv_usec / 1000;
 }
@@ -51,7 +51,7 @@ bool Socket::setSendTimeOut(int64_t v){
 
 int64_t Socket::getRecvTimeOut(){
     timeval tv;
-    if(getOption(SOL_SOCKET, SO_RCVTIMEO, tv) == -1)
+    if(!getOption(SOL_SOCKET, SO_RCVTIMEO, tv))
         return -1;
     return tv.tv_sec * 1000 + tv.tv_usec / 1000;
 }
@@ -120,19 +120,23 @@ bool Socket::init(int newsock){
 
 }
 
-bool Socket::bind(const Address::ptr addr){
+bool Socket::bind(const Address::ptr& addr){
+    return bind(*addr.get());
+}
+
+bool Socket::bind(const Address& addr){
     if(!isVaild()){
         newSock();
         if(!isVaild())
             return false;
     }
-    if(addr->getFamily() != m_family){
+    if(addr.getFamily() != m_family){
         SERVER_LOG_ERROR(s_log) 
-            << "bind sock error: family different addr.family=" << addr->getFamily()
+            << "bind sock error: family different addr.family=" << addr.getFamily()
             << "sock.family=" << m_family;
         return false;
     }
-    if(::bind(m_sock, addr->getAddr(), addr->getAddrLen())){
+    if(::bind(m_sock, addr.getAddr(), addr.getAddrLen())){
         SERVER_LOG_ERROR(s_log) 
             << "bind sock error: bind error errno=" << errno
             << "errstr=" << std::string(strerror(errno));
@@ -141,19 +145,23 @@ bool Socket::bind(const Address::ptr addr){
     return true;
 }
 
-int Socket::connect(const Address::ptr addr){
+int Socket::connect(const Address::ptr& addr){
+    return connect(*addr.get());
+}
+
+int Socket::connect(const Address& addr){
     if(!isVaild()){
         newSock();
         if(!isVaild())
             return ENOTSOCK;
     }
-    if(addr->getFamily() != m_family){
+    if(addr.getFamily() != m_family){
         SERVER_LOG_ERROR(s_log) 
-            << "connect sock error: family different addr.family=" << addr->getFamily()
+            << "connect sock error: family different addr.family=" << addr.getFamily()
             << "sock.family=" << m_family;
         return EAFNOSUPPORT;
     }
-    if(::connect(m_sock, addr->getAddr(), addr->getAddrLen())){
+    if(::connect(m_sock, addr.getAddr(), addr.getAddrLen())){
         if(errno == EINPROGRESS)
             return EINPROGRESS;
         SERVER_LOG_ERROR(s_log) 
@@ -196,12 +204,6 @@ std::ostream& Socket::dump(std::ostream& os){
       << " family=" << m_family
       << " type=" << m_type
       << " protocol= " << m_protocol;
-    if(m_localAddress){
-        os << " local address=" << m_localAddress->toString();
-    }
-    if(m_remoteAddress){
-        os << " remote address=" << m_remoteAddress->toString();
-    }
     return os << "]";
 }
 
@@ -222,17 +224,25 @@ int Socket::send(iovec* buffer, size_t length, int flags){
     return ::sendmsg(m_sock, &msg, flags);
 }
 
-int Socket::sendTo(const void* buffer, size_t length, const Address::ptr toAddr, int flags){
+int Socket::sendTo(const void* buffer, size_t length, const Address::ptr& toAddr, int flags){
     return ::sendto(m_sock, buffer, length, flags, toAddr->getAddr(), toAddr->getAddrLen());
 }
 
-int Socket::sendTo(iovec* buffer, size_t length, const Address::ptr to,int flags){
+int Socket::sendTo(iovec* buffer, size_t length, const Address::ptr& to,int flags){
+    return sendTo(buffer, length, *to.get());
+}
+
+int Socket::sendTo(const void* buffer, size_t length, const Address& toAddr, int flags){
+    return ::sendto(m_sock, buffer, length, flags, toAddr.getAddr(), toAddr.getAddrLen());
+}
+
+int Socket::sendTo(iovec* buffer, size_t length, const Address& to, int flags){
     msghdr msg;
     memset(&msg, 0, sizeof(msg));
     msg.msg_iov = buffer;
     msg.msg_iovlen = length;
-    msg.msg_name = (void*)to->getAddr();
-    msg.msg_namelen = to->getAddrLen();
+    msg.msg_name = (void*)to.getAddr();
+    msg.msg_namelen = to.getAddrLen();
     return ::sendmsg(m_sock, &msg, flags);
 }
 
@@ -251,25 +261,32 @@ int Socket::recv(iovec* buffer, size_t length, int flags){
     return ::recvmsg(m_sock, &msg, flags);
 }
 
-int Socket::recvFrom(void* buffer, size_t length, const Address::ptr from, int flags){
+int Socket::recvFrom(void* buffer, size_t length, const Address::ptr& from, int flags){
     socklen_t len = from->getAddrLen();
     return ::recvfrom(m_sock, buffer, length, flags, (sockaddr*)from->getAddr(), &len);
 }
 
-int Socket::recvFrom(iovec* buffer, size_t length, const Address::ptr from,int flag){
+int Socket::recvFrom(iovec* buffer, size_t length, const Address::ptr& from,int flags){
+    return recvFrom(buffer, length, *from.get(), flags);
+}
+
+int Socket::recvFrom(void* buffer, size_t length, const Address& from, int flags){
+socklen_t len = from.getAddrLen();
+    return ::recvfrom(m_sock, buffer, length, flags, (sockaddr*)from.getAddr(), &len);
+}
+
+int Socket::recvFrom(iovec* buffer, size_t length, const Address& from, int flags){
     msghdr msg;
     memset(&msg, 0, sizeof(msg));
     msg.msg_iov = buffer;
     msg.msg_iovlen = length;
-    msg.msg_name = (void*)from->getAddr();
-    msg.msg_namelen = from->getAddrLen();
-    return ::recvmsg(m_sock, &msg, flag);
+    msg.msg_name = (void*)from.getAddr();
+    msg.msg_namelen = from.getAddrLen();
+    return ::recvmsg(m_sock, &msg, flags);
 }
 
 Address::ptr Socket::getRemoteAddress(){
-    if(m_remoteAddress)
-        return m_remoteAddress;
-    return {};
+    return refreshRemoteAddress();
 }
 
 Address::ptr Socket::refreshRemoteAddress(){
@@ -297,7 +314,6 @@ Address::ptr Socket::refreshRemoteAddress(){
         UnixAddress::ptr unaddr = std::dynamic_pointer_cast<UnixAddress>(result);
         unaddr->setAddrLen(addrlen);
     }
-    m_remoteAddress = result;
     return result;
 }
 
@@ -326,7 +342,6 @@ Address::ptr Socket::getLocalAddress(){
         UnixAddress::ptr unaddr = std::dynamic_pointer_cast<UnixAddress>(result);
         unaddr->setAddrLen(addrlen);
     }
-    m_localAddress = result;
     return result;
 }
 

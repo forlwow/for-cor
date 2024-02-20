@@ -1,4 +1,5 @@
 #include "address.h"
+#include "async.h"
 #include "socket.h"
 #include "socketfunc_cpp20.h"
 #include <cerrno>
@@ -47,15 +48,15 @@ void test3();
 void test4();
 void test5();
 
-server::CoRet run_in_fiber(){
+server::Task run_in_fiber(){
     SERVER_LOG_INFO(logger) << "enter fiber";
-    co_await server::sleep(5);
+    co_await server::msleep(2000);
     SERVER_LOG_INFO(logger) << "begin run in fiber";
-    co_yield server::HOLD;
+    co_yield server::YIELD;
     SERVER_LOG_INFO(logger) << "before end run in fiber";
-    co_yield server::HOLD;
+    co_yield server::SUSPEND;
     SERVER_LOG_INFO(logger) << "end run in fiber";
-    co_return server::TERM;
+    co_return ;
 }
 
 server::CoRet count_in_fiber(){
@@ -70,6 +71,7 @@ server::CoRet count_in_fiber(){
 atomic<int> g_count;
 server::CoRet test_Fiber(){
     for(auto i in range(20)){
+        --i;
         co_yield server::HOLD;
     }
     ++g_count;
@@ -77,23 +79,23 @@ server::CoRet test_Fiber(){
 }
 
 
-server::CoRet test_Fiber2(int i_){
+server::Task test_Fiber2(int i_){
     for(auto i in range(i_)){
         SERVER_LOG_DEBUG(logger) << "test2 swapIn=" << i;
-        co_yield server::HOLD;
+        co_yield server::SUSPEND;
     }
     ++g_count;
-    co_return server::TERM;
+    co_return ;
 }
 
-server::CoRet test_sock(){
+server::Task test_sock(){
     auto sock = server::Socket::ptr(new server::Socket(AF_INET, SOCK_STREAM));
-    auto address = server::IPv4Address::CreateAddressPtr("192.168.2.18", 9999);
+    auto address = server::IPv4Address::CreateAddressPtr("192.168.1.10", 9999);
     SERVER_LOG_DEBUG(logger) << "start connect";
     int res = co_await server::connect(sock, address);
     SERVER_LOG_DEBUG(logger) << res;
     if(res)
-        co_return server::TERM;
+        co_return ;
     const char* buff = "write example";
     SERVER_LOG_DEBUG(logger) << "start write";
     auto writer = server::send(sock, buff, 11);
@@ -136,17 +138,17 @@ server::CoRet test_sock(){
 
     }
 
-    co_return server::TERM;
+    co_return;
 }
 
-server::CoRet test_sock2(){
+server::Task test_sock2(){
     auto sock = server::Socket::ptr(new server::Socket(AF_INET, SOCK_STREAM));
-    auto address = server::IPv4Address::CreateAddressPtr("192.168.2.110", 9999);
+    auto address = server::IPv4Address::CreateAddressPtr("192.168.1.110", 39001);
     sock->bind(address);
     sock->listen();
     auto res_sock = co_await server::accept(sock);
     if (!res_sock){
-        co_return server::TERM;
+        co_return;
     }
     SERVER_LOG_DEBUG(logger) << "accept sock:" << res_sock->getFd();
     const char* buff = "write example";
@@ -165,7 +167,7 @@ server::CoRet test_sock2(){
             break;
         }
     }
-    co_return server::TERM;
+    co_return;
 }
 
 int main(){
@@ -174,22 +176,18 @@ int main(){
 }
 
 void test1(){
-    server::IOManager_ iom(3);
+    server::IOManager_ iom(2);
+    auto Fib = server::AsyncFiber::CreatePtr(test_sock2);
     iom.start();
-    auto task = server::FiberIO::ptr(new server::FiberIO(test_sock2));
-    iom.schedule(task);
-
+    iom.schedule(Fib);
     iom.wait();
 }
 
 void test2(){
-    server::Fiber_::ptr task(new server::Fiber_(test_Fiber2, 10));
-    for(auto i in range(10)){
-        SERVER_LOG_DEBUG(logger) << task->done();
-        if(!task->done()){
-            task->swapIn();
-        }
-    }
+    auto func = server::FuncFiber::ptr(new server::FuncFiber([]{
+        printf("ok\n");
+    }));
+    func->swapIn();
 }
 
 void test3(){
@@ -197,41 +195,15 @@ void test3(){
 
 
 void test4(){
-    server::Scheduler_ sc(5);
-    server::Fiber_2::ptr fib2(new server::Fiber_2(test_Fiber, false));
-    Timer timer;
-    for(auto i in range(5000)){
-        server::Fiber_::ptr fib(new server::Fiber_(test_Fiber));
-        sc.schedule(fib);
-    }
-    timer.start_count();
-    sc.start();
-    sc.wait_stop();
-    timer.end_count();
-    SERVER_LOG_INFO(logger) << timer.get_duration().count();
-    SERVER_LOG_INFO(logger) << g_count.load();
 }
 
 server::CoRet fiber_timer_cir(){
-    while(1){
-        SERVER_LOG_DEBUG(logger) << "circulate timer trigger";
-        co_yield server::HOLD;
-    }
+
 }
 void p(){SERVER_LOG_INFO(logger) << "test";}
 
 void test5(){
-    server::IOManager_ iom(2);
-    server::Fiber_2::ptr fib2(new server::Fiber_2(run_in_fiber)); 
 
-    iom.schedule(fib2);
-    for(auto i in range(10)){
-        server::Fiber_2::ptr fib(new server::Fiber_2(count_in_fiber)); 
-        iom.schedule(fib);
-    }
-    iom.start();
-    iom.wait(100);
-    // iom.wait_stop();
 }
 
 

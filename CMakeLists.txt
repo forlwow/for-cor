@@ -12,7 +12,7 @@ set(CMAKE_C_COMPILER /usr/local/bin/gcc)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 
 set(CMAKE_BUILD_TYPE "Debug")
-set(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g2 -ggdb -ldl")
+set(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -w -g2 -ggdb -ldl")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
 
 include_directories(${PROJECT_SOURCE_DIR}/server/log/inc)
@@ -21,6 +21,7 @@ include_directories(${PROJECT_SOURCE_DIR}/server/ethread/inc)
 include_directories(${PROJECT_SOURCE_DIR}/server/ecoroutine/inc)
 include_directories(${PROJECT_SOURCE_DIR}/server/fiber/inc)
 include_directories(${PROJECT_SOURCE_DIR}/server/socket/inc)
+include_directories(${PROJECT_SOURCE_DIR}/server/dev)
 
 aux_source_directory(${PROJECT_SOURCE_DIR}/server src_dir)
 # 第三方库
@@ -35,7 +36,7 @@ add_executable(
         ${src_dir}
 )
 
-target_link_libraries(${PROJECT_NAME} log util ethread ecoroutine fiber socket)
+target_link_libraries(${PROJECT_NAME} log util ethread ecoroutine fiber socket dev)
 target_link_libraries(${PROJECT_NAME} yaml-cpp)
 target_link_libraries(${PROJECT_NAME} pthread)
 

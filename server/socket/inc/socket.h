@@ -45,8 +45,10 @@ public:
     }
 
     Socket::ptr accept();
-    bool bind(const Address::ptr);
-    int connect(const Address::ptr);
+    bool bind(const Address::ptr&);
+    bool bind(const Address&);
+    int connect(const Address::ptr&);
+    int connect(const Address&);
 
     bool listen(int backlog = SOMAXCONN);
 
@@ -56,13 +58,17 @@ public:
 
     int send(const void* buffer, size_t length, int flags = 0);
     int send(iovec* buffer, size_t length, int flags = 0);
-    int sendTo(const void* buffer, size_t length, const Address::ptr, int flags = 0);
-    int sendTo(iovec* buffer, size_t length, const Address::ptr ,int flags = 0);
+    int sendTo(const void* buffer, size_t length, const Address::ptr&, int flags = 0);
+    int sendTo(iovec* buffer, size_t length, const Address::ptr&, int flags = 0);
+    int sendTo(const void* buffer, size_t length, const Address&, int flags = 0);
+    int sendTo(iovec* buffer, size_t length, const Address&, int flags = 0);
 
     int recv(void* buffer, size_t length, int flags = 0);
     int recv(iovec* buffer, size_t length, int flags = 0);
-    int recvFrom(void* buffer, size_t length, const Address::ptr, int flags = 0);
-    int recvFrom(iovec* buffer, size_t length, const Address::ptr ,int flags = 0);
+    int recvFrom(void* buffer, size_t length, const Address::ptr&, int flags = 0);
+    int recvFrom(iovec* buffer, size_t length, const Address::ptr&, int flags = 0);
+    int recvFrom(void* buffer, size_t length, const Address&, int flags = 0);
+    int recvFrom(iovec* buffer, size_t length, const Address&, int flags = 0);
 
     Address::ptr getRemoteAddress();
     Address::ptr refreshRemoteAddress();
@@ -91,8 +97,6 @@ private:
 
     void(*m_err_handler)(int);
 
-    Address::ptr m_localAddress;
-    Address::ptr m_remoteAddress;
 };
 
 
