@@ -21,6 +21,7 @@ include_directories(${PROJECT_SOURCE_DIR}/server/ethread/inc)
 include_directories(${PROJECT_SOURCE_DIR}/server/ecoroutine/inc)
 include_directories(${PROJECT_SOURCE_DIR}/server/fiber/inc)
 include_directories(${PROJECT_SOURCE_DIR}/server/socket/inc)
+include_directories(${PROJECT_SOURCE_DIR}/server/http/inc)
 include_directories(${PROJECT_SOURCE_DIR}/server/dev)
 
 aux_source_directory(${PROJECT_SOURCE_DIR}/server src_dir)
@@ -36,7 +37,7 @@ add_executable(
         ${src_dir}
 )
 
-target_link_libraries(${PROJECT_NAME} log util ethread ecoroutine fiber socket dev)
+target_link_libraries(${PROJECT_NAME} log util ethread ecoroutine fiber socket dev http)
 target_link_libraries(${PROJECT_NAME} yaml-cpp)
 target_link_libraries(${PROJECT_NAME} pthread)
 

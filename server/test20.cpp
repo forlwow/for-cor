@@ -1,5 +1,6 @@
 #include "address.h"
 #include "async.h"
+#include "http.h"
 #include "socket.h"
 #include "socketfunc_cpp20.h"
 #include <cerrno>
@@ -171,8 +172,7 @@ server::Task test_sock2(){
 }
 
 int main(){
-    auto res = signal(SIGPIPE, SIG_IGN);
-    test1();
+    test3();
 }
 
 void test1(){
@@ -181,7 +181,7 @@ void test1(){
     iom.start();
     iom.schedule(Fib);
     iom.wait();
-}
+} 
 
 void test2(){
     auto func = server::FuncFiber::ptr(new server::FuncFiber([]{
@@ -191,6 +191,7 @@ void test2(){
 }
 
 void test3(){
+    cout << server::http::HttpStatus2String(server::http::HTTP_STATUS_INVALID) << endl;
 }
 
 

@@ -23,6 +23,12 @@ namespace server {
 
 static Logger::ptr s_log = SERVER_LOGGER_SYSTEM;
 
+struct InitHelper{
+    InitHelper(){
+        signal(SIGPIPE, SIG_IGN);
+    }
+} static inithelper;
+
 Socket::Socket(int family, int type, int protocol, void(*handle)(int))
     :m_sock(-1), m_family(family), m_type(type), 
     m_protocol(protocol), 
