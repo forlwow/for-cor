@@ -2,6 +2,7 @@
 #define SERVER_HTTP_HTTP_H
 
 #include <atomic>
+#include <cstddef>
 #include <cstdint>
 #include <memory>
 #include <ostream>
@@ -11,6 +12,8 @@
 #include <sstream>
 #include <string_view>
 #include <unordered_map>
+#include "http_parse/http11_parser.h"
+#include "http_parse/httpclient_parser.h"
 
 namespace server{
 
@@ -136,9 +139,8 @@ enum HttpStatus{
 };
 
 HttpMethod String2HttpMethod(const std::string& s);
-
+HttpStatus String2HttpStatus(const std::string& s);
 std::string HttpMethod2String(HttpMethod m);
-
 std::string HttpStatus2String(HttpStatus h);
 
 class HttpRequest{
@@ -161,6 +163,7 @@ public:
     void SetPath(std::string_view k)  { m_path = k;}
     void SetQuery(std::string_view k)  { m_query = k;}
     void SetBody(std::string_view k)  { m_body = k;}
+    void SetFragment(std::string_view k) { m_fragment = k;}
     void SetClose(bool close) { m_close = close;}
     bool isClose() {return m_close;}
     void SetHeaders(const std::string& key, std::string_view value)  { m_headers[key] = value;}
@@ -179,7 +182,8 @@ public:
     bool ContainParam(const std::string& key) {return m_params.contains(key);}
     bool ContainCookie(const std::string& key) {return m_cookies.contains(key);}
 
-    std::ostream& dump(std::ostream&);
+    std::ostream& dump(std::ostream&) const;
+    std::string toString() const;
 
 private:
     HttpMethod m_method;
@@ -197,7 +201,7 @@ private:
 
 class HttpResponse{
 public: 
-    typedef std::shared_ptr<HttpRequest> ptr;
+    typedef std::shared_ptr<HttpResponse> ptr;
     typedef std::map<std::string, std::string> MapType;
 
     HttpResponse(uint8_t version = 0x11, bool close = true);
@@ -221,8 +225,8 @@ public:
 
     bool ContainHead(const std::string& key) {return m_headers.contains(key);}
 
-    std::ostream& dump(std::ostream&);
-
+    std::ostream& dump(std::ostream&) const;
+    std::string toString() const;
 private:
     HttpStatus m_status;
     bool m_close;
@@ -233,6 +237,7 @@ private:
 
     MapType m_headers;
 };
+
 
 
 } // namespace http 

@@ -3,6 +3,7 @@
 
 #include <functional>
 #include <string>
+#include <string_view>
 #include <vector>
 #include <fstream>
 #include <iostream>
@@ -162,6 +163,10 @@ public:
     auto getEvent() {return m_event;}
 
     inline LogEventWrap& operator<<(const std::string& str){
+        m_event->getSS().append(str);
+        return *this;
+    }
+    inline LogEventWrap& operator<<(std::string_view str){
         m_event->getSS().append(str);
         return *this;
     }

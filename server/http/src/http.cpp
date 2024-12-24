@@ -1,5 +1,6 @@
 #include "http.h"
 #include <cstdint>
+#include <sstream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -23,7 +24,7 @@ void init(){
     #undef YY
     #undef XX
     
-    #define XX(num, name, string) HttpString2StatusMap[#name] = HttpStatus::HTTP_STATUS_##name;
+    #define XX(num, name, string) HttpString2StatusMap[#num] = HttpStatus::HTTP_STATUS_##name;
     #define YY(num, name, string) HttpStatus2StringMap[HttpStatus::HTTP_STATUS_##name] = #string;
         HTTP_STATUS_MAP(XX)
         HTTP_STATUS_MAP(YY)
@@ -61,7 +62,7 @@ std::string HttpStatus2String(HttpStatus m){
     return "Invalid Status";
 }
 
-std::ostream& HttpRequest::dump(std::ostream& os){
+std::ostream& HttpRequest::dump(std::ostream& os) const {
     os << HttpMethod2String(m_method) << " "
         << m_path << (m_query.empty() ? "" : "?") << m_query << (m_fragment.empty() ? "" : "#") << m_fragment
         << "HTTP/" << (uint32_t)(m_version >> 4) << "." << (uint32_t)(m_version & 0x0F)
@@ -80,6 +81,12 @@ std::ostream& HttpRequest::dump(std::ostream& os){
     return os;
 }
 
+std::string HttpRequest::toString() const{
+    std::stringstream ss;
+    dump(ss);
+    return ss.str();
+}
+
 HttpRequest::HttpRequest(uint8_t version, bool close)
     :   m_method(HTTP_GET),
         m_close(close),
@@ -88,7 +95,7 @@ HttpRequest::HttpRequest(uint8_t version, bool close)
 
 }
 
-std::ostream& HttpResponse::dump(std::ostream& os){
+std::ostream& HttpResponse::dump(std::ostream& os) const {
     os << "HTTP/" << (uint32_t)(m_version >> 4) << "." << (uint32_t)(m_version & 0x0f) << " "
         << (uint32_t)m_status << " "
         << (m_reason.empty() ? HttpStatus2String(m_status) : m_reason)
@@ -105,6 +112,12 @@ std::ostream& HttpResponse::dump(std::ostream& os){
         os << "\r\n\r\n";
     }
     return os;
+}
+
+std::string HttpResponse::toString() const{
+    std::stringstream ss;
+    dump(ss);
+    return ss.str();
 }
 
 HttpResponse::HttpResponse(uint8_t version, bool close)

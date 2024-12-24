@@ -1,6 +1,7 @@
 #include "address.h"
 #include "async.h"
 #include "http.h"
+#include "http_parser.h"
 #include "socket.h"
 #include "socketfunc_cpp20.h"
 #include <cerrno>
@@ -43,11 +44,47 @@ using namespace std;
 auto logger = SERVER_LOGGER_SYSTEM;
 auto slog = SERVER_LOGGER("system");
 server::CoRet fiber_timer_cir();
+
+char response_data[] = 
+    "HTTP/1.1 200 OK"
+    "Date: Tue, 27 Feb 2024 15:15:02 GMT"
+    "Server: Apache"
+    "Last-Modified: Tue, 12 Jan 2010 13:48:00 GMT"
+    "ETag: \"51-47cf7e6ee8400\""
+    "Accept-Ranges: bytes"
+    "Content-Length: 81"
+    "Cache-Control: max-age=86400"
+    "Expires: Wed, 28 Feb 2024 15:15:02 GMT"
+    "Connection: Keep-Alive"
+    "Content-Type: text/html"
+    ;
+char request_data[] = 
+    "GET / HTTP/1.1\r\n"
+    "User-Agent: Wget/1.20.3 (linux-gnu)\r\n"
+    "Accept: */*\r\n"
+    "Accept-Encoding: identity\r\n"
+    "Host: www.baidu.com\r\n"
+    "Connection: Keep-Alive\r\n"
+    "Content-Length: 10\r\n"
+    "\r\n"
+    "1234567890" 
+    ;
+
 void test1();
 void test2();
 void test3();
 void test4();
 void test5();
+
+void http_test(){
+    server::http::HttpRequestParser parser;
+    string tmp(request_data);
+    auto s = parser.execute(&(request_data[0]), tmp.size());
+    SERVER_LOG_DEBUG(logger) << "execute rt=" << s << 
+    " error=" << parser.GetErrstr() << " is finished=" << parser.isFinished();
+    SERVER_LOG_DEBUG(logger) << "data: \n" << parser.GetData()->toString();
+    SERVER_LOG_DEBUG(logger) << "body: \n" << parser.GetData()->GetBody();
+}
 
 server::Task run_in_fiber(){
     SERVER_LOG_INFO(logger) << "enter fiber";
@@ -172,7 +209,7 @@ server::Task test_sock2(){
 }
 
 int main(){
-    test3();
+    http_test();
 }
 
 void test1(){

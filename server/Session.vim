@@ -24,9 +24,7 @@ vnoremap <nowait> <silent> <expr>  coc#float#has_scroll() ? coc#float#scroll(0
 nnoremap <nowait> <silent> <expr>  coc#float#has_scroll() ? coc#float#scroll(0) : "\"
 vnoremap <nowait> <silent> <expr>  coc#float#has_scroll() ? coc#float#scroll(1) : "\"
 nnoremap <nowait> <silent> <expr>  coc#float#has_scroll() ? coc#float#scroll(1) : "\"
-snoremap <silent>  c
 nnoremap  
-snoremap  "_c
 xmap <silent>  <Plug>(coc-range-select)
 nmap <silent>  <Plug>(coc-range-select)
 nnoremap <nowait> <silent>  p :CocListResume
@@ -69,10 +67,6 @@ omap ic <Plug>(coc-classobj-i)
 xmap ic <Plug>(coc-classobj-i)
 omap if <Plug>(coc-funcobj-i)
 xmap if <Plug>(coc-funcobj-i)
-snoremap <C-R> "_c
-snoremap <silent> <C-H> c
-snoremap <silent> <Del> c
-snoremap <silent> <BS> c
 xnoremap <silent> <Plug>NetrwBrowseXVis :call netrw#BrowseXVis()
 nnoremap <silent> <Plug>NetrwBrowseX :call netrw#BrowseX(netrw#GX(),netrw#CheckIfRemote(netrw#GX()))
 onoremap <silent> <Plug>(coc-classobj-a) :call CocAction('selectSymbolRange', v:false, '', ['Interface', 'Struct', 'Class'])
@@ -139,6 +133,7 @@ inoremap  u
 inoremap <silent> <expr>  coc#pum#visible() ? coc#pum#confirm() : "\"
 let &cpo=s:cpo_save
 unlet s:cpo_save
+set ambiwidth=double
 set autoindent
 set background=dark
 set backspace=indent,eol,start
@@ -181,24 +176,11 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +11 fiber/inc/scheduler.h
-badd +40 fiber/inc/scheduler_cpp20.h
-badd +93 fiber/inc/fiber_cpp20.h
-badd +62 fiber/src/fiber_cpp20.cpp
-badd +99 test20.cpp
-badd +51 socket/inc/socket.h
-badd +123 socket/src/address.cpp
-badd +152 socket/src/socket.cpp
-badd +18 main.cpp
-badd +34 fiber/src/iomanager_cpp17.cpp
-badd +10 fiber/inc/fiberfunc_cpp20.h
-badd +22 fiber/src/fiberfunc_cpp20.cpp
-badd +27 socket/inc/socketfunc_cpp20.h
-badd +103 fiber/inc/iomanager_cpp20.h
-badd +208 fiber/src/iomanager_cpp20.cpp
+badd +1 http/inc/http.h
+badd +0 http/src/http.cpp
 argglobal
 %argdel
-edit socket/inc/socketfunc_cpp20.h
+edit http/inc/http.h
 let s:save_splitbelow = &splitbelow
 let s:save_splitright = &splitright
 set splitbelow splitright
@@ -215,10 +197,10 @@ set winminheight=0
 set winheight=1
 set winminwidth=0
 set winwidth=1
-exe 'vert 1resize ' . ((&columns * 105 + 105) / 210)
-exe 'vert 2resize ' . ((&columns * 104 + 105) / 210)
+exe 'vert 1resize ' . ((&columns * 78 + 78) / 157)
+exe 'vert 2resize ' . ((&columns * 78 + 78) / 157)
 argglobal
-balt fiber/inc/fiberfunc_cpp20.h
+balt http/inc/http.h
 setlocal keymap=
 setlocal noarabic
 setlocal autoindent
@@ -351,16 +333,16 @@ setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 31 - ((30 * winheight(0) + 26) / 53)
+let s:l = 1 - ((0 * winheight(0) + 18) / 37)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 31
-normal! 025|
+keepjumps 1
+normal! 0
 wincmd w
 argglobal
-if bufexists(fnamemodify("test20.cpp", ":p")) | buffer test20.cpp | else | edit test20.cpp | endif
-balt socket/src/socket.cpp
+if bufexists(fnamemodify("http/src/http.cpp", ":p")) | buffer http/src/http.cpp | else | edit http/src/http.cpp | endif
+balt http/inc/http.h
 setlocal keymap=
 setlocal noarabic
 setlocal autoindent
@@ -493,15 +475,15 @@ setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 107 - ((34 * winheight(0) + 26) / 53)
+let s:l = 1 - ((0 * winheight(0) + 18) / 37)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 107
-normal! 045|
+keepjumps 1
+normal! 0
 wincmd w
-exe 'vert 1resize ' . ((&columns * 105 + 105) / 210)
-exe 'vert 2resize ' . ((&columns * 104 + 105) / 210)
+exe 'vert 1resize ' . ((&columns * 78 + 78) / 157)
+exe 'vert 2resize ' . ((&columns * 78 + 78) / 157)
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0
   silent exe 'bwipe ' . s:wipebuf
@@ -516,6 +498,7 @@ if filereadable(s:sx)
   exe "source " . fnameescape(s:sx)
 endif
 let &g:so = s:so_save | let &g:siso = s:siso_save
+nohlsearch
 doautoall SessionLoadPost
 unlet SessionLoad
 " vim: set ft=vim :
