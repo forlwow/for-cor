@@ -1,0 +1,10 @@
+/home/worker/.cache/JetBrains/RemoteDev/dist/bca632c2fbeff_CLion-2024.3.1.1/bin/cmake/linux/x64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "Unix Makefiles" -S /home/worker/webserver -B /home/worker/webserver/cmake-build-debug
+-- The CXX compiler identification is GNU 13.2.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/local/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done (1.0s)
+-- Generating done (0.1s)
+-- Build files have been written to: /home/worker/webserver/cmake-build-debug

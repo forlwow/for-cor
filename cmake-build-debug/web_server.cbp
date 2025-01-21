@@ -1,0 +1,816 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="web_server"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\server\;CMake Files\server\log\;CMake Files\server\util\;CMake Files\server\ethread\;CMake Files\server\ecoroutine\;CMake Files\server\fiber\;CMake Files\server\socket\;CMake Files\server\dev\;CMake Files\server\http\;CMake Files\server\ThirdModule\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/worker/webserver/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="web_server">
+				<Option output="/home/worker/webserver/bin/web_server" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/worker/webserver/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/worker/webserver/server/log/inc"/>
+					<Add directory="/home/worker/webserver/server/util/inc"/>
+					<Add directory="/home/worker/webserver/server/ethread/inc"/>
+					<Add directory="/home/worker/webserver/server/ecoroutine/inc"/>
+					<Add directory="/home/worker/webserver/server/fiber/inc"/>
+					<Add directory="/home/worker/webserver/server/socket/inc"/>
+					<Add directory="/home/worker/webserver/server/http/inc"/>
+					<Add directory="/home/worker/webserver/server/dev"/>
+					<Add directory="/home/worker/webserver/server/ThirdModule/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/backward"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed/x86_64-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 web_server"/>
+					<CompileFile command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="web_server/fast">
+				<Option output="/home/worker/webserver/bin/web_server" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/worker/webserver/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/worker/webserver/server/log/inc"/>
+					<Add directory="/home/worker/webserver/server/util/inc"/>
+					<Add directory="/home/worker/webserver/server/ethread/inc"/>
+					<Add directory="/home/worker/webserver/server/ecoroutine/inc"/>
+					<Add directory="/home/worker/webserver/server/fiber/inc"/>
+					<Add directory="/home/worker/webserver/server/socket/inc"/>
+					<Add directory="/home/worker/webserver/server/http/inc"/>
+					<Add directory="/home/worker/webserver/server/dev"/>
+					<Add directory="/home/worker/webserver/server/ThirdModule/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/backward"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed/x86_64-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 web_server/fast"/>
+					<CompileFile command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/worker/webserver/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/worker/webserver/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="log">
+				<Option output="/home/worker/webserver/lib/liblog.so" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/worker/webserver/cmake-build-debug/server/log"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/worker/webserver/server/log/inc"/>
+					<Add directory="/home/worker/webserver/server/util/inc"/>
+					<Add directory="/home/worker/webserver/server/ethread/inc"/>
+					<Add directory="/home/worker/webserver/server/ecoroutine/inc"/>
+					<Add directory="/home/worker/webserver/server/fiber/inc"/>
+					<Add directory="/home/worker/webserver/server/socket/inc"/>
+					<Add directory="/home/worker/webserver/server/http/inc"/>
+					<Add directory="/home/worker/webserver/server/dev"/>
+					<Add directory="/home/worker/webserver/server/ThirdModule/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/backward"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed/x86_64-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/log/Makefile&quot;  VERBOSE=1 log"/>
+					<CompileFile command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/log/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/log/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/log/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="log/fast">
+				<Option output="/home/worker/webserver/lib/liblog.so" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/worker/webserver/cmake-build-debug/server/log"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/worker/webserver/server/log/inc"/>
+					<Add directory="/home/worker/webserver/server/util/inc"/>
+					<Add directory="/home/worker/webserver/server/ethread/inc"/>
+					<Add directory="/home/worker/webserver/server/ecoroutine/inc"/>
+					<Add directory="/home/worker/webserver/server/fiber/inc"/>
+					<Add directory="/home/worker/webserver/server/socket/inc"/>
+					<Add directory="/home/worker/webserver/server/http/inc"/>
+					<Add directory="/home/worker/webserver/server/dev"/>
+					<Add directory="/home/worker/webserver/server/ThirdModule/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/backward"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed/x86_64-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/log/Makefile&quot;  VERBOSE=1 log/fast"/>
+					<CompileFile command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/log/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/log/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/log/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="util">
+				<Option output="/home/worker/webserver/lib/libutil.so" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/worker/webserver/cmake-build-debug/server/util"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/worker/webserver/server/log/inc"/>
+					<Add directory="/home/worker/webserver/server/util/inc"/>
+					<Add directory="/home/worker/webserver/server/ethread/inc"/>
+					<Add directory="/home/worker/webserver/server/ecoroutine/inc"/>
+					<Add directory="/home/worker/webserver/server/fiber/inc"/>
+					<Add directory="/home/worker/webserver/server/socket/inc"/>
+					<Add directory="/home/worker/webserver/server/http/inc"/>
+					<Add directory="/home/worker/webserver/server/dev"/>
+					<Add directory="/home/worker/webserver/server/ThirdModule/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/backward"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed/x86_64-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/util/Makefile&quot;  VERBOSE=1 util"/>
+					<CompileFile command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/util/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/util/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/util/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="util/fast">
+				<Option output="/home/worker/webserver/lib/libutil.so" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/worker/webserver/cmake-build-debug/server/util"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/worker/webserver/server/log/inc"/>
+					<Add directory="/home/worker/webserver/server/util/inc"/>
+					<Add directory="/home/worker/webserver/server/ethread/inc"/>
+					<Add directory="/home/worker/webserver/server/ecoroutine/inc"/>
+					<Add directory="/home/worker/webserver/server/fiber/inc"/>
+					<Add directory="/home/worker/webserver/server/socket/inc"/>
+					<Add directory="/home/worker/webserver/server/http/inc"/>
+					<Add directory="/home/worker/webserver/server/dev"/>
+					<Add directory="/home/worker/webserver/server/ThirdModule/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/backward"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed/x86_64-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/util/Makefile&quot;  VERBOSE=1 util/fast"/>
+					<CompileFile command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/util/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/util/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/util/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ethread">
+				<Option output="/home/worker/webserver/lib/libethread.so" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/worker/webserver/cmake-build-debug/server/ethread"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/worker/webserver/server/log/inc"/>
+					<Add directory="/home/worker/webserver/server/util/inc"/>
+					<Add directory="/home/worker/webserver/server/ethread/inc"/>
+					<Add directory="/home/worker/webserver/server/ecoroutine/inc"/>
+					<Add directory="/home/worker/webserver/server/fiber/inc"/>
+					<Add directory="/home/worker/webserver/server/socket/inc"/>
+					<Add directory="/home/worker/webserver/server/http/inc"/>
+					<Add directory="/home/worker/webserver/server/dev"/>
+					<Add directory="/home/worker/webserver/server/ThirdModule/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/backward"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed/x86_64-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/ethread/Makefile&quot;  VERBOSE=1 ethread"/>
+					<CompileFile command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/ethread/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/ethread/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/ethread/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ethread/fast">
+				<Option output="/home/worker/webserver/lib/libethread.so" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/worker/webserver/cmake-build-debug/server/ethread"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/worker/webserver/server/log/inc"/>
+					<Add directory="/home/worker/webserver/server/util/inc"/>
+					<Add directory="/home/worker/webserver/server/ethread/inc"/>
+					<Add directory="/home/worker/webserver/server/ecoroutine/inc"/>
+					<Add directory="/home/worker/webserver/server/fiber/inc"/>
+					<Add directory="/home/worker/webserver/server/socket/inc"/>
+					<Add directory="/home/worker/webserver/server/http/inc"/>
+					<Add directory="/home/worker/webserver/server/dev"/>
+					<Add directory="/home/worker/webserver/server/ThirdModule/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/backward"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed/x86_64-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/ethread/Makefile&quot;  VERBOSE=1 ethread/fast"/>
+					<CompileFile command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/ethread/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/ethread/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/ethread/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ecoroutine">
+				<Option output="/home/worker/webserver/lib/libecoroutine.so" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/worker/webserver/cmake-build-debug/server/ecoroutine"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/worker/webserver/server/log/inc"/>
+					<Add directory="/home/worker/webserver/server/util/inc"/>
+					<Add directory="/home/worker/webserver/server/ethread/inc"/>
+					<Add directory="/home/worker/webserver/server/ecoroutine/inc"/>
+					<Add directory="/home/worker/webserver/server/fiber/inc"/>
+					<Add directory="/home/worker/webserver/server/socket/inc"/>
+					<Add directory="/home/worker/webserver/server/http/inc"/>
+					<Add directory="/home/worker/webserver/server/dev"/>
+					<Add directory="/home/worker/webserver/server/ThirdModule/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/backward"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed/x86_64-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/ecoroutine/Makefile&quot;  VERBOSE=1 ecoroutine"/>
+					<CompileFile command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/ecoroutine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/ecoroutine/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/ecoroutine/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ecoroutine/fast">
+				<Option output="/home/worker/webserver/lib/libecoroutine.so" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/worker/webserver/cmake-build-debug/server/ecoroutine"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/worker/webserver/server/log/inc"/>
+					<Add directory="/home/worker/webserver/server/util/inc"/>
+					<Add directory="/home/worker/webserver/server/ethread/inc"/>
+					<Add directory="/home/worker/webserver/server/ecoroutine/inc"/>
+					<Add directory="/home/worker/webserver/server/fiber/inc"/>
+					<Add directory="/home/worker/webserver/server/socket/inc"/>
+					<Add directory="/home/worker/webserver/server/http/inc"/>
+					<Add directory="/home/worker/webserver/server/dev"/>
+					<Add directory="/home/worker/webserver/server/ThirdModule/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/backward"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed/x86_64-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/ecoroutine/Makefile&quot;  VERBOSE=1 ecoroutine/fast"/>
+					<CompileFile command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/ecoroutine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/ecoroutine/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/ecoroutine/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="fiber">
+				<Option output="/home/worker/webserver/lib/libfiber.so" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/worker/webserver/cmake-build-debug/server/fiber"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/worker/webserver/server/log/inc"/>
+					<Add directory="/home/worker/webserver/server/util/inc"/>
+					<Add directory="/home/worker/webserver/server/ethread/inc"/>
+					<Add directory="/home/worker/webserver/server/ecoroutine/inc"/>
+					<Add directory="/home/worker/webserver/server/fiber/inc"/>
+					<Add directory="/home/worker/webserver/server/socket/inc"/>
+					<Add directory="/home/worker/webserver/server/http/inc"/>
+					<Add directory="/home/worker/webserver/server/dev"/>
+					<Add directory="/home/worker/webserver/server/ThirdModule/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/backward"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed/x86_64-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/fiber/Makefile&quot;  VERBOSE=1 fiber"/>
+					<CompileFile command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/fiber/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/fiber/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/fiber/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="fiber/fast">
+				<Option output="/home/worker/webserver/lib/libfiber.so" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/worker/webserver/cmake-build-debug/server/fiber"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/worker/webserver/server/log/inc"/>
+					<Add directory="/home/worker/webserver/server/util/inc"/>
+					<Add directory="/home/worker/webserver/server/ethread/inc"/>
+					<Add directory="/home/worker/webserver/server/ecoroutine/inc"/>
+					<Add directory="/home/worker/webserver/server/fiber/inc"/>
+					<Add directory="/home/worker/webserver/server/socket/inc"/>
+					<Add directory="/home/worker/webserver/server/http/inc"/>
+					<Add directory="/home/worker/webserver/server/dev"/>
+					<Add directory="/home/worker/webserver/server/ThirdModule/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/backward"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed/x86_64-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/fiber/Makefile&quot;  VERBOSE=1 fiber/fast"/>
+					<CompileFile command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/fiber/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/fiber/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/fiber/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="socket">
+				<Option output="/home/worker/webserver/lib/libsocket.so" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/worker/webserver/cmake-build-debug/server/socket"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/worker/webserver/server/log/inc"/>
+					<Add directory="/home/worker/webserver/server/util/inc"/>
+					<Add directory="/home/worker/webserver/server/ethread/inc"/>
+					<Add directory="/home/worker/webserver/server/ecoroutine/inc"/>
+					<Add directory="/home/worker/webserver/server/fiber/inc"/>
+					<Add directory="/home/worker/webserver/server/socket/inc"/>
+					<Add directory="/home/worker/webserver/server/http/inc"/>
+					<Add directory="/home/worker/webserver/server/dev"/>
+					<Add directory="/home/worker/webserver/server/ThirdModule/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/backward"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed/x86_64-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/socket/Makefile&quot;  VERBOSE=1 socket"/>
+					<CompileFile command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/socket/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/socket/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/socket/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="socket/fast">
+				<Option output="/home/worker/webserver/lib/libsocket.so" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/worker/webserver/cmake-build-debug/server/socket"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/worker/webserver/server/log/inc"/>
+					<Add directory="/home/worker/webserver/server/util/inc"/>
+					<Add directory="/home/worker/webserver/server/ethread/inc"/>
+					<Add directory="/home/worker/webserver/server/ecoroutine/inc"/>
+					<Add directory="/home/worker/webserver/server/fiber/inc"/>
+					<Add directory="/home/worker/webserver/server/socket/inc"/>
+					<Add directory="/home/worker/webserver/server/http/inc"/>
+					<Add directory="/home/worker/webserver/server/dev"/>
+					<Add directory="/home/worker/webserver/server/ThirdModule/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/backward"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed/x86_64-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/socket/Makefile&quot;  VERBOSE=1 socket/fast"/>
+					<CompileFile command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/socket/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/socket/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/socket/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="dev">
+				<Option output="/home/worker/webserver/lib/libdev.so" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/worker/webserver/cmake-build-debug/server/dev"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/worker/webserver/server/log/inc"/>
+					<Add directory="/home/worker/webserver/server/util/inc"/>
+					<Add directory="/home/worker/webserver/server/ethread/inc"/>
+					<Add directory="/home/worker/webserver/server/ecoroutine/inc"/>
+					<Add directory="/home/worker/webserver/server/fiber/inc"/>
+					<Add directory="/home/worker/webserver/server/socket/inc"/>
+					<Add directory="/home/worker/webserver/server/http/inc"/>
+					<Add directory="/home/worker/webserver/server/dev"/>
+					<Add directory="/home/worker/webserver/server/ThirdModule/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/backward"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed/x86_64-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/dev/Makefile&quot;  VERBOSE=1 dev"/>
+					<CompileFile command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/dev/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/dev/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/dev/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="dev/fast">
+				<Option output="/home/worker/webserver/lib/libdev.so" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/worker/webserver/cmake-build-debug/server/dev"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/worker/webserver/server/log/inc"/>
+					<Add directory="/home/worker/webserver/server/util/inc"/>
+					<Add directory="/home/worker/webserver/server/ethread/inc"/>
+					<Add directory="/home/worker/webserver/server/ecoroutine/inc"/>
+					<Add directory="/home/worker/webserver/server/fiber/inc"/>
+					<Add directory="/home/worker/webserver/server/socket/inc"/>
+					<Add directory="/home/worker/webserver/server/http/inc"/>
+					<Add directory="/home/worker/webserver/server/dev"/>
+					<Add directory="/home/worker/webserver/server/ThirdModule/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/backward"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed/x86_64-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/dev/Makefile&quot;  VERBOSE=1 dev/fast"/>
+					<CompileFile command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/dev/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/dev/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/dev/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="http">
+				<Option output="/home/worker/webserver/lib/libhttp.so" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/worker/webserver/cmake-build-debug/server/http"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/worker/webserver/server/log/inc"/>
+					<Add directory="/home/worker/webserver/server/util/inc"/>
+					<Add directory="/home/worker/webserver/server/ethread/inc"/>
+					<Add directory="/home/worker/webserver/server/ecoroutine/inc"/>
+					<Add directory="/home/worker/webserver/server/fiber/inc"/>
+					<Add directory="/home/worker/webserver/server/socket/inc"/>
+					<Add directory="/home/worker/webserver/server/http/inc"/>
+					<Add directory="/home/worker/webserver/server/dev"/>
+					<Add directory="/home/worker/webserver/server/ThirdModule/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/backward"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed/x86_64-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/http/Makefile&quot;  VERBOSE=1 http"/>
+					<CompileFile command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/http/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/http/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/http/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="http/fast">
+				<Option output="/home/worker/webserver/lib/libhttp.so" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/worker/webserver/cmake-build-debug/server/http"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/worker/webserver/server/log/inc"/>
+					<Add directory="/home/worker/webserver/server/util/inc"/>
+					<Add directory="/home/worker/webserver/server/ethread/inc"/>
+					<Add directory="/home/worker/webserver/server/ecoroutine/inc"/>
+					<Add directory="/home/worker/webserver/server/fiber/inc"/>
+					<Add directory="/home/worker/webserver/server/socket/inc"/>
+					<Add directory="/home/worker/webserver/server/http/inc"/>
+					<Add directory="/home/worker/webserver/server/dev"/>
+					<Add directory="/home/worker/webserver/server/ThirdModule/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/backward"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed/x86_64-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/http/Makefile&quot;  VERBOSE=1 http/fast"/>
+					<CompileFile command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/http/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/http/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/http/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="thirdMould">
+				<Option output="/home/worker/webserver/lib/libthirdMould.so" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/worker/webserver/cmake-build-debug/server/ThirdModule"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/worker/webserver/server/log/inc"/>
+					<Add directory="/home/worker/webserver/server/util/inc"/>
+					<Add directory="/home/worker/webserver/server/ethread/inc"/>
+					<Add directory="/home/worker/webserver/server/ecoroutine/inc"/>
+					<Add directory="/home/worker/webserver/server/fiber/inc"/>
+					<Add directory="/home/worker/webserver/server/socket/inc"/>
+					<Add directory="/home/worker/webserver/server/http/inc"/>
+					<Add directory="/home/worker/webserver/server/dev"/>
+					<Add directory="/home/worker/webserver/server/ThirdModule/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/backward"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed/x86_64-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/ThirdModule/Makefile&quot;  VERBOSE=1 thirdMould"/>
+					<CompileFile command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/ThirdModule/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/ThirdModule/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/ThirdModule/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="thirdMould/fast">
+				<Option output="/home/worker/webserver/lib/libthirdMould.so" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/worker/webserver/cmake-build-debug/server/ThirdModule"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/worker/webserver/server/log/inc"/>
+					<Add directory="/home/worker/webserver/server/util/inc"/>
+					<Add directory="/home/worker/webserver/server/ethread/inc"/>
+					<Add directory="/home/worker/webserver/server/ecoroutine/inc"/>
+					<Add directory="/home/worker/webserver/server/fiber/inc"/>
+					<Add directory="/home/worker/webserver/server/socket/inc"/>
+					<Add directory="/home/worker/webserver/server/http/inc"/>
+					<Add directory="/home/worker/webserver/server/dev"/>
+					<Add directory="/home/worker/webserver/server/ThirdModule/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/backward"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed/x86_64-linux-gnu"/>
+					<Add directory="/usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/ThirdModule/Makefile&quot;  VERBOSE=1 thirdMould/fast"/>
+					<CompileFile command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/ThirdModule/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/ThirdModule/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j32 -f &quot;/home/worker/webserver/cmake-build-debug/server/ThirdModule/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/worker/webserver/server/ThirdModule/include/http_parse/http11_parser.cc">
+			<Option target="thirdMould"/>
+		</Unit>
+		<Unit filename="/home/worker/webserver/server/ThirdModule/include/http_parse/http11_parser.h">
+			<Option target="thirdMould"/>
+		</Unit>
+		<Unit filename="/home/worker/webserver/server/ThirdModule/include/http_parse/httpclient_parser.cc">
+			<Option target="thirdMould"/>
+		</Unit>
+		<Unit filename="/home/worker/webserver/server/ThirdModule/include/http_parse/httpclient_parser.h">
+			<Option target="thirdMould"/>
+		</Unit>
+		<Unit filename="/home/worker/webserver/server/dev/dev.cpp">
+			<Option target="dev"/>
+		</Unit>
+		<Unit filename="/home/worker/webserver/server/ecoroutine/src/ecoroutine.cpp">
+			<Option target="ecoroutine"/>
+		</Unit>
+		<Unit filename="/home/worker/webserver/server/ethread/src/ethread.cpp">
+			<Option target="ethread"/>
+		</Unit>
+		<Unit filename="/home/worker/webserver/server/fiber/src/async.cpp">
+			<Option target="fiber"/>
+		</Unit>
+		<Unit filename="/home/worker/webserver/server/fiber/src/fiber_cpp17.cpp">
+			<Option target="fiber"/>
+		</Unit>
+		<Unit filename="/home/worker/webserver/server/fiber/src/fiber_cpp20.cpp">
+			<Option target="fiber"/>
+		</Unit>
+		<Unit filename="/home/worker/webserver/server/fiber/src/fiberfunc_cpp20.cpp">
+			<Option target="fiber"/>
+		</Unit>
+		<Unit filename="/home/worker/webserver/server/fiber/src/iomanager_cpp17.cpp">
+			<Option target="fiber"/>
+		</Unit>
+		<Unit filename="/home/worker/webserver/server/fiber/src/iomanager_cpp20.cpp">
+			<Option target="fiber"/>
+		</Unit>
+		<Unit filename="/home/worker/webserver/server/fiber/src/scheduler_cpp17.cpp">
+			<Option target="fiber"/>
+		</Unit>
+		<Unit filename="/home/worker/webserver/server/fiber/src/scheduler_cpp20.cpp">
+			<Option target="fiber"/>
+		</Unit>
+		<Unit filename="/home/worker/webserver/server/http/src/http.cpp">
+			<Option target="http"/>
+		</Unit>
+		<Unit filename="/home/worker/webserver/server/http/src/http_parser.cpp">
+			<Option target="http"/>
+		</Unit>
+		<Unit filename="/home/worker/webserver/server/log/src/log.cpp">
+			<Option target="log"/>
+		</Unit>
+		<Unit filename="/home/worker/webserver/server/main.cpp">
+			<Option target="web_server"/>
+		</Unit>
+		<Unit filename="/home/worker/webserver/server/socket/src/address.cpp">
+			<Option target="socket"/>
+		</Unit>
+		<Unit filename="/home/worker/webserver/server/socket/src/socket.cpp">
+			<Option target="socket"/>
+		</Unit>
+		<Unit filename="/home/worker/webserver/server/test17.cpp">
+			<Option target="web_server"/>
+		</Unit>
+		<Unit filename="/home/worker/webserver/server/test20.cpp">
+			<Option target="web_server"/>
+		</Unit>
+		<Unit filename="/home/worker/webserver/server/util/src/hook.cpp">
+			<Option target="util"/>
+		</Unit>
+		<Unit filename="/home/worker/webserver/server/util/src/range.cpp">
+			<Option target="util"/>
+		</Unit>
+		<Unit filename="/home/worker/webserver/server/util/src/timer.cpp">
+			<Option target="util"/>
+		</Unit>
+		<Unit filename="/home/worker/webserver/server/util/src/util.cpp">
+			<Option target="util"/>
+		</Unit>
+		<Unit filename="/home/worker/webserver/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/home/worker/webserver/server/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\server\"/>
+		</Unit>
+		<Unit filename="/home/worker/webserver/server/log/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\server\log\"/>
+		</Unit>
+		<Unit filename="/home/worker/webserver/server/util/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\server\util\"/>
+		</Unit>
+		<Unit filename="/home/worker/webserver/server/ethread/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\server\ethread\"/>
+		</Unit>
+		<Unit filename="/home/worker/webserver/server/ecoroutine/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\server\ecoroutine\"/>
+		</Unit>
+		<Unit filename="/home/worker/webserver/server/fiber/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\server\fiber\"/>
+		</Unit>
+		<Unit filename="/home/worker/webserver/server/socket/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\server\socket\"/>
+		</Unit>
+		<Unit filename="/home/worker/webserver/server/dev/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\server\dev\"/>
+		</Unit>
+		<Unit filename="/home/worker/webserver/server/http/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\server\http\"/>
+		</Unit>
+		<Unit filename="/home/worker/webserver/server/ThirdModule/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\server\ThirdModule\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

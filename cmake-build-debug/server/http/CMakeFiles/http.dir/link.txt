@@ -1,0 +1,1 @@
+/usr/local/bin/g++ -fPIC  -O0 -w -g2 -ggdb -ldl -shared -Wl,-soname,libhttp.so -o /home/worker/webserver/lib/libhttp.so CMakeFiles/http.dir/src/http.cpp.o CMakeFiles/http.dir/src/http_parser.cpp.o   -L/home/worker/webserver/server/ThirdModule/lib  -L/home/worker/webserver/lib

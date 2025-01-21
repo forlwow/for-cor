@@ -328,7 +328,7 @@ void LogFormatter::init() {
             nstr.append(1 ,m_pattern[i]);
             continue;
         }
-
+        // 转译 %%
         if ((i+1) < m_pattern.size() && m_pattern[i+1] == '%'){
             nstr.append(1, '%');
             continue;
@@ -446,6 +446,7 @@ Logger::ptr LogManager::getLogger(const std::string &name){
     return logger;
 }
 
+// 通过Log.yaml初始化失败的默认初始化
 void LogManager::init(){
     server::Logger::ptr log = std::make_shared<server::Logger>("system");
     server::LogAppender::ptr app(new server::StdoutLogAppender);
@@ -475,6 +476,7 @@ int LogManager::initFromYaml(const std::string& file_name){
                 if (mode.empty() || fmtpat.empty() || level.empty())
                     return 2;
                 // 创建Appender
+                // TODO: 添加更多输出
                 if(mode == "std"){
                     appender.reset(new StdoutLogAppender);
                 }

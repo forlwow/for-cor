@@ -110,8 +110,8 @@ bool Fiber_2::swapIn(){
         if(!m_done){
             t_fiber_ = shared_from_this();
             std::get<COROUTINE>(m_cb)();
-            m_flag.clear();
             t_fiber_.reset();
+            m_flag.clear();
             return true;
         }
         return false;

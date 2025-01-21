@@ -210,6 +210,8 @@ server::Task test_sock2(){
 
 int main(){
     http_test();
+    auto file_log = SERVER_LOGGER("file");
+    SERVER_LOG_DEBUG(file_log) << "aaa";
 }
 
 void test1(){

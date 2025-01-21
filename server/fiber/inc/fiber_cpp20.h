@@ -60,6 +60,7 @@ public:
 
 };
 
+// TODO: 可拆成多个Fiber
 // 线程安全的协程
 // 可以同时传入普通函数和协程
 // 使用普通函数时不保证函数内部的线程安全
@@ -91,7 +92,7 @@ private:
     Fiber_2();
 private:
     bool m_done;
-    bool m_drop = false;                        // 当协程被多进程操作时是否要丢弃
+    bool m_drop = false;                                // 当协程被多进程操作时是否要丢弃
     std::atomic_flag m_flag = ATOMIC_FLAG_INIT;
     std::variant<std::function<void()>, CoRet> m_cb;
     std::function<void()> m_cbBeforeSwapIn;

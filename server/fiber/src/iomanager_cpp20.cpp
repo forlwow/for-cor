@@ -210,6 +210,7 @@ void IOManager_::idle(){
                                                 << " read:" << (bool)(cur_evt.events & EPOLLIN);
                 auto cur_fdcont = m_fdContexts[cur_evt.data.fd];
                 assert(cur_fdcont);
+                // 描述符出错或已关闭
                 if((cur_evt.events & EPOLLHUP) || (cur_evt.events & EPOLLERR)){
                     m_fdContexts.erase(m_fdContexts.find(cur_evt.data.fd));
                     continue;

@@ -1,0 +1,1 @@
+/usr/local/bin/g++ -fPIC  -O0 -w -g2 -ggdb -ldl -shared -Wl,-soname,libdev.so -o /home/worker/webserver/lib/libdev.so CMakeFiles/dev.dir/dev.cpp.o   -L/home/worker/webserver/server/ThirdModule/lib  -L/home/worker/webserver/lib
