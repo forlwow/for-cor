@@ -33,6 +33,7 @@ public:
     virtual sockaddr* getAddr() =0;
     virtual socklen_t getAddrLen() const=0;
 
+    // 刷出地址信息
     virtual std::ostream& insert(std::ostream&) const;
     std::string toString() const;
 
@@ -48,8 +49,11 @@ class IPAddress: public Address{
 public:
     typedef std::shared_ptr<IPAddress> ptr;
 
+    // 输入网络号长度 返回广播地址
     virtual IPAddress::ptr broadcastAddress(uint32_t)=0;
+    // 输入网络号长度 返回网络地址
     virtual IPAddress::ptr networkAddress(uint32_t)=0;
+    // 输入网络号长度 返回子网掩码
     virtual IPAddress::ptr subnetMask(uint32_t)=0;
     
     virtual uint32_t getPort() const=0;

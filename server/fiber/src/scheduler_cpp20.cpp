@@ -31,6 +31,7 @@ Scheduler_::Scheduler_(size_t max_, const std::string& name_)
     s_scheduler = this;
 }
 Scheduler_::~Scheduler_(){
+    // TODO: 处理线程无法中断时的处理
     m_stopping = true;
     m_autoStop = true;
     for(auto &td: m_threads){

@@ -29,6 +29,7 @@ public:
     // 传入的参数为Fiber对象，或函数对象
     bool schedule(task_type task_);
     using submit = decltype(&Scheduler_::schedule);
+
     static Scheduler_* GetScheduler();
 protected:
     virtual void run();

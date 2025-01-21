@@ -9,6 +9,7 @@
 #include <cstring>
 #include <iterator>
 #include <netinet/in.h>
+#include <memory>
 #include <ostream>
 #include <regex>
 #include <sstream>
@@ -115,7 +116,7 @@ IPv4Address::ptr IPv4Address::CreateAddressPtr(const char *address, uint16_t por
             << "-Port-" << port;
         return {};
     }
-    return IPv4Address::ptr(new IPv4Address(addr));
+    return std::make_shared<IPv4Address>(addr);
 }
 
 IPv4Address::IPv4Address(const sockaddr_in& sock)
@@ -149,7 +150,7 @@ IPAddress::ptr IPv4Address::broadcastAddress(uint32_t prefix_len) {
         return {};
     sockaddr_in baddr(m_addr);
     baddr.sin_addr.s_addr |= htonl(CreateMask<uint32_t>(prefix_len));
-    return IPv4Address::ptr(new IPv4Address(baddr));
+    return std::make_shared<IPv4Address>(baddr);
 }
 
 IPAddress::ptr IPv4Address::networkAddress(uint32_t prefix_len) {
@@ -157,7 +158,7 @@ IPAddress::ptr IPv4Address::networkAddress(uint32_t prefix_len) {
         return {};
     sockaddr_in baddr(m_addr);
     baddr.sin_addr.s_addr &= htonl(~CreateMask<uint32_t>(prefix_len));
-    return IPv4Address::ptr(new IPv4Address(baddr));
+    return std::make_shared<IPv4Address>(baddr);
 }
 
 IPAddress::ptr IPv4Address::subnetMask(uint32_t prefix_len) {
@@ -165,7 +166,7 @@ IPAddress::ptr IPv4Address::subnetMask(uint32_t prefix_len) {
     memset(&subnet, 0, sizeof(subnet));
     subnet.sin_family = AF_INET;
     subnet.sin_addr.s_addr = ~htonl(CreateMask<uint32_t>(prefix_len));
-    return IPv4Address::ptr(new IPv4Address(subnet));
+    return std::make_shared<IPv4Address>(subnet);
 }
 
 uint32_t IPv4Address::getPort() const {
@@ -187,7 +188,7 @@ IPv6Address::ptr IPv6Address::CreateAddress(const char *address, uint16_t port){
             << "-Port-" << port;
         return {};
     }
-    return IPv6Address::ptr(new IPv6Address(addr));
+    return std::make_shared<IPv6Address>(addr);
 }
 
 IPv6Address::IPv6Address(const sockaddr_in6& addr)
@@ -223,7 +224,7 @@ IPAddress::ptr IPv6Address::broadcastAddress(uint32_t prefix_len) {
     for(int i = prefix_len / 8 + 1; i < 16; ++i){
         baddr.sin6_addr.s6_addr[i] = 0xff;
     }
-    return IPv6Address::ptr(new IPv6Address(baddr));
+    return std::make_shared<IPv6Address>(baddr);
 }
 
 IPAddress::ptr IPv6Address::networkAddress(uint32_t prefix_len) {
@@ -248,7 +249,7 @@ void IPv6Address::setPort(uint32_t port) {
     m_addr.sin6_port = htons(port);
 }
 
-static const size_t MAX_PATH_LEN = sizeof(((sockaddr_un*)0)->sun_path) - 1;
+static constexpr size_t MAX_PATH_LEN = sizeof(((sockaddr_un*)0)->sun_path) - 1;
 
 UnixAddress::UnixAddress(){
     memset(&m_addr, 0, sizeof(m_addr));

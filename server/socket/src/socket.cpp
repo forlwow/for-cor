@@ -25,7 +25,11 @@ static Logger::ptr s_log = SERVER_LOGGER_SYSTEM;
 
 struct InitHelper{
     InitHelper(){
-        signal(SIGPIPE, SIG_IGN);
+        // signal(SIGPIPE, SIG_IGN);
+        struct sigaction sa;
+        sa.sa_handler = SIG_IGN;
+        sa.sa_flags = 0;
+        sigaction(SIGPIPE, &sa, nullptr);
     }
 } static inithelper;
 
@@ -95,7 +99,8 @@ bool Socket::setOption(int level, int option, const void *result, socklen_t len)
 
 
 Socket::ptr Socket::accept(){
-    auto addr = IPv4Address::ptr(new IPv4Address);
+    // auto addr = IPv4Address::ptr(new IPv4Address);
+    auto addr = std::make_shared<IPv4Address>();
     socklen_t len;
     int newsock = ::accept(m_sock, addr->getAddr(), &len);
     if(newsock == -1){
@@ -105,7 +110,8 @@ Socket::ptr Socket::accept(){
         }
         return {};
     }
-    Socket::ptr sock(new Socket(m_family, m_type, m_protocol));
+    ptr sock = std::make_shared<Socket>(m_family, m_type, m_protocol);
+    // Socket::ptr sock(new Socket(m_family, m_type, m_protocol));
     if(sock->init(newsock))
         return sock;
     return {};
@@ -375,6 +381,7 @@ void Socket::initSock(){
     // 获取已有flags
     int flag = fcntl(m_sock, F_GETFL, 0);
     if(flag == -1)
+        // TODO 异常处理
         throw std::logic_error("initSock getAddrFlag err");
     if(fcntl(m_sock, F_SETFL, flag | O_NONBLOCK) == -1)
         throw std::logic_error("initSock set nonblock err");

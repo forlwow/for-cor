@@ -61,7 +61,7 @@ struct TimeEvent{
             return true;
         }
         else if(getSec() > that.getSec()){
-            return true;
+            return false;
         }
         else{
             if(getUSec() < that.getUSec()){

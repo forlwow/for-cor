@@ -64,13 +64,13 @@ EThread::EThread(std::function<void()> cb, const std::string& name)
         m_name = "UNKNOW";
     }
     m_thread = std::thread(&EThread::run, this);
+    m_semaphore.wait();     // 保证在线程构造完毕开始运行后才完成构造
     if(!m_thread.joinable()){
         SERVER_LOG_ERROR(g_logger) << "create thread error";
         throw std::logic_error("thread create error");
     }
 
-    m_semaphore.wait();     // 保证在线程构造完毕开始运行后才完成构造
-    SERVER_LOG_INFO(g_logger) << "create ethred:" << m_name;
+    SERVER_LOG_INFO(g_logger) << "create ethread:" << m_name;
 }
 
 EThread::~EThread(){
