@@ -109,6 +109,12 @@
 },
 {
   "directory": "/home/worker/webserver/cmake-build-debug/server/socket",
+  "command": "/usr/local/bin/g++ -Dsocket_EXPORTS -I/home/worker/webserver/server/log/inc -I/home/worker/webserver/server/util/inc -I/home/worker/webserver/server/ethread/inc -I/home/worker/webserver/server/ecoroutine/inc -I/home/worker/webserver/server/fiber/inc -I/home/worker/webserver/server/socket/inc -I/home/worker/webserver/server/http/inc -I/home/worker/webserver/server/dev -I/home/worker/webserver/tests -I/home/worker/webserver/server/ThirdModule/include  -O0 -w -g2 -ggdb -ldl -std=gnu++20 -fPIC -fdiagnostics-color=always -o CMakeFiles/socket.dir/src/TCP_server.cpp.o -c /home/worker/webserver/server/socket/src/TCP_server.cpp",
+  "file": "/home/worker/webserver/server/socket/src/TCP_server.cpp",
+  "output": "server/socket/CMakeFiles/socket.dir/src/TCP_server.cpp.o"
+},
+{
+  "directory": "/home/worker/webserver/cmake-build-debug/server/socket",
   "command": "/usr/local/bin/g++ -Dsocket_EXPORTS -I/home/worker/webserver/server/log/inc -I/home/worker/webserver/server/util/inc -I/home/worker/webserver/server/ethread/inc -I/home/worker/webserver/server/ecoroutine/inc -I/home/worker/webserver/server/fiber/inc -I/home/worker/webserver/server/socket/inc -I/home/worker/webserver/server/http/inc -I/home/worker/webserver/server/dev -I/home/worker/webserver/tests -I/home/worker/webserver/server/ThirdModule/include  -O0 -w -g2 -ggdb -ldl -std=gnu++20 -fPIC -fdiagnostics-color=always -o CMakeFiles/socket.dir/src/address.cpp.o -c /home/worker/webserver/server/socket/src/address.cpp",
   "file": "/home/worker/webserver/server/socket/src/address.cpp",
   "output": "server/socket/CMakeFiles/socket.dir/src/address.cpp.o"

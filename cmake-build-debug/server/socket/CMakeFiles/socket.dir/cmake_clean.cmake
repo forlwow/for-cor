@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "/home/worker/webserver/lib/libsocket.pdb"
   "/home/worker/webserver/lib/libsocket.so"
+  "CMakeFiles/socket.dir/src/TCP_server.cpp.o"
+  "CMakeFiles/socket.dir/src/TCP_server.cpp.o.d"
   "CMakeFiles/socket.dir/src/address.cpp.o"
   "CMakeFiles/socket.dir/src/address.cpp.o.d"
   "CMakeFiles/socket.dir/src/socket.cpp.o"

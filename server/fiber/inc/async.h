@@ -46,7 +46,7 @@ struct Task{
 }; 
 
 
-
+// 协程包装 线程安全
 class AsyncFiber: public Fiber_{
 public:
     typedef std::shared_ptr<AsyncFiber> ptr;
@@ -64,7 +64,7 @@ public:
     requires std::invocable<Func, Args...> 
         && std::same_as<std::invoke_result_t<Func, Args...>, Task>
     static ptr CreatePtr(Func &&func, Args &&...args){
-        return ptr(new AsyncFiber(std::forward<Func>(func), std::forward<Args>(args)...));
+        return std::make_shared<AsyncFiber>(std::forward<Func>(func), std::forward<Args>(args)...);
     }
 
     void setErrHandler(errorHandler handler) {m_cb.h_.promise().handler = handler;}
@@ -81,6 +81,7 @@ private:
     Task m_cb;
 };
 
+// 函数包装
 class FuncFiber: public Fiber_{
 public:
     typedef std::shared_ptr<FuncFiber> ptr;

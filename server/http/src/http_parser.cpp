@@ -316,9 +316,9 @@ size_t HttpRequestParser_v2::execute(char* data, size_t len, size_t off)
     return llhttp_execute(&m_parser, data + off, len);
 }
 
-int HttpRequestParser_v2::isFinished() const
+bool HttpRequestParser_v2::isFinished() const
 {
-    return llhttp_finish(&m_parser);
+    return llhttp_message_needs_eof(&m_parser);
 }
 
 std::string HttpRequestParser_v2::GetErrstr() const
@@ -326,11 +326,17 @@ std::string HttpRequestParser_v2::GetErrstr() const
     return llhttp_errno_name(m_error);
 }
 
+std::string HttpRequestParser_v2::GetErrReason() const
+{
+    return llhttp_get_error_reason(&m_parser);
+}
+
 void HttpRequestParser_v2::Reset(HttpRequest::ptr req)
 {
     m_error = HPE_OK;
     m_data = req;
     m_buff.clear();
+    llhttp_finish(&m_parser);
 }
 
 
@@ -338,13 +344,11 @@ void HttpRequestParser_v2::Reset(HttpRequest::ptr req)
 int on_response_data_v2(llhttp_t *llparser, const char *at, size_t length){
     HttpResponseParser_v2 *parser = static_cast<HttpResponseParser_v2*>(llparser->data);
     parser->Getbuffer().append(at, length);
-    SERVER_LOG_DEBUG(s_log) << "Data: " << std::string(at, length);
     return llhttp_get_errno(llparser);
 }
 
 int on_response_status_complete_v2(llhttp_t *llparser){
     HttpResponseParser_v2 *parser = static_cast<HttpResponseParser_v2*>(llparser->data);
-    SERVER_LOG_DEBUG(s_log) << "status: " << parser->Getbuffer();
     parser->GetData()->SetStatus(HttpStatus(llparser->status_code));
     parser->GetData()->SetReason(parser->Getbuffer());
     parser->Getbuffer().clear();
@@ -353,7 +357,6 @@ int on_response_status_complete_v2(llhttp_t *llparser){
 
 int on_response_body_complete_v2(llhttp_t *llparser){
     HttpResponseParser_v2 *parser = static_cast<HttpResponseParser_v2*>(llparser->data);
-    SERVER_LOG_DEBUG(s_log) << "body complete: " << parser->Getbuffer();
     parser->GetData()->SetBody(parser->Getbuffer());
     auto err = llhttp_get_errno(llparser);
     if (err != HPE_OK)
@@ -364,7 +367,6 @@ int on_response_body_complete_v2(llhttp_t *llparser){
 
 int on_response_version_complete_v2(llhttp_t *llparser){
     HttpResponseParser_v2 *parser = static_cast<HttpResponseParser_v2*>(llparser->data);
-    SERVER_LOG_DEBUG(s_log) << "version: " << parser->Getbuffer();
     int v = 0;
     if(parser->Getbuffer() == "1.1"){
         v = 0x11;
@@ -389,7 +391,6 @@ int on_response_header_field_complete_v2(llhttp_t *llparser){
 
 int on_response_header_value_complete_v2(llhttp_t *llparser){
     HttpResponseParser_v2 *parser = static_cast<HttpResponseParser_v2*>(llparser->data);
-    SERVER_LOG_DEBUG(s_log) << parser->Getbuffer();
     size_t pos = parser->Getbuffer().find(':');
     if(pos == std::string::npos || pos == parser->Getbuffer().size()-1){
         parser->SetError(HPE_INVALID_HEADER_TOKEN);
@@ -431,9 +432,9 @@ size_t HttpResponseParser_v2::execute(char* data, size_t len, size_t off)
     return err;
 }
 
-int HttpResponseParser_v2::isFinished() const
+bool HttpResponseParser_v2::isFinished() const
 {
-    return llhttp_finish(&m_parser);
+    return llhttp_message_needs_eof(&m_parser) == 1;
 }
 
 std::string HttpResponseParser_v2::GetErrstr() const
@@ -441,11 +442,17 @@ std::string HttpResponseParser_v2::GetErrstr() const
     return llhttp_errno_name(m_error);
 }
 
+std::string HttpResponseParser_v2::GetErrReason() const
+{
+    return llhttp_get_error_reason(&m_parser);
+}
+
 void HttpResponseParser_v2::Reset(HttpResponse::ptr res)
 {
     m_data = res;
     m_buff.clear();
     m_error = HPE_OK;
+    llhttp_finish(&m_parser);
 }
 } // namespace http
 

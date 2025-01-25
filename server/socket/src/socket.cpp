@@ -45,6 +45,46 @@ Socket::~Socket(){
     close();
 }
 
+Socket::ptr Socket::CreateTCP(const Address::ptr &address)
+{
+    return std::make_shared<Socket>(address->getFamily(), TCP, 0);
+}
+
+Socket::ptr Socket::CreateUDP(const Address::ptr &address)
+{
+    return std::make_shared<Socket>(address->getFamily(), UDP, 0);
+}
+
+Socket::ptr Socket::CreateTCPSocket()
+{
+    return std::make_shared<Socket>(AF_INET, TCP, 0);
+}
+
+Socket::ptr Socket::CreateUDPSocket()
+{
+    return std::make_shared<Socket>(AF_INET, UDP, 0);
+}
+
+Socket::ptr Socket::CreateTCPSocket6()
+{
+    return std::make_shared<Socket>(AF_INET6, TCP, 0);
+}
+
+Socket::ptr Socket::CreateUDPSocket6()
+{
+    return std::make_shared<Socket>(AF_INET6, UDP, 0);
+}
+
+Socket::ptr Socket::CreateUnixTCPSocket()
+{
+    return std::make_shared<Socket>(AF_UNIX, TCP, 0);
+}
+
+Socket::ptr Socket::CreateUnixUDPSocket()
+{
+    return std::make_shared<Socket>(AF_UNIX, UDP, 0);
+}
+
 int64_t Socket::getSendTimeOut(){
     timeval tv;
     if(!getOption(SOL_SOCKET, SO_SNDTIMEO, tv))
@@ -393,7 +433,7 @@ void Socket::newSock(){
         initSock();    
     }
     else{
-        SERVER_LOG_DEBUG(s_log) << "newSock error sock=" << m_sock
+        SERVER_LOG_ERROR(s_log) << "newSock error sock=" << m_sock
             << " errno=" << errno << " errstr=" << std::string(strerror(errno));
     }
 }
