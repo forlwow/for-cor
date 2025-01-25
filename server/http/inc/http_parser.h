@@ -61,9 +61,10 @@ public:
     HttpRequestParser_v2();
 
     size_t execute(char* data, size_t len, size_t off = 0);
-    int isFinished() const ;
-    int GetError() const {return m_error | llhttp_get_errno(&m_parser);}
+    bool isFinished() const ;
+    int GetError() const {return llhttp_get_errno(&m_parser);}
     std::string GetErrstr() const;
+    std::string GetErrReason() const;
     void SetError(llhttp_errno_t e) {m_error = e;}
 
     HttpRequest::ptr GetData() const {return m_data;}
@@ -84,9 +85,10 @@ public:
     HttpResponseParser_v2();
 
     size_t execute(char* data, size_t len, size_t off = 0);
-    int isFinished() const;
+    bool isFinished() const;
     int GetError() const {return m_error;}
     std::string GetErrstr() const;
+    std::string GetErrReason() const;
     void SetError(llhttp_errno_t e) {m_error = e;}
     HttpResponse::ptr GetData() const {return m_data;}
 

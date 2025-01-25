@@ -31,6 +31,8 @@
 #include "test_http.h"
 #include "test_fiber.h"
 #include "test_log.h"
+#include "TCP_server.h"
+#include "test_tcpserver.h"
 using namespace std;
 
 #define in :
@@ -40,7 +42,8 @@ auto slog = SERVER_LOGGER("system");
 server::CoRet fiber_timer_cir();
 
 int main(){
-    server::test::httpv2_response_test();
+    // server::test::httpv2_response_test();
+    server::test::test_tcpserver();
 }
 
 

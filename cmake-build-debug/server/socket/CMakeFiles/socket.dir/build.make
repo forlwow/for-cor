@@ -69,10 +69,24 @@ include server/socket/CMakeFiles/socket.dir/progress.make
 # Include the compile flags for this target's objects.
 include server/socket/CMakeFiles/socket.dir/flags.make
 
+server/socket/CMakeFiles/socket.dir/src/TCP_server.cpp.o: server/socket/CMakeFiles/socket.dir/flags.make
+server/socket/CMakeFiles/socket.dir/src/TCP_server.cpp.o: /home/worker/webserver/server/socket/src/TCP_server.cpp
+server/socket/CMakeFiles/socket.dir/src/TCP_server.cpp.o: server/socket/CMakeFiles/socket.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/worker/webserver/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object server/socket/CMakeFiles/socket.dir/src/TCP_server.cpp.o"
+	cd /home/worker/webserver/cmake-build-debug/server/socket && /usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT server/socket/CMakeFiles/socket.dir/src/TCP_server.cpp.o -MF CMakeFiles/socket.dir/src/TCP_server.cpp.o.d -o CMakeFiles/socket.dir/src/TCP_server.cpp.o -c /home/worker/webserver/server/socket/src/TCP_server.cpp
+
+server/socket/CMakeFiles/socket.dir/src/TCP_server.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/socket.dir/src/TCP_server.cpp.i"
+	cd /home/worker/webserver/cmake-build-debug/server/socket && /usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/worker/webserver/server/socket/src/TCP_server.cpp > CMakeFiles/socket.dir/src/TCP_server.cpp.i
+
+server/socket/CMakeFiles/socket.dir/src/TCP_server.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/socket.dir/src/TCP_server.cpp.s"
+	cd /home/worker/webserver/cmake-build-debug/server/socket && /usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/worker/webserver/server/socket/src/TCP_server.cpp -o CMakeFiles/socket.dir/src/TCP_server.cpp.s
+
 server/socket/CMakeFiles/socket.dir/src/address.cpp.o: server/socket/CMakeFiles/socket.dir/flags.make
 server/socket/CMakeFiles/socket.dir/src/address.cpp.o: /home/worker/webserver/server/socket/src/address.cpp
 server/socket/CMakeFiles/socket.dir/src/address.cpp.o: server/socket/CMakeFiles/socket.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/worker/webserver/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object server/socket/CMakeFiles/socket.dir/src/address.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/worker/webserver/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object server/socket/CMakeFiles/socket.dir/src/address.cpp.o"
 	cd /home/worker/webserver/cmake-build-debug/server/socket && /usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT server/socket/CMakeFiles/socket.dir/src/address.cpp.o -MF CMakeFiles/socket.dir/src/address.cpp.o.d -o CMakeFiles/socket.dir/src/address.cpp.o -c /home/worker/webserver/server/socket/src/address.cpp
 
 server/socket/CMakeFiles/socket.dir/src/address.cpp.i: cmake_force
@@ -86,7 +100,7 @@ server/socket/CMakeFiles/socket.dir/src/address.cpp.s: cmake_force
 server/socket/CMakeFiles/socket.dir/src/socket.cpp.o: server/socket/CMakeFiles/socket.dir/flags.make
 server/socket/CMakeFiles/socket.dir/src/socket.cpp.o: /home/worker/webserver/server/socket/src/socket.cpp
 server/socket/CMakeFiles/socket.dir/src/socket.cpp.o: server/socket/CMakeFiles/socket.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/worker/webserver/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object server/socket/CMakeFiles/socket.dir/src/socket.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/worker/webserver/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object server/socket/CMakeFiles/socket.dir/src/socket.cpp.o"
 	cd /home/worker/webserver/cmake-build-debug/server/socket && /usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT server/socket/CMakeFiles/socket.dir/src/socket.cpp.o -MF CMakeFiles/socket.dir/src/socket.cpp.o.d -o CMakeFiles/socket.dir/src/socket.cpp.o -c /home/worker/webserver/server/socket/src/socket.cpp
 
 server/socket/CMakeFiles/socket.dir/src/socket.cpp.i: cmake_force
@@ -99,17 +113,19 @@ server/socket/CMakeFiles/socket.dir/src/socket.cpp.s: cmake_force
 
 # Object files for target socket
 socket_OBJECTS = \
+"CMakeFiles/socket.dir/src/TCP_server.cpp.o" \
 "CMakeFiles/socket.dir/src/address.cpp.o" \
 "CMakeFiles/socket.dir/src/socket.cpp.o"
 
 # External object files for target socket
 socket_EXTERNAL_OBJECTS =
 
+/home/worker/webserver/lib/libsocket.so: server/socket/CMakeFiles/socket.dir/src/TCP_server.cpp.o
 /home/worker/webserver/lib/libsocket.so: server/socket/CMakeFiles/socket.dir/src/address.cpp.o
 /home/worker/webserver/lib/libsocket.so: server/socket/CMakeFiles/socket.dir/src/socket.cpp.o
 /home/worker/webserver/lib/libsocket.so: server/socket/CMakeFiles/socket.dir/build.make
 /home/worker/webserver/lib/libsocket.so: server/socket/CMakeFiles/socket.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/worker/webserver/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX shared library /home/worker/webserver/lib/libsocket.so"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/worker/webserver/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX shared library /home/worker/webserver/lib/libsocket.so"
 	cd /home/worker/webserver/cmake-build-debug/server/socket && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/socket.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

@@ -17,12 +17,30 @@ public:
     typedef std::shared_ptr<Socket> ptr;
     typedef std::weak_ptr<Socket> weak_ptr;
 
+    enum Type{
+        TCP = SOCK_STREAM,
+        UDP = SOCK_DGRAM
+    };
+
     Socket(int family, int type, int protocol = 0, void(*)(int) = nullptr);
     ~Socket();
     Socket(const Socket&)=delete;
     Socket& operator=(const Socket&)=delete;
     Socket(Socket&&)=default;
     Socket& operator=(Socket&&)=default;
+
+    std::string toString() {
+        return "[Socket] " + std::to_string(this->getFamily());
+    }
+
+    static Socket::ptr CreateTCP(const Address::ptr &address);
+    static Socket::ptr CreateUDP(const Address::ptr &address);
+    static Socket::ptr CreateTCPSocket();
+    static Socket::ptr CreateUDPSocket();
+    static Socket::ptr CreateTCPSocket6();
+    static Socket::ptr CreateUDPSocket6();
+    static Socket::ptr CreateUnixTCPSocket();
+    static Socket::ptr CreateUnixUDPSocket();
 
     bool init(int sock);
 

@@ -130,6 +130,30 @@ socket/fast:
 	cd /home/worker/webserver/cmake-build-debug && $(MAKE) $(MAKESILENT) -f server/socket/CMakeFiles/socket.dir/build.make server/socket/CMakeFiles/socket.dir/build
 .PHONY : socket/fast
 
+src/TCP_server.o: src/TCP_server.cpp.o
+.PHONY : src/TCP_server.o
+
+# target to build an object file
+src/TCP_server.cpp.o:
+	cd /home/worker/webserver/cmake-build-debug && $(MAKE) $(MAKESILENT) -f server/socket/CMakeFiles/socket.dir/build.make server/socket/CMakeFiles/socket.dir/src/TCP_server.cpp.o
+.PHONY : src/TCP_server.cpp.o
+
+src/TCP_server.i: src/TCP_server.cpp.i
+.PHONY : src/TCP_server.i
+
+# target to preprocess a source file
+src/TCP_server.cpp.i:
+	cd /home/worker/webserver/cmake-build-debug && $(MAKE) $(MAKESILENT) -f server/socket/CMakeFiles/socket.dir/build.make server/socket/CMakeFiles/socket.dir/src/TCP_server.cpp.i
+.PHONY : src/TCP_server.cpp.i
+
+src/TCP_server.s: src/TCP_server.cpp.s
+.PHONY : src/TCP_server.s
+
+# target to generate assembly for a file
+src/TCP_server.cpp.s:
+	cd /home/worker/webserver/cmake-build-debug && $(MAKE) $(MAKESILENT) -f server/socket/CMakeFiles/socket.dir/build.make server/socket/CMakeFiles/socket.dir/src/TCP_server.cpp.s
+.PHONY : src/TCP_server.cpp.s
+
 src/address.o: src/address.cpp.o
 .PHONY : src/address.o
 
@@ -187,6 +211,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... socket"
+	@echo "... src/TCP_server.o"
+	@echo "... src/TCP_server.i"
+	@echo "... src/TCP_server.s"
 	@echo "... src/address.o"
 	@echo "... src/address.i"
 	@echo "... src/address.s"
