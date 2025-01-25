@@ -24,6 +24,9 @@ include_directories(${PROJECT_SOURCE_DIR}/server/socket/inc)
 include_directories(${PROJECT_SOURCE_DIR}/server/http/inc)
 include_directories(${PROJECT_SOURCE_DIR}/server/dev)
 
+# 测试文件
+include_directories(${PROJECT_SOURCE_DIR}/tests)
+
 aux_source_directory(${PROJECT_SOURCE_DIR}/server src_dir)
 # 第三方库
 include_directories(${PROJECT_SOURCE_DIR}/server/ThirdModule/include)
@@ -40,6 +43,7 @@ add_executable(
 target_link_libraries(${PROJECT_NAME} log util ethread ecoroutine fiber socket dev http)
 target_link_libraries(${PROJECT_NAME} thirdMould)
 target_link_libraries(${PROJECT_NAME} yaml-cpp)
+target_link_libraries(${PROJECT_NAME} llhttp)
 target_link_libraries(${PROJECT_NAME} pthread)
 
 

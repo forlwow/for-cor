@@ -277,8 +277,6 @@ CMakeFiles/web_server.dir/server/test20.cpp.o: \
  /home/worker/webserver/server/ThirdModule/include/http_parse/http11_parser.h \
  /home/worker/webserver/server/ThirdModule/include/http_parse/http_common.h \
  /home/worker/webserver/server/ThirdModule/include/http_parse/httpclient_parser.h \
- /home/worker/webserver/server/http/inc/http_parser.h \
- /home/worker/webserver/server/http/inc/http.h \
  /home/worker/webserver/server/socket/inc/socket.h \
  /home/worker/webserver/server/socket/inc/socketfunc_cpp20.h \
  /home/worker/webserver/server/socket/inc/address.h \
@@ -325,8 +323,6 @@ CMakeFiles/web_server.dir/server/test20.cpp.o: \
  /usr/local/include/c++/13.2.0/set \
  /usr/local/include/c++/13.2.0/bits/stl_set.h \
  /usr/local/include/c++/13.2.0/bits/stl_multiset.h \
- /home/worker/webserver/server/fiber/inc/iomanager.h \
- /home/worker/webserver/server/fiber/inc/iomanager_cpp20.h \
  /home/worker/webserver/server/util/inc/range.h \
  /home/worker/webserver/server/util/inc/timer.h \
  /usr/local/include/c++/13.2.0/chrono \
@@ -345,9 +341,7 @@ CMakeFiles/web_server.dir/server/test20.cpp.o: \
  /usr/local/include/c++/13.2.0/optional \
  /usr/local/include/c++/13.2.0/span \
  /usr/include/x86_64-linux-gnu/sys/ucontext.h \
- /usr/include/x86_64-linux-gnu/bits/types/stack_t.h \
- /home/worker/webserver/server/fiber/inc/scheduler.h \
- /usr/include/arpa/telnet.h /usr/include/fcntl.h \
+ /usr/include/x86_64-linux-gnu/bits/types/stack_t.h /usr/include/fcntl.h \
  /usr/include/x86_64-linux-gnu/bits/fcntl.h \
  /usr/include/x86_64-linux-gnu/bits/fcntl-linux.h \
  /usr/include/linux/falloc.h /usr/include/x86_64-linux-gnu/bits/stat.h \
@@ -370,4 +364,11 @@ CMakeFiles/web_server.dir/server/test20.cpp.o: \
  /usr/include/x86_64-linux-gnu/bits/sigthread.h \
  /usr/include/x86_64-linux-gnu/bits/signal_ext.h \
  /home/worker/webserver/server/fiber/inc/fiberfunc_cpp20.h \
- /home/worker/webserver/server/socket/inc/concept.h
+ /home/worker/webserver/server/fiber/inc/iomanager_cpp20.h \
+ /home/worker/webserver/server/socket/inc/concept.h \
+ /home/worker/webserver/tests/test_http.h \
+ /home/worker/webserver/server/http/inc/http_parser.h \
+ /home/worker/webserver/server/http/inc/http.h \
+ /home/worker/webserver/server/ThirdModule/include/llhttp/llhttp.h \
+ /home/worker/webserver/tests/test_fiber.h \
+ /home/worker/webserver/tests/test_log.h

@@ -142,24 +142,23 @@ HttpMethod String2HttpMethod(const std::string& s);
 HttpStatus String2HttpStatus(const std::string& s);
 std::string HttpMethod2String(HttpMethod m);
 std::string HttpStatus2String(HttpStatus h);
+std::string HttpVersion2String(uint8_t);
 
 class HttpRequest{
 public: 
     typedef std::shared_ptr<HttpRequest> ptr;
     typedef std::map<std::string, std::string> MapType;
 
-    HttpRequest(uint8_t version = 0x11, bool close = true);
+    HttpRequest(uint8_t version = 0, bool close = true);
     HttpMethod GetMethod() const {return m_method;}
     uint8_t GetVersion() const {return m_version;}
     std::string_view GetPath() const {return m_path;}
     std::string_view GetQuery() const {return m_query;}
     std::string_view GetBody() const {return m_body;}
     const MapType& GetHeaders() const {return m_headers;}
-    const MapType& GetParams() const {return m_params;}
-    const MapType& GetCookies() const {return m_cookies;}
 
     void SetMethod(HttpMethod k)  { m_method = k;}
-    void SetVersion(uint8_t k)  { m_version;}
+    void SetVersion(uint8_t k)  { m_version = k;}
     void SetPath(std::string_view k)  { m_path = k;}
     void SetQuery(std::string_view k)  { m_query = k;}
     void SetBody(std::string_view k)  { m_body = k;}
@@ -167,20 +166,12 @@ public:
     void SetClose(bool close) { m_close = close;}
     bool isClose() {return m_close;}
     void SetHeaders(const std::string& key, std::string_view value)  { m_headers[key] = value;}
-    void SetParams(const std::string& key, std::string_view value)  { m_params[key] = value;}
-    void SetCookies(const std::string& key, std::string_view value)  { m_cookies[key] = value;}
 
-    std::string_view GetHeader(const std::string& key) {return {m_headers[key]};}
-    std::string_view GetParam(const std::string& key) {return {m_params[key]};}
-    std::string_view GetCookie(const std::string& key) {return {m_cookies[key]};}
+    std::string_view GetHeader(const std::string& key) {return m_headers[key];}
 
     void DelHeader(const std::string& key) {m_headers.erase(key);}
-    void DelParam(const std::string& key) {m_params.erase(key);}
-    void DelCookie(const std::string& key) {m_cookies.erase(key);}
 
     bool ContainHead(const std::string& key) {return m_headers.contains(key);}
-    bool ContainParam(const std::string& key) {return m_params.contains(key);}
-    bool ContainCookie(const std::string& key) {return m_cookies.contains(key);}
 
     std::ostream& dump(std::ostream&) const;
     std::string toString() const;
@@ -188,15 +179,13 @@ public:
 private:
     HttpMethod m_method;
     bool m_close;
-    uint8_t m_version;
+    uint8_t m_version = 0;
     std::string m_path = "/";
     std::string m_query = "";
     std::string m_fragment = "";
     std::string m_body = "";
 
     MapType m_headers;
-    MapType m_params;
-    MapType m_cookies;
 };
 
 class HttpResponse{
@@ -219,7 +208,7 @@ public:
     void SetClose(bool close) { m_close = close;}
     bool isClose() {return m_close;}
 
-    std::string_view GetHeader(const std::string& key) {return {m_headers[key]};}
+    std::string_view GetHeader(const std::string& key) {return m_headers[key];}
 
     void DelHeader(const std::string& key) {m_headers.erase(key);}
 

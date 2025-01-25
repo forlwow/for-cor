@@ -3,5 +3,6 @@
 /.vscode
 /.idea
 /.cache
+/tests
 /server/log/info.md
 *.TODO.md

@@ -174,6 +174,24 @@ public:
         m_event->getSS().append(c);
         return *this;
     }
+    LogEventWrap& operator<<(const std::unordered_map<std::string, std::string> &map){
+        m_event->getSS().append("{ ");
+        for (auto iter : map)
+        {
+            m_event->getSS().append(iter.first + ": " + iter.second + ", ");
+        }
+        m_event->getSS().append(" }");
+        return *this;
+    }
+    LogEventWrap& operator<<(const std::map<std::string, std::string> &map){
+        m_event->getSS().append("{ ");
+        for (auto iter : map)
+        {
+            m_event->getSS().append(iter.first + ": " + iter.second + ", ");
+        }
+        m_event->getSS().append(" }");
+        return *this;
+    }
     template<typename T>
     LogEventWrap& operator<<(T arg){
         m_event->getSS().append(std::to_string(arg));

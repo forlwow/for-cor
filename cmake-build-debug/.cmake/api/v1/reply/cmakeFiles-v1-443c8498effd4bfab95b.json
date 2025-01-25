@@ -1,0 +1,132 @@
+{
+	"inputs" : 
+	[
+		{
+			"path" : "CMakeLists.txt"
+		},
+		{
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/CMakeFiles/3.30.5/CMakeSystem.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/worker/.cache/JetBrains/RemoteDev/dist/bca632c2fbeff_CLion-2024.3.1.1/bin/cmake/linux/x64/share/cmake-3.30/Modules/CMakeSystemSpecificInitialize.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/worker/.cache/JetBrains/RemoteDev/dist/bca632c2fbeff_CLion-2024.3.1.1/bin/cmake/linux/x64/share/cmake-3.30/Modules/Platform/Linux-Initialize.cmake"
+		},
+		{
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/CMakeFiles/3.30.5/CMakeCXXCompiler.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/worker/.cache/JetBrains/RemoteDev/dist/bca632c2fbeff_CLion-2024.3.1.1/bin/cmake/linux/x64/share/cmake-3.30/Modules/CMakeSystemSpecificInformation.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/worker/.cache/JetBrains/RemoteDev/dist/bca632c2fbeff_CLion-2024.3.1.1/bin/cmake/linux/x64/share/cmake-3.30/Modules/CMakeGenericSystem.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/worker/.cache/JetBrains/RemoteDev/dist/bca632c2fbeff_CLion-2024.3.1.1/bin/cmake/linux/x64/share/cmake-3.30/Modules/CMakeInitializeConfigs.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/worker/.cache/JetBrains/RemoteDev/dist/bca632c2fbeff_CLion-2024.3.1.1/bin/cmake/linux/x64/share/cmake-3.30/Modules/Platform/Linux.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/worker/.cache/JetBrains/RemoteDev/dist/bca632c2fbeff_CLion-2024.3.1.1/bin/cmake/linux/x64/share/cmake-3.30/Modules/Platform/UnixPaths.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/worker/.cache/JetBrains/RemoteDev/dist/bca632c2fbeff_CLion-2024.3.1.1/bin/cmake/linux/x64/share/cmake-3.30/Modules/CMakeCXXInformation.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/worker/.cache/JetBrains/RemoteDev/dist/bca632c2fbeff_CLion-2024.3.1.1/bin/cmake/linux/x64/share/cmake-3.30/Modules/CMakeLanguageInformation.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/worker/.cache/JetBrains/RemoteDev/dist/bca632c2fbeff_CLion-2024.3.1.1/bin/cmake/linux/x64/share/cmake-3.30/Modules/Compiler/GNU-CXX.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/worker/.cache/JetBrains/RemoteDev/dist/bca632c2fbeff_CLion-2024.3.1.1/bin/cmake/linux/x64/share/cmake-3.30/Modules/Compiler/GNU.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/worker/.cache/JetBrains/RemoteDev/dist/bca632c2fbeff_CLion-2024.3.1.1/bin/cmake/linux/x64/share/cmake-3.30/Modules/Compiler/CMakeCommonCompilerMacros.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/worker/.cache/JetBrains/RemoteDev/dist/bca632c2fbeff_CLion-2024.3.1.1/bin/cmake/linux/x64/share/cmake-3.30/Modules/Platform/Linux-GNU-CXX.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/worker/.cache/JetBrains/RemoteDev/dist/bca632c2fbeff_CLion-2024.3.1.1/bin/cmake/linux/x64/share/cmake-3.30/Modules/Platform/Linux-GNU.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/worker/.cache/JetBrains/RemoteDev/dist/bca632c2fbeff_CLion-2024.3.1.1/bin/cmake/linux/x64/share/cmake-3.30/Modules/CMakeCommonLanguageInclude.cmake"
+		},
+		{
+			"path" : "server/CMakeLists.txt"
+		},
+		{
+			"path" : "server/log/CMakeLists.txt"
+		},
+		{
+			"path" : "server/util/CMakeLists.txt"
+		},
+		{
+			"path" : "server/ethread/CMakeLists.txt"
+		},
+		{
+			"path" : "server/ecoroutine/CMakeLists.txt"
+		},
+		{
+			"path" : "server/fiber/CMakeLists.txt"
+		},
+		{
+			"path" : "server/socket/CMakeLists.txt"
+		},
+		{
+			"path" : "server/dev/CMakeLists.txt"
+		},
+		{
+			"path" : "server/http/CMakeLists.txt"
+		},
+		{
+			"path" : "server/ThirdModule/CMakeLists.txt"
+		}
+	],
+	"kind" : "cmakeFiles",
+	"paths" : 
+	{
+		"build" : "/home/worker/webserver/cmake-build-debug",
+		"source" : "/home/worker/webserver"
+	},
+	"version" : 
+	{
+		"major" : 1,
+		"minor" : 1
+	}
+}
