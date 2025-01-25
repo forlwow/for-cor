@@ -27,43 +27,49 @@
 			{
 				"command" : 0,
 				"file" : 0,
+				"line" : 38,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 33,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
 				"line" : 35,
-				"parent" : 0
-			},
-			{
-				"command" : 1,
-				"file" : 0,
-				"line" : 30,
-				"parent" : 0
-			},
-			{
-				"command" : 1,
-				"file" : 0,
-				"line" : 32,
-				"parent" : 0
-			},
-			{
-				"command" : 2,
-				"file" : 0,
-				"line" : 40,
-				"parent" : 0
-			},
-			{
-				"command" : 2,
-				"file" : 0,
-				"line" : 41,
-				"parent" : 0
-			},
-			{
-				"command" : 2,
-				"file" : 0,
-				"line" : 42,
 				"parent" : 0
 			},
 			{
 				"command" : 2,
 				"file" : 0,
 				"line" : 43,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 44,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 45,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 46,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 47,
 				"parent" : 0
 			},
 			{
@@ -117,7 +123,13 @@
 			{
 				"command" : 3,
 				"file" : 0,
-				"line" : 29,
+				"line" : 28,
+				"parent" : 0
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 32,
 				"parent" : 0
 			}
 		]
@@ -134,39 +146,43 @@
 			"includes" : 
 			[
 				{
-					"backtrace" : 8,
+					"backtrace" : 9,
 					"path" : "/home/worker/webserver/server/log/inc"
 				},
 				{
-					"backtrace" : 9,
+					"backtrace" : 10,
 					"path" : "/home/worker/webserver/server/util/inc"
 				},
 				{
-					"backtrace" : 10,
+					"backtrace" : 11,
 					"path" : "/home/worker/webserver/server/ethread/inc"
 				},
 				{
-					"backtrace" : 11,
+					"backtrace" : 12,
 					"path" : "/home/worker/webserver/server/ecoroutine/inc"
 				},
 				{
-					"backtrace" : 12,
+					"backtrace" : 13,
 					"path" : "/home/worker/webserver/server/fiber/inc"
 				},
 				{
-					"backtrace" : 13,
+					"backtrace" : 14,
 					"path" : "/home/worker/webserver/server/socket/inc"
 				},
 				{
-					"backtrace" : 14,
+					"backtrace" : 15,
 					"path" : "/home/worker/webserver/server/http/inc"
 				},
 				{
-					"backtrace" : 15,
+					"backtrace" : 16,
 					"path" : "/home/worker/webserver/server/dev"
 				},
 				{
-					"backtrace" : 16,
+					"backtrace" : 17,
+					"path" : "/home/worker/webserver/tests"
+				},
+				{
+					"backtrace" : 18,
 					"path" : "/home/worker/webserver/server/ThirdModule/include"
 				}
 			],
@@ -305,6 +321,11 @@
 			},
 			{
 				"backtrace" : 7,
+				"fragment" : "-lllhttp",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 8,
 				"fragment" : "-lpthread",
 				"role" : "libraries"
 			}

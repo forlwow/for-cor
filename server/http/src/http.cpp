@@ -62,6 +62,22 @@ std::string HttpStatus2String(HttpStatus m){
     return "Invalid Status";
 }
 
+std::string HttpVersion2String(uint8_t v){
+    switch (v)
+    {
+    case 0x11:
+        return "HTTP/1.1";
+    case 0x10:
+        return "HTTP/1.0";
+    case 0x20:
+        return "HTTP/2.0";
+    case 0x30:
+        return "HTTP/3.0";
+    default:
+        return "Invalid HTTP Version";
+    }
+}
+
 std::ostream& HttpRequest::dump(std::ostream& os) const {
     os << HttpMethod2String(m_method) << " "
         << m_path << (m_query.empty() ? "" : "?") << m_query << (m_fragment.empty() ? "" : "#") << m_fragment
