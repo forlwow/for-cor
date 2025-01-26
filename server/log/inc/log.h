@@ -6,11 +6,11 @@
 #include <string_view>
 #include <vector>
 #include <fstream>
-#include <iostream>
 #include <map>
 #include <list>
 #include <memory>
 #include <cstdio>
+#include <util.h>
 
 #include <ethread.h>
 #include <singleton.h>
@@ -48,22 +48,64 @@ namespace server{
 extern thread_local int t_thread_id;
 extern thread_local const char* t_thread_name;
 
+// 日志等级
+#define LOG_LEVEL_DEBUG 0
+#define LOG_LEVEL_INFO 1
+#define LOG_LEVEL_WARN 2
+#define LOG_LEVEL_ERROR 3
+#define LOG_LEVEL_FATAL 4
+#define LOG_LEVEL_OFF 5
 
+// 当前日志等级 默认为INFO
+#ifndef CURRENT_LOG_LEVEL
+    #define CURRENT_LOG_LEVEL LOG_LEVEL_INFO
+#endif
 
-#define SERVER_LOGGER_SYSTEM server::LogManager::GetInstance()->getLogger("system")
-#define SERVER_LOGGER(name) server::LogManager::GetInstance()->getLogger(name)
+// DEBUG
+#if CURRENT_LOG_LEVEL <= LOG_LEVEL_DEBUG0
+    #define SERVER_LOG_DEBUG(logger) SERVER_LOG_LEVEL(logger, server::LogLevel::DEBUG)
+#else
+    #define SERVER_LOG_DEBUG(logger) while (false) server::NullStream()
+#endif
 
-#define SERVER_LOG_DEBUG(logger) SERVER_LOG_LEVEL(logger, server::LogLevel::DEBUG)
-#define SERVER_LOG_INFO(logger) SERVER_LOG_LEVEL(logger, server::LogLevel::INFO)
-#define SERVER_LOG_WARN(logger) SERVER_LOG_LEVEL(logger, server::LogLevel::WARN)
-#define SERVER_LOG_ERROR(logger) SERVER_LOG_LEVEL(logger, server::LogLevel::ERROR)
-#define SERVER_LOG_FATAL(logger) SERVER_LOG_LEVEL(logger, server::LogLevel::FATAL)
+// INFO
+#if CURRENT_LOG_LEVEL <= LOG_LEVEL_INFO
+    #define SERVER_LOG_INFO(logger) SERVER_LOG_LEVEL(logger, server::LogLevel::INFO)
+#else
+    #define SERVER_LOG_INFO(logger) while (false) server::NullStream()
+#endif
 
+// WARN
+#if CURRENT_LOG_LEVEL <= LOG_LEVEL_WARN
+    #define SERVER_LOG_WARN(logger) SERVER_LOG_LEVEL(logger, server::LogLevel::WARN)
+#else
+    #define SERVER_LOG_WARN(logger) while (false) server::NullStream()
+#endif
+
+// ERROR
+#if CURRENT_LOG_LEVEL <= LOG_LEVEL_ERROR
+    #define SERVER_LOG_ERROR(logger) SERVER_LOG_LEVEL(logger, server::LogLevel::ERROR)
+#else
+    #define SERVER_LOG_ERROR(logger) while (false) server::NullStream()
+#endif
+
+// FATAL
+#if CURRENT_LOG_LEVEL <= LOG_LEVEL_FATAL
+    #define SERVER_LOG_FATAL(logger) SERVER_LOG_LEVEL(logger, server::LogLevel::FATAL)
+#else
+    #define SERVER_LOG_FATAL(logger) while (false) server::NullStream()
+#endif
+
+// TODO: 支持级别定义
 #define SERVER_LOG_DEBUG2(logger) SERVER_LOG_LEVEL2(logger, server::LogLevel::DEBUG)
 #define SERVER_LOG_INFO2(logger) SERVER_LOG_LEVEL2(logger, server::LogLevel::INFO)
 #define SERVER_LOG_WARN2(logger) SERVER_LOG_LEVEL2(logger, server::LogLevel::WARN)
 #define SERVER_LOG_ERROR2(logger) SERVER_LOG_LEVEL2(logger, server::LogLevel::ERROR)
 #define SERVER_LOG_FATAL2(logger) SERVER_LOG_LEVEL2(logger, server::LogLevel::FATAL)
+
+// 系统日志
+#define SERVER_LOGGER_SYSTEM server::LogManager::GetInstance()->getLogger("system")
+#define SERVER_LOGGER(name) server::LogManager::GetInstance()->getLogger(name)
 
 class Logger;
 
@@ -83,19 +125,19 @@ public:
 
     inline static const char* ToString(LogLevel::Level level) {
         switch (level){
-        #define XX(name) \
+        #define XX(color, name) \
             case LogLevel::name: \
-                return #name; \
+                return #color#name "\e[0m"; \
                 break;
-            XX(DEBUG);
-            XX(INFO);
-            XX(WARN);
-            XX(ERROR);
-            XX(FATAL);
-            XX(OFF);
+            XX(\e[34m, DEBUG);
+            XX(\e[32m, INFO);
+            XX(\e[33m, WARN);
+            XX(\e[36m, ERROR);
+            XX(\e[91m, FATAL);
+            XX(\e[39m, OFF);
         #undef XX
             default:
-                return "UNKNOW";
+                return "\e[36mUNKNOW";
         }
     }
    

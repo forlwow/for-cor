@@ -37,6 +37,8 @@ using namespace std;
 
 #define in :
 
+#define CURRENT_LOG_LEVEL LOG_LEVEL_DEBUG
+
 auto logger = SERVER_LOGGER_SYSTEM;
 auto slog = SERVER_LOGGER("system");
 server::CoRet fiber_timer_cir();
