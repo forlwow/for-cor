@@ -35,6 +35,20 @@ enum SOCK_RESULT{
     SOCK_SUCCESS = 0,
 };
 
+inline std::string Sock_Result2String(int res) {
+    switch (res) {
+        case SOCK_REMAIN_DATA: return "remain data";
+        case SOCK_CLOSE: return "close socket";
+        case SOCK_OTHER: return "other socket";
+        case SOCK_EAGAIN: return "eagain socket";
+        case SOCK_EWOULDBLOCK: return "ewould block socket";
+        case SOCK_SUCCESS: return "success";
+        default: {
+            return "recv: " + std::to_string(res);
+        }
+    }
+}
+
 struct connect{
     connect(const Socket::ptr& sock, const Address::ptr& add)
     {
@@ -107,7 +121,7 @@ struct send{
         // auto fib = std::dynamic_pointer_cast<FiberIO>(Fiber_::GetThis().lock());
         auto iom = IOManager_::GetIOManager();
         if(!iom || !fib){
-            throw std::logic_error("fib|iomanager not found");
+            SERVER_LOG_ERROR(s_log) << ("fib|iomanager not found");
             return;
         }
         res = m_sock->send(m_str.data(), m_len, m_flag);
@@ -123,11 +137,19 @@ struct send{
             handle.resume();
         }
         else if(res > 0){
-            m_str = m_str.substr(res);
-            m_len = std::min(m_len, (int)m_str.length());
-            res = SOCK_REMAIN_DATA;
-            if (m_str.empty()) {
+            // m_str = m_str.substr(res);
+            // m_len = std::min(m_len, (int)m_str.length());
+            // res = SOCK_REMAIN_DATA;
+            // if (m_str.empty()) {
+            //     res = SOCK_SUCCESS;
+            // }
+            if (res == m_str.size()) {
                 res = SOCK_SUCCESS;
+            }
+            else {
+                m_str = m_str.substr(m_len);
+                m_len = m_str.size() - res;
+                res = SOCK_REMAIN_DATA;
             }
             handle.resume();
         }
@@ -140,6 +162,13 @@ struct send{
     int await_resume() {
         return res;
     }
+
+    void reset(std::string_view buf, size_t len) {
+        m_isAddEvent = false;
+        m_len = len;
+        m_str = buf;
+    }
+
     bool m_isAddEvent = false;
     int m_len;
     int m_flag;
@@ -165,7 +194,7 @@ struct recv{
         if(m_isAddEvent){
             IOManager_::GetIOManager()->DelEvent(m_sock->getFd(), IOManager_::READ);
         }
-        SERVER_LOG_DEBUG(s_log) << "recv destory";
+        SERVER_LOG_DEBUG(s_log) << "recv destroy";
     }
 
     bool await_ready() {
@@ -196,12 +225,17 @@ struct recv{
         else {
             res = SOCK_OTHER;
         }
-
-
     }
     int await_resume() {
         return res;
     }
+
+    void reset(void *buf, size_t len) {
+        m_isAddEvent = false;
+        m_len = len;
+        m_buf = buf;
+    }
+
     bool m_isAddEvent = false;
     size_t m_len;
     int res = 0;

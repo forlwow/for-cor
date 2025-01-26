@@ -29,7 +29,7 @@ public:
     bool isStop() const { return m_isStop; }
 
 protected:
-    virtual void handleClient(Socket::ptr client);
+    virtual Task handleClient(Socket::ptr client);
     virtual Task startAccept(Socket::ptr sock);
 
 private:
@@ -39,6 +39,18 @@ private:
     std::string m_name;
     bool m_isStop;
 };
+
+
+class TcpEchoServer : public TcpServer {
+public:
+    TcpEchoServer() = default;
+    ~TcpEchoServer() override = default;
+protected:
+    Task handleClient(Socket::ptr client) override;
+
+};
+
+
 
 }
 

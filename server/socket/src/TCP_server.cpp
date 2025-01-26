@@ -78,8 +78,9 @@ namespace server
         }
     }
 
-    void TcpServer::handleClient(Socket::ptr client){
+    Task TcpServer::handleClient(Socket::ptr client){
         SERVER_LOG_INFO(logger) << "TCPServer handleClient : " << client->toString();
+        co_return;
     }
 
     Task TcpServer::startAccept(Socket::ptr sock) {
@@ -91,11 +92,39 @@ namespace server
                 SERVER_LOG_ERROR(logger) << "TCP server accept failed " << "errno=" << errno << " errstr=" << std::string(strerror(errno));
             }
             else {
-                std::function<void()> fun = std::bind_front(&TcpServer::handleClient, this, client);
-                m_worker->schedule(std::make_shared<FuncFiber>(fun));
+                m_worker->schedule(std::make_shared<AsyncFiber>(&TcpServer::handleClient, this, client));
 
             }
         }
+        co_return;
     }
 
+    Task TcpEchoServer::handleClient(Socket::ptr client) {
+        const int MAXSIZE = 1024;
+        char buffer[MAXSIZE];
+        auto recver = server::recv(client, buffer, MAXSIZE);
+        auto sender = server::send(client, buffer, 0, 0);
+        while (1) {
+            recver.reset(buffer, MAXSIZE);
+            int num = co_await recver;
+            // int num = co_await server::recv(client, buffer, MAXSIZE);
+            if (num < 0) {
+                SERVER_LOG_WARN(logger) << "TCP server recv failed: " << Sock_Result2String(num);
+                if (num == SOCK_CLOSE) {
+                    break;
+                }
+                continue;
+            }
+            sender.reset(buffer, num);
+            int wnum = co_await sender;
+            if (wnum < 0) {
+                SERVER_LOG_WARN(logger) << "TCP server send failed: " << Sock_Result2String(wnum);
+                if (wnum == SOCK_CLOSE) {
+                    break;
+                }
+                continue;
+            }
+            SERVER_LOG_DEBUG(logger) << "TCP server echo success";
+        }
+    }
 }
