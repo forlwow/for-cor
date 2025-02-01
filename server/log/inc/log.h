@@ -58,11 +58,11 @@ extern thread_local const char* t_thread_name;
 
 // 当前日志等级 默认为INFO
 #ifndef CURRENT_LOG_LEVEL
-    #define CURRENT_LOG_LEVEL LOG_LEVEL_INFO
+    #define CURRENT_LOG_LEVEL LOG_LEVEL_DEBUG
 #endif
 
 // DEBUG
-#if CURRENT_LOG_LEVEL <= LOG_LEVEL_DEBUG0
+#if CURRENT_LOG_LEVEL <= LOG_LEVEL_DEBUG
     #define SERVER_LOG_DEBUG(logger) SERVER_LOG_LEVEL(logger, server::LogLevel::DEBUG)
 #else
     #define SERVER_LOG_DEBUG(logger) while (false) server::NullStream()
@@ -132,7 +132,7 @@ public:
             XX(\e[34m, DEBUG);
             XX(\e[32m, INFO);
             XX(\e[33m, WARN);
-            XX(\e[36m, ERROR);
+            XX(\e[95m, ERROR);
             XX(\e[91m, FATAL);
             XX(\e[39m, OFF);
         #undef XX

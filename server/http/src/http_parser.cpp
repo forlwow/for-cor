@@ -230,12 +230,32 @@ int on_request_method_complete_v2(llhttp_t *llparser){
 
 int on_request_url_complete_v2(llhttp_t *llparser){
     HttpRequestParser_v2 *parser = static_cast<HttpRequestParser_v2*>(llparser->data);
-    // TODO:
-    parser->GetData()->SetPath(parser->Getbuffer());
-    int i = 0;
-    while (i < parser->Getbuffer().size()){
-        ++i;
+    // 处理URL
+    std::string_view buf = parser->Getbuffer();
+    int n = buf.size();
+    int query = buf.size();
+    int frag = query;
+    for (int i = 0; i < buf.size(); ++i) {
+        if (buf.at(i) == '?') {
+            query = i;
+        }
+        else if (buf.at(i) == '#') {
+            frag = i;
+        }
     }
+    // fragment必须在query后
+    if (query > frag) {
+        return HPE_INVALID_URL;
+    }
+    // path一定是从头开始， 长query
+    parser->GetData()->SetPath(buf.substr(0, query));
+    if (query != n && query != n-1) {
+        parser->GetData()->SetQuery(buf.substr(query + 1, frag-query));
+    }
+    if (frag != n && frag != n-1) {
+        parser->GetData()->SetFragment(buf.substr(frag + 1));
+    }
+
     parser->Getbuffer().clear();
     return llhttp_get_errno(llparser);
 }
@@ -246,6 +266,7 @@ int on_request_body_complete_v2(llhttp_t *llparser){
     auto err = llhttp_get_errno(llparser);
     if (err != HPE_OK)
         parser->SetError(err);
+    parser->SetRequestFinished(true);
     parser->Getbuffer().clear();
     return err;
 }
@@ -334,9 +355,13 @@ std::string HttpRequestParser_v2::GetErrReason() const
 void HttpRequestParser_v2::Reset(HttpRequest::ptr req)
 {
     m_error = HPE_OK;
-    m_data = req;
+    if (req != nullptr)
+        m_data = req;
+    else
+        m_data->clear();
     m_buff.clear();
-    llhttp_finish(&m_parser);
+    m_request_finished = false;
+    llhttp_reset(&m_parser);
 }
 
 
@@ -452,7 +477,7 @@ void HttpResponseParser_v2::Reset(HttpResponse::ptr res)
     m_data = res;
     m_buff.clear();
     m_error = HPE_OK;
-    llhttp_finish(&m_parser);
+    llhttp_reset(&m_parser);
 }
 } // namespace http
 

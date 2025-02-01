@@ -88,6 +88,7 @@ server/all: server/fiber/all
 server/all: server/socket/all
 server/all: server/dev/all
 server/all: server/http/all
+server/all: server/server/all
 server/all: server/ThirdModule/all
 .PHONY : server/all
 
@@ -100,6 +101,7 @@ server/preinstall: server/fiber/preinstall
 server/preinstall: server/socket/preinstall
 server/preinstall: server/dev/preinstall
 server/preinstall: server/http/preinstall
+server/preinstall: server/server/preinstall
 server/preinstall: server/ThirdModule/preinstall
 .PHONY : server/preinstall
 
@@ -112,6 +114,7 @@ server/clean: server/fiber/clean
 server/clean: server/socket/clean
 server/clean: server/dev/clean
 server/clean: server/http/clean
+server/clean: server/server/clean
 server/clean: server/ThirdModule/clean
 .PHONY : server/clean
 
@@ -221,6 +224,21 @@ server/log/clean: server/log/CMakeFiles/log.dir/clean
 .PHONY : server/log/clean
 
 #=============================================================================
+# Directory level rules for directory server/server
+
+# Recursive "all" directory target.
+server/server/all: server/server/CMakeFiles/server.dir/all
+.PHONY : server/server/all
+
+# Recursive "preinstall" directory target.
+server/server/preinstall:
+.PHONY : server/server/preinstall
+
+# Recursive "clean" directory target.
+server/server/clean: server/server/CMakeFiles/server.dir/clean
+.PHONY : server/server/clean
+
+#=============================================================================
 # Directory level rules for directory server/socket
 
 # Recursive "all" directory target.
@@ -262,15 +280,16 @@ CMakeFiles/web_server.dir/all: server/fiber/CMakeFiles/fiber.dir/all
 CMakeFiles/web_server.dir/all: server/socket/CMakeFiles/socket.dir/all
 CMakeFiles/web_server.dir/all: server/dev/CMakeFiles/dev.dir/all
 CMakeFiles/web_server.dir/all: server/http/CMakeFiles/http.dir/all
+CMakeFiles/web_server.dir/all: server/server/CMakeFiles/server.dir/all
 CMakeFiles/web_server.dir/all: server/ThirdModule/CMakeFiles/thirdMould.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/web_server.dir/build.make CMakeFiles/web_server.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/web_server.dir/build.make CMakeFiles/web_server.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/worker/webserver/cmake-build-debug/CMakeFiles --progress-num=33,34,35,36 "Built target web_server"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/worker/webserver/cmake-build-debug/CMakeFiles --progress-num=36,37,38,39 "Built target web_server"
 .PHONY : CMakeFiles/web_server.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/web_server.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/worker/webserver/cmake-build-debug/CMakeFiles 36
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/worker/webserver/cmake-build-debug/CMakeFiles 39
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/web_server.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/worker/webserver/cmake-build-debug/CMakeFiles 0
 .PHONY : CMakeFiles/web_server.dir/rule
@@ -291,7 +310,7 @@ CMakeFiles/web_server.dir/clean:
 server/log/CMakeFiles/log.dir/all:
 	$(MAKE) $(MAKESILENT) -f server/log/CMakeFiles/log.dir/build.make server/log/CMakeFiles/log.dir/depend
 	$(MAKE) $(MAKESILENT) -f server/log/CMakeFiles/log.dir/build.make server/log/CMakeFiles/log.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/worker/webserver/cmake-build-debug/CMakeFiles --progress-num=19,20 "Built target log"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/worker/webserver/cmake-build-debug/CMakeFiles --progress-num=20,21 "Built target log"
 .PHONY : server/log/CMakeFiles/log.dir/all
 
 # Build rule for subdir invocation for target.
@@ -317,7 +336,7 @@ server/log/CMakeFiles/log.dir/clean:
 server/util/CMakeFiles/util.dir/all:
 	$(MAKE) $(MAKESILENT) -f server/util/CMakeFiles/util.dir/build.make server/util/CMakeFiles/util.dir/depend
 	$(MAKE) $(MAKESILENT) -f server/util/CMakeFiles/util.dir/build.make server/util/CMakeFiles/util.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/worker/webserver/cmake-build-debug/CMakeFiles --progress-num=28,29,30,31,32 "Built target util"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/worker/webserver/cmake-build-debug/CMakeFiles --progress-num=31,32,33,34,35 "Built target util"
 .PHONY : server/util/CMakeFiles/util.dir/all
 
 # Build rule for subdir invocation for target.
@@ -421,12 +440,12 @@ server/fiber/CMakeFiles/fiber.dir/clean:
 server/socket/CMakeFiles/socket.dir/all:
 	$(MAKE) $(MAKESILENT) -f server/socket/CMakeFiles/socket.dir/build.make server/socket/CMakeFiles/socket.dir/depend
 	$(MAKE) $(MAKESILENT) -f server/socket/CMakeFiles/socket.dir/build.make server/socket/CMakeFiles/socket.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/worker/webserver/cmake-build-debug/CMakeFiles --progress-num=21,22,23,24 "Built target socket"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/worker/webserver/cmake-build-debug/CMakeFiles --progress-num=25,26,27 "Built target socket"
 .PHONY : server/socket/CMakeFiles/socket.dir/all
 
 # Build rule for subdir invocation for target.
 server/socket/CMakeFiles/socket.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/worker/webserver/cmake-build-debug/CMakeFiles 4
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/worker/webserver/cmake-build-debug/CMakeFiles 3
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 server/socket/CMakeFiles/socket.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/worker/webserver/cmake-build-debug/CMakeFiles 0
 .PHONY : server/socket/CMakeFiles/socket.dir/rule
@@ -473,12 +492,12 @@ server/dev/CMakeFiles/dev.dir/clean:
 server/http/CMakeFiles/http.dir/all:
 	$(MAKE) $(MAKESILENT) -f server/http/CMakeFiles/http.dir/build.make server/http/CMakeFiles/http.dir/depend
 	$(MAKE) $(MAKESILENT) -f server/http/CMakeFiles/http.dir/build.make server/http/CMakeFiles/http.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/worker/webserver/cmake-build-debug/CMakeFiles --progress-num=16,17,18 "Built target http"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/worker/webserver/cmake-build-debug/CMakeFiles --progress-num=16,17,18,19 "Built target http"
 .PHONY : server/http/CMakeFiles/http.dir/all
 
 # Build rule for subdir invocation for target.
 server/http/CMakeFiles/http.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/worker/webserver/cmake-build-debug/CMakeFiles 3
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/worker/webserver/cmake-build-debug/CMakeFiles 4
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 server/http/CMakeFiles/http.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/worker/webserver/cmake-build-debug/CMakeFiles 0
 .PHONY : server/http/CMakeFiles/http.dir/rule
@@ -493,13 +512,39 @@ server/http/CMakeFiles/http.dir/clean:
 .PHONY : server/http/CMakeFiles/http.dir/clean
 
 #=============================================================================
+# Target rules for target server/server/CMakeFiles/server.dir
+
+# All Build rule for target.
+server/server/CMakeFiles/server.dir/all:
+	$(MAKE) $(MAKESILENT) -f server/server/CMakeFiles/server.dir/build.make server/server/CMakeFiles/server.dir/depend
+	$(MAKE) $(MAKESILENT) -f server/server/CMakeFiles/server.dir/build.make server/server/CMakeFiles/server.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/worker/webserver/cmake-build-debug/CMakeFiles --progress-num=22,23,24 "Built target server"
+.PHONY : server/server/CMakeFiles/server.dir/all
+
+# Build rule for subdir invocation for target.
+server/server/CMakeFiles/server.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/worker/webserver/cmake-build-debug/CMakeFiles 3
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 server/server/CMakeFiles/server.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/worker/webserver/cmake-build-debug/CMakeFiles 0
+.PHONY : server/server/CMakeFiles/server.dir/rule
+
+# Convenience name for target.
+server: server/server/CMakeFiles/server.dir/rule
+.PHONY : server
+
+# clean rule for target.
+server/server/CMakeFiles/server.dir/clean:
+	$(MAKE) $(MAKESILENT) -f server/server/CMakeFiles/server.dir/build.make server/server/CMakeFiles/server.dir/clean
+.PHONY : server/server/CMakeFiles/server.dir/clean
+
+#=============================================================================
 # Target rules for target server/ThirdModule/CMakeFiles/thirdMould.dir
 
 # All Build rule for target.
 server/ThirdModule/CMakeFiles/thirdMould.dir/all:
 	$(MAKE) $(MAKESILENT) -f server/ThirdModule/CMakeFiles/thirdMould.dir/build.make server/ThirdModule/CMakeFiles/thirdMould.dir/depend
 	$(MAKE) $(MAKESILENT) -f server/ThirdModule/CMakeFiles/thirdMould.dir/build.make server/ThirdModule/CMakeFiles/thirdMould.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/worker/webserver/cmake-build-debug/CMakeFiles --progress-num=25,26,27 "Built target thirdMould"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/worker/webserver/cmake-build-debug/CMakeFiles --progress-num=28,29,30 "Built target thirdMould"
 .PHONY : server/ThirdModule/CMakeFiles/thirdMould.dir/all
 
 # Build rule for subdir invocation for target.

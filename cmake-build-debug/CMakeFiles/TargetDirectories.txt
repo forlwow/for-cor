@@ -27,6 +27,9 @@
 /home/worker/webserver/cmake-build-debug/server/http/CMakeFiles/http.dir
 /home/worker/webserver/cmake-build-debug/server/http/CMakeFiles/edit_cache.dir
 /home/worker/webserver/cmake-build-debug/server/http/CMakeFiles/rebuild_cache.dir
+/home/worker/webserver/cmake-build-debug/server/server/CMakeFiles/server.dir
+/home/worker/webserver/cmake-build-debug/server/server/CMakeFiles/edit_cache.dir
+/home/worker/webserver/cmake-build-debug/server/server/CMakeFiles/rebuild_cache.dir
 /home/worker/webserver/cmake-build-debug/server/ThirdModule/CMakeFiles/thirdMould.dir
 /home/worker/webserver/cmake-build-debug/server/ThirdModule/CMakeFiles/edit_cache.dir
 /home/worker/webserver/cmake-build-debug/server/ThirdModule/CMakeFiles/rebuild_cache.dir

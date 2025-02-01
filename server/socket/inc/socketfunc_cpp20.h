@@ -24,7 +24,7 @@
 
 namespace server {
 
-auto s_log = SERVER_LOGGER_SYSTEM;
+static auto s_log = SERVER_LOGGER_SYSTEM;
 
 enum SOCK_RESULT{
     SOCK_REMAIN_DATA = -10,
@@ -97,7 +97,7 @@ struct connect{
 // >0: send num
 // <0: error
 struct send{
-    send(const Socket::ptr& sock, std::string_view str_, int len, int flag = 0)
+    send(const Socket::ptr& sock, std::string_view str_ = {}, int len = 0, int flag = 0)
     {
         m_sock = sock;
         m_str = str_;

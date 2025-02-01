@@ -80,7 +80,7 @@ std::string HttpVersion2String(uint8_t v){
 
 std::ostream& HttpRequest::dump(std::ostream& os) const {
     os << HttpMethod2String(m_method) << " "
-        << m_path << (m_query.empty() ? "" : "?") << m_query << (m_fragment.empty() ? "" : "#") << m_fragment
+        << m_path << (m_query.empty() ? "" : "?") << m_query << (m_fragment.empty() ? "" : "#") << m_fragment << " "
         << "HTTP/" << (uint32_t)(m_version >> 4) << "." << (uint32_t)(m_version & 0x0F)
         << "\r\n";
     os << "connection: " << (m_close ? "close" : "keep-alive") << "\r\n";
@@ -117,7 +117,7 @@ std::ostream& HttpResponse::dump(std::ostream& os) const {
         << (m_reason.empty() ? HttpStatus2String(m_status) : m_reason)
         << "\r\n";
     for(auto &[key, value] : m_headers){
-        os << key << ": " << value;
+        os << key << ": " << value << "\r\n";
     }
     os << "connection: " << (m_close ? "close" : "keep-alive") << "\r\n";
     if(!m_body.empty()){

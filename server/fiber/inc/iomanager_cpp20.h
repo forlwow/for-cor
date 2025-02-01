@@ -148,8 +148,6 @@ private:
 };
 
 
-// 由于每个Fiber对象可能会在短时间内被多次调度
-// 因此使用Fiber2
 class IOManager_: public Scheduler_, public TimeManager{
 public:
     typedef std::shared_ptr<IOManager_> ptr;

@@ -7,8 +7,9 @@
 #include "llhttp/llhttp.h"
 #include <memory>
 
-namespace server{
 
+
+namespace server{
 namespace http{
 
 enum HTTP_PARSER_ERROR{
@@ -57,7 +58,7 @@ private:
 
 class HttpRequestParser_v2{
 public:
-    typedef std::shared_ptr<HttpRequestParser_v1> ptr;
+    typedef std::shared_ptr<HttpRequestParser_v2> ptr;
     HttpRequestParser_v2();
 
     size_t execute(char* data, size_t len, size_t off = 0);
@@ -70,18 +71,23 @@ public:
     HttpRequest::ptr GetData() const {return m_data;}
     std::string& Getbuffer() {return m_buff;}
 
+    bool IsRequestFinished() const {return m_request_finished;}
+    void SetRequestFinished(bool f) {m_request_finished = f;}
     void Reset(HttpRequest::ptr = nullptr);
+    llhttp_errno_t FinishParse() const {return llhttp_finish(&m_parser);}
+
 private:
+    bool m_request_finished = false;
     llhttp_errno_t m_error = HPE_OK;
     HttpRequest::ptr m_data;
     std::string m_buff;
-    mutable llhttp_t m_parser;
-    mutable llhttp_settings_t m_settings;
+    mutable llhttp_t m_parser{};
+    mutable llhttp_settings_t m_settings{};
 };
 
 class HttpResponseParser_v2{
 public:
-    typedef std::shared_ptr<HttpResponseParser_v1> ptr;
+    typedef std::shared_ptr<HttpResponseParser_v2> ptr;
     HttpResponseParser_v2();
 
     size_t execute(char* data, size_t len, size_t off = 0);
@@ -94,6 +100,7 @@ public:
 
     std::string& Getbuffer() {return m_buff;}
     void Reset(HttpResponse::ptr = nullptr);
+    void FinishParse() {m_data->clear(); llhttp_finish(&m_parser); }
 private:
     llhttp_errno_t m_error = HPE_OK;
     HttpResponse::ptr m_data;
@@ -106,10 +113,10 @@ private:
     typedef HttpRequestParser_v1 HttpRequestParser;
     typedef HttpResponseParser_v1 HttpResponseParser;
 
-} // namespace http
+} // namespace server::http
+}
 
 
-} // namespace server
 
 
 #endif

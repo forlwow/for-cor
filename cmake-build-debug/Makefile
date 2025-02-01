@@ -234,6 +234,19 @@ http/fast:
 .PHONY : http/fast
 
 #=============================================================================
+# Target rules for targets named server
+
+# Build rule for target.
+server: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 server
+.PHONY : server
+
+# fast build rule for target.
+server/fast:
+	$(MAKE) $(MAKESILENT) -f server/server/CMakeFiles/server.dir/build.make server/server/CMakeFiles/server.dir/build
+.PHONY : server/fast
+
+#=============================================================================
 # Target rules for targets named thirdMould
 
 # Build rule for target.
@@ -332,6 +345,7 @@ help:
 	@echo "... fiber"
 	@echo "... http"
 	@echo "... log"
+	@echo "... server"
 	@echo "... socket"
 	@echo "... thirdMould"
 	@echo "... util"

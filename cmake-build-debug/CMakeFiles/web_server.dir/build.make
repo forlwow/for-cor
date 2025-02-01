@@ -132,6 +132,7 @@ web_server_EXTERNAL_OBJECTS =
 /home/worker/webserver/bin/web_server: /home/worker/webserver/lib/libsocket.so
 /home/worker/webserver/bin/web_server: /home/worker/webserver/lib/libdev.so
 /home/worker/webserver/bin/web_server: /home/worker/webserver/lib/libhttp.so
+/home/worker/webserver/bin/web_server: /home/worker/webserver/lib/libserver.so
 /home/worker/webserver/bin/web_server: /home/worker/webserver/lib/libthirdMould.so
 /home/worker/webserver/bin/web_server: CMakeFiles/web_server.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/worker/webserver/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable /home/worker/webserver/bin/web_server"
