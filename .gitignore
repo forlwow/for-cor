@@ -5,4 +5,6 @@
 /.cache
 /server/tests
 /server/log/info.md
+/clion-work
+/cmake-build-debug
 *.TODO.md
