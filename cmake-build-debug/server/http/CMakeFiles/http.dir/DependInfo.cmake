@@ -10,6 +10,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/worker/webserver/server/http/src/http.cpp" "server/http/CMakeFiles/http.dir/src/http.cpp.o" "gcc" "server/http/CMakeFiles/http.dir/src/http.cpp.o.d"
   "/home/worker/webserver/server/http/src/http_parser.cpp" "server/http/CMakeFiles/http.dir/src/http_parser.cpp.o" "gcc" "server/http/CMakeFiles/http.dir/src/http_parser.cpp.o.d"
+  "/home/worker/webserver/server/http/src/http_session.cpp" "server/http/CMakeFiles/http.dir/src/http_session.cpp.o" "gcc" "server/http/CMakeFiles/http.dir/src/http_session.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

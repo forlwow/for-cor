@@ -178,6 +178,30 @@ src/http_parser.cpp.s:
 	cd /home/worker/webserver/cmake-build-debug && $(MAKE) $(MAKESILENT) -f server/http/CMakeFiles/http.dir/build.make server/http/CMakeFiles/http.dir/src/http_parser.cpp.s
 .PHONY : src/http_parser.cpp.s
 
+src/http_session.o: src/http_session.cpp.o
+.PHONY : src/http_session.o
+
+# target to build an object file
+src/http_session.cpp.o:
+	cd /home/worker/webserver/cmake-build-debug && $(MAKE) $(MAKESILENT) -f server/http/CMakeFiles/http.dir/build.make server/http/CMakeFiles/http.dir/src/http_session.cpp.o
+.PHONY : src/http_session.cpp.o
+
+src/http_session.i: src/http_session.cpp.i
+.PHONY : src/http_session.i
+
+# target to preprocess a source file
+src/http_session.cpp.i:
+	cd /home/worker/webserver/cmake-build-debug && $(MAKE) $(MAKESILENT) -f server/http/CMakeFiles/http.dir/build.make server/http/CMakeFiles/http.dir/src/http_session.cpp.i
+.PHONY : src/http_session.cpp.i
+
+src/http_session.s: src/http_session.cpp.s
+.PHONY : src/http_session.s
+
+# target to generate assembly for a file
+src/http_session.cpp.s:
+	cd /home/worker/webserver/cmake-build-debug && $(MAKE) $(MAKESILENT) -f server/http/CMakeFiles/http.dir/build.make server/http/CMakeFiles/http.dir/src/http_session.cpp.s
+.PHONY : src/http_session.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -193,6 +217,9 @@ help:
 	@echo "... src/http_parser.o"
 	@echo "... src/http_parser.i"
 	@echo "... src/http_parser.s"
+	@echo "... src/http_session.o"
+	@echo "... src/http_session.i"
+	@echo "... src/http_session.s"
 .PHONY : help
 
 

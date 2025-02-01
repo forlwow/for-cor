@@ -1,0 +1,1 @@
+/usr/local/bin/g++ -fPIC  -O0 -w -g2 -ggdb -ldl -shared -Wl,-soname,libserver.so -o /home/worker/webserver/lib/libserver.so CMakeFiles/server.dir/src/TCP_server.cpp.o CMakeFiles/server.dir/src/http_server.cpp.o   -L/home/worker/webserver/server/ThirdModule/lib  -L/home/worker/webserver/lib

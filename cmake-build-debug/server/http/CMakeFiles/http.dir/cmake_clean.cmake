@@ -5,6 +5,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/http.dir/src/http.cpp.o.d"
   "CMakeFiles/http.dir/src/http_parser.cpp.o"
   "CMakeFiles/http.dir/src/http_parser.cpp.o.d"
+  "CMakeFiles/http.dir/src/http_session.cpp.o"
+  "CMakeFiles/http.dir/src/http_session.cpp.o.d"
 )
 
 # Per-language clean rules from dependency scanning.

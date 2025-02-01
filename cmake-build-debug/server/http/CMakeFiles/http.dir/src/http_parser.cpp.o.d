@@ -3,8 +3,7 @@ server/http/CMakeFiles/http.dir/src/http_parser.cpp.o: \
  /usr/include/stdc-predef.h \
  /home/worker/webserver/server/http/inc/http_parser.h \
  /home/worker/webserver/server/http/inc/http.h \
- /usr/local/include/c++/13.2.0/atomic \
- /usr/local/include/c++/13.2.0/bits/atomic_base.h \
+ /usr/local/include/c++/13.2.0/cstdint \
  /usr/local/include/c++/13.2.0/x86_64-pc-linux-gnu/bits/c++config.h \
  /usr/local/include/c++/13.2.0/x86_64-pc-linux-gnu/bits/os_defines.h \
  /usr/include/features.h /usr/include/x86_64-linux-gnu/sys/cdefs.h \
@@ -14,8 +13,6 @@ server/http/CMakeFiles/http.dir/src/http_parser.cpp.o: \
  /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
  /usr/local/include/c++/13.2.0/x86_64-pc-linux-gnu/bits/cpu_defines.h \
  /usr/local/include/c++/13.2.0/pstl/pstl_config.h \
- /usr/local/include/c++/13.2.0/new \
- /usr/local/include/c++/13.2.0/bits/exception.h \
  /usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include/stdint.h \
  /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
@@ -26,76 +23,17 @@ server/http/CMakeFiles/http.dir/src/http_parser.cpp.o: \
  /usr/include/x86_64-linux-gnu/bits/wchar.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
- /usr/local/include/c++/13.2.0/bits/atomic_lockfree_defines.h \
- /usr/local/include/c++/13.2.0/bits/move.h \
- /usr/local/include/c++/13.2.0/type_traits \
- /usr/local/include/c++/13.2.0/bits/atomic_wait.h \
- /usr/local/include/c++/13.2.0/bits/functional_hash.h \
- /usr/local/include/c++/13.2.0/bits/hash_bytes.h \
- /usr/local/include/c++/13.2.0/x86_64-pc-linux-gnu/bits/gthr.h \
- /usr/local/include/c++/13.2.0/x86_64-pc-linux-gnu/bits/gthr-default.h \
- /usr/include/pthread.h /usr/include/sched.h \
- /usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include/stddef.h \
- /usr/include/x86_64-linux-gnu/bits/types/time_t.h \
- /usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h \
- /usr/include/x86_64-linux-gnu/bits/endian.h \
- /usr/include/x86_64-linux-gnu/bits/endianness.h \
- /usr/include/x86_64-linux-gnu/bits/sched.h \
- /usr/include/x86_64-linux-gnu/bits/types/struct_sched_param.h \
- /usr/include/x86_64-linux-gnu/bits/cpu-set.h /usr/include/time.h \
- /usr/include/x86_64-linux-gnu/bits/time.h \
- /usr/include/x86_64-linux-gnu/bits/timex.h \
- /usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h \
- /usr/include/x86_64-linux-gnu/bits/types/clock_t.h \
- /usr/include/x86_64-linux-gnu/bits/types/struct_tm.h \
- /usr/include/x86_64-linux-gnu/bits/types/clockid_t.h \
- /usr/include/x86_64-linux-gnu/bits/types/timer_t.h \
- /usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h \
- /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
- /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
- /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
- /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
- /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
- /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
- /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
- /usr/include/x86_64-linux-gnu/bits/setjmp.h \
- /usr/local/include/c++/13.2.0/ext/numeric_traits.h \
- /usr/local/include/c++/13.2.0/bits/cpp_type_traits.h \
- /usr/local/include/c++/13.2.0/ext/type_traits.h \
- /usr/local/include/c++/13.2.0/cerrno /usr/include/errno.h \
- /usr/include/x86_64-linux-gnu/bits/errno.h /usr/include/linux/errno.h \
- /usr/include/x86_64-linux-gnu/asm/errno.h \
- /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h \
- /usr/include/x86_64-linux-gnu/bits/types/error_t.h \
- /usr/local/include/c++/13.2.0/climits \
- /usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include/limits.h \
- /usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include/syslimits.h \
- /usr/include/limits.h /usr/include/x86_64-linux-gnu/bits/posix1_lim.h \
- /usr/include/x86_64-linux-gnu/bits/local_lim.h \
- /usr/include/linux/limits.h \
- /usr/include/x86_64-linux-gnu/bits/posix2_lim.h \
- /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
- /usr/include/x86_64-linux-gnu/bits/uio_lim.h /usr/include/unistd.h \
- /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
- /usr/include/x86_64-linux-gnu/bits/environments.h \
- /usr/include/x86_64-linux-gnu/bits/confname.h \
- /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
- /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
- /usr/include/x86_64-linux-gnu/bits/unistd_ext.h /usr/include/syscall.h \
- /usr/include/x86_64-linux-gnu/sys/syscall.h \
- /usr/include/x86_64-linux-gnu/asm/unistd.h \
- /usr/include/x86_64-linux-gnu/asm/unistd_64.h \
- /usr/include/x86_64-linux-gnu/bits/syscall.h \
- /usr/local/include/c++/13.2.0/bits/functexcept.h \
- /usr/local/include/c++/13.2.0/bits/exception_defines.h \
- /usr/local/include/c++/13.2.0/bits/std_mutex.h \
- /usr/local/include/c++/13.2.0/cstddef \
- /usr/local/include/c++/13.2.0/cstdint \
  /usr/local/include/c++/13.2.0/memory \
  /usr/local/include/c++/13.2.0/bits/memoryfwd.h \
  /usr/local/include/c++/13.2.0/bits/allocator.h \
  /usr/local/include/c++/13.2.0/x86_64-pc-linux-gnu/bits/c++allocator.h \
  /usr/local/include/c++/13.2.0/bits/new_allocator.h \
+ /usr/local/include/c++/13.2.0/new \
+ /usr/local/include/c++/13.2.0/bits/exception.h \
+ /usr/local/include/c++/13.2.0/bits/functexcept.h \
+ /usr/local/include/c++/13.2.0/bits/exception_defines.h \
+ /usr/local/include/c++/13.2.0/bits/move.h \
+ /usr/local/include/c++/13.2.0/type_traits \
  /usr/local/include/c++/13.2.0/bits/stl_tempbuf.h \
  /usr/local/include/c++/13.2.0/bits/stl_construct.h \
  /usr/local/include/c++/13.2.0/bits/stl_iterator_base_types.h \
@@ -109,6 +47,9 @@ server/http/CMakeFiles/http.dir/src/http_parser.cpp.o: \
  /usr/local/include/c++/13.2.0/bits/stl_pair.h \
  /usr/local/include/c++/13.2.0/bits/utility.h \
  /usr/local/include/c++/13.2.0/compare \
+ /usr/local/include/c++/13.2.0/ext/numeric_traits.h \
+ /usr/local/include/c++/13.2.0/bits/cpp_type_traits.h \
+ /usr/local/include/c++/13.2.0/ext/type_traits.h \
  /usr/local/include/c++/13.2.0/bits/stl_uninitialized.h \
  /usr/local/include/c++/13.2.0/bits/stl_algobase.h \
  /usr/local/include/c++/13.2.0/bits/stl_iterator.h \
@@ -130,6 +71,8 @@ server/http/CMakeFiles/http.dir/src/http_parser.cpp.o: \
  /usr/local/include/c++/13.2.0/numbers \
  /usr/local/include/c++/13.2.0/bits/stl_function.h \
  /usr/local/include/c++/13.2.0/backward/binders.h \
+ /usr/local/include/c++/13.2.0/bits/functional_hash.h \
+ /usr/local/include/c++/13.2.0/bits/hash_bytes.h \
  /usr/local/include/c++/13.2.0/ostream \
  /usr/local/include/c++/13.2.0/bits/requires_hosted.h \
  /usr/local/include/c++/13.2.0/ios /usr/local/include/c++/13.2.0/iosfwd \
@@ -138,12 +81,15 @@ server/http/CMakeFiles/http.dir/src/http_parser.cpp.o: \
  /usr/local/include/c++/13.2.0/cwchar /usr/include/wchar.h \
  /usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed/x86_64-linux-gnu/bits/floatn.h \
  /usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed/x86_64-linux-gnu/bits/floatn-common.h \
+ /usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include/stddef.h \
  /usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include/stdarg.h \
  /usr/include/x86_64-linux-gnu/bits/types/wint_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/mbstate_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__FILE.h \
  /usr/include/x86_64-linux-gnu/bits/types/FILE.h \
+ /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
+ /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
  /usr/local/include/c++/13.2.0/exception \
  /usr/local/include/c++/13.2.0/bits/exception_ptr.h \
  /usr/local/include/c++/13.2.0/bits/cxxabi_init_exception.h \
@@ -155,8 +101,32 @@ server/http/CMakeFiles/http.dir/src/http_parser.cpp.o: \
  /usr/local/include/c++/13.2.0/clocale /usr/include/locale.h \
  /usr/include/x86_64-linux-gnu/bits/locale.h \
  /usr/local/include/c++/13.2.0/cctype /usr/include/ctype.h \
+ /usr/include/x86_64-linux-gnu/bits/endian.h \
+ /usr/include/x86_64-linux-gnu/bits/endianness.h \
  /usr/local/include/c++/13.2.0/bits/ios_base.h \
  /usr/local/include/c++/13.2.0/ext/atomicity.h \
+ /usr/local/include/c++/13.2.0/x86_64-pc-linux-gnu/bits/gthr.h \
+ /usr/local/include/c++/13.2.0/x86_64-pc-linux-gnu/bits/gthr-default.h \
+ /usr/include/pthread.h /usr/include/sched.h \
+ /usr/include/x86_64-linux-gnu/bits/types/time_t.h \
+ /usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h \
+ /usr/include/x86_64-linux-gnu/bits/sched.h \
+ /usr/include/x86_64-linux-gnu/bits/types/struct_sched_param.h \
+ /usr/include/x86_64-linux-gnu/bits/cpu-set.h /usr/include/time.h \
+ /usr/include/x86_64-linux-gnu/bits/time.h \
+ /usr/include/x86_64-linux-gnu/bits/timex.h \
+ /usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h \
+ /usr/include/x86_64-linux-gnu/bits/types/clock_t.h \
+ /usr/include/x86_64-linux-gnu/bits/types/struct_tm.h \
+ /usr/include/x86_64-linux-gnu/bits/types/clockid_t.h \
+ /usr/include/x86_64-linux-gnu/bits/types/timer_t.h \
+ /usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h \
+ /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
+ /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
+ /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
+ /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
+ /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
+ /usr/include/x86_64-linux-gnu/bits/setjmp.h \
  /usr/local/include/c++/13.2.0/x86_64-pc-linux-gnu/bits/atomic_word.h \
  /usr/local/include/c++/13.2.0/bits/locale_classes.h \
  /usr/local/include/c++/13.2.0/string \
@@ -187,9 +157,15 @@ server/http/CMakeFiles/http.dir/src/http_parser.cpp.o: \
  /usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h \
  /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
  /usr/include/x86_64-linux-gnu/bits/sys_errlist.h \
+ /usr/local/include/c++/13.2.0/cerrno /usr/include/errno.h \
+ /usr/include/x86_64-linux-gnu/bits/errno.h /usr/include/linux/errno.h \
+ /usr/include/x86_64-linux-gnu/asm/errno.h \
+ /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h \
+ /usr/include/x86_64-linux-gnu/bits/types/error_t.h \
  /usr/local/include/c++/13.2.0/bits/charconv.h \
  /usr/local/include/c++/13.2.0/bits/basic_string.tcc \
  /usr/local/include/c++/13.2.0/bits/memory_resource.h \
+ /usr/local/include/c++/13.2.0/cstddef \
  /usr/local/include/c++/13.2.0/bits/uses_allocator_args.h \
  /usr/local/include/c++/13.2.0/bits/locale_classes.tcc \
  /usr/local/include/c++/13.2.0/system_error \
@@ -213,6 +189,29 @@ server/http/CMakeFiles/http.dir/src/http_parser.cpp.o: \
  /usr/local/include/c++/13.2.0/ext/aligned_buffer.h \
  /usr/local/include/c++/13.2.0/ext/concurrence.h \
  /usr/local/include/c++/13.2.0/bits/shared_ptr_atomic.h \
+ /usr/local/include/c++/13.2.0/bits/atomic_base.h \
+ /usr/local/include/c++/13.2.0/bits/atomic_lockfree_defines.h \
+ /usr/local/include/c++/13.2.0/bits/atomic_wait.h \
+ /usr/local/include/c++/13.2.0/climits \
+ /usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include/limits.h \
+ /usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include/syslimits.h \
+ /usr/include/limits.h /usr/include/x86_64-linux-gnu/bits/posix1_lim.h \
+ /usr/include/x86_64-linux-gnu/bits/local_lim.h \
+ /usr/include/linux/limits.h \
+ /usr/include/x86_64-linux-gnu/bits/posix2_lim.h \
+ /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
+ /usr/include/x86_64-linux-gnu/bits/uio_lim.h /usr/include/unistd.h \
+ /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
+ /usr/include/x86_64-linux-gnu/bits/environments.h \
+ /usr/include/x86_64-linux-gnu/bits/confname.h \
+ /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
+ /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
+ /usr/include/x86_64-linux-gnu/bits/unistd_ext.h /usr/include/syscall.h \
+ /usr/include/x86_64-linux-gnu/sys/syscall.h \
+ /usr/include/x86_64-linux-gnu/asm/unistd.h \
+ /usr/include/x86_64-linux-gnu/asm/unistd_64.h \
+ /usr/include/x86_64-linux-gnu/bits/syscall.h \
+ /usr/local/include/c++/13.2.0/bits/std_mutex.h \
  /usr/local/include/c++/13.2.0/backward/auto_ptr.h \
  /usr/local/include/c++/13.2.0/bits/ranges_uninitialized.h \
  /usr/local/include/c++/13.2.0/bits/ranges_algobase.h \
@@ -224,16 +223,6 @@ server/http/CMakeFiles/http.dir/src/http_parser.cpp.o: \
  /usr/local/include/c++/13.2.0/bits/stl_map.h \
  /usr/local/include/c++/13.2.0/bits/stl_multimap.h \
  /usr/local/include/c++/13.2.0/bits/erase_if.h \
- /usr/local/include/c++/13.2.0/iostream \
- /usr/local/include/c++/13.2.0/istream \
- /usr/local/include/c++/13.2.0/bits/istream.tcc \
- /usr/local/include/c++/13.2.0/sstream \
- /usr/local/include/c++/13.2.0/bits/sstream.tcc \
- /usr/local/include/c++/13.2.0/unordered_map \
- /usr/local/include/c++/13.2.0/bits/unordered_map.h \
- /usr/local/include/c++/13.2.0/bits/hashtable.h \
- /usr/local/include/c++/13.2.0/bits/hashtable_policy.h \
- /usr/local/include/c++/13.2.0/bits/enable_special_members.h \
  /home/worker/webserver/server/ThirdModule/include/http_parse/http11_parser.h \
  /home/worker/webserver/server/ThirdModule/include/http_parse/http_common.h \
  /home/worker/webserver/server/ThirdModule/include/http_parse/httpclient_parser.h \
@@ -242,6 +231,11 @@ server/http/CMakeFiles/http.dir/src/http_parser.cpp.o: \
  /home/worker/webserver/server/log/inc/log.h \
  /usr/local/include/c++/13.2.0/functional \
  /usr/local/include/c++/13.2.0/bits/std_function.h \
+ /usr/local/include/c++/13.2.0/unordered_map \
+ /usr/local/include/c++/13.2.0/bits/unordered_map.h \
+ /usr/local/include/c++/13.2.0/bits/hashtable.h \
+ /usr/local/include/c++/13.2.0/bits/hashtable_policy.h \
+ /usr/local/include/c++/13.2.0/bits/enable_special_members.h \
  /usr/local/include/c++/13.2.0/vector \
  /usr/local/include/c++/13.2.0/bits/stl_vector.h \
  /usr/local/include/c++/13.2.0/bits/stl_bvector.h \
@@ -252,6 +246,8 @@ server/http/CMakeFiles/http.dir/src/http_parser.cpp.o: \
  /usr/local/include/c++/13.2.0/bits/stl_heap.h \
  /usr/local/include/c++/13.2.0/bits/uniform_int_dist.h \
  /usr/local/include/c++/13.2.0/fstream \
+ /usr/local/include/c++/13.2.0/istream \
+ /usr/local/include/c++/13.2.0/bits/istream.tcc \
  /usr/local/include/c++/13.2.0/bits/codecvt.h \
  /usr/local/include/c++/13.2.0/x86_64-pc-linux-gnu/bits/basic_file.h \
  /usr/local/include/c++/13.2.0/x86_64-pc-linux-gnu/bits/c++io.h \
@@ -259,9 +255,11 @@ server/http/CMakeFiles/http.dir/src/http_parser.cpp.o: \
  /usr/local/include/c++/13.2.0/list \
  /usr/local/include/c++/13.2.0/bits/stl_list.h \
  /usr/local/include/c++/13.2.0/bits/list.tcc \
+ /home/worker/webserver/server/util/inc/util.h \
  /home/worker/webserver/server/ethread/inc/ethread.h \
  /usr/local/include/c++/13.2.0/thread \
  /usr/local/include/c++/13.2.0/stop_token \
+ /usr/local/include/c++/13.2.0/atomic \
  /usr/local/include/c++/13.2.0/bits/std_thread.h \
  /usr/local/include/c++/13.2.0/semaphore \
  /usr/local/include/c++/13.2.0/bits/semaphore_base.h \
@@ -287,4 +285,44 @@ server/http/CMakeFiles/http.dir/src/http_parser.cpp.o: \
  /usr/include/x86_64-linux-gnu/bits/epoll.h \
  /home/worker/webserver/server/util/inc/enums.h \
  /usr/local/include/c++/13.2.0/cstring /usr/include/string.h \
- /usr/include/strings.h
+ /usr/include/strings.h \
+ /home/worker/webserver/server/socket/inc/socketfunc_cpp20.h \
+ /home/worker/webserver/server/socket/inc/address.h \
+ /usr/include/netinet/in.h /usr/include/x86_64-linux-gnu/sys/socket.h \
+ /usr/include/x86_64-linux-gnu/bits/types/struct_iovec.h \
+ /usr/include/x86_64-linux-gnu/bits/socket.h \
+ /usr/include/x86_64-linux-gnu/bits/socket_type.h \
+ /usr/include/x86_64-linux-gnu/bits/sockaddr.h \
+ /usr/include/x86_64-linux-gnu/asm/socket.h \
+ /usr/include/asm-generic/socket.h /usr/include/linux/posix_types.h \
+ /usr/include/linux/stddef.h \
+ /usr/include/x86_64-linux-gnu/asm/posix_types.h \
+ /usr/include/x86_64-linux-gnu/asm/posix_types_64.h \
+ /usr/include/asm-generic/posix_types.h \
+ /usr/include/x86_64-linux-gnu/asm/bitsperlong.h \
+ /usr/include/asm-generic/bitsperlong.h \
+ /usr/include/x86_64-linux-gnu/asm/sockios.h \
+ /usr/include/asm-generic/sockios.h \
+ /usr/include/x86_64-linux-gnu/bits/types/struct_osockaddr.h \
+ /usr/include/x86_64-linux-gnu/bits/in.h \
+ /usr/local/include/c++/13.2.0/sstream \
+ /usr/local/include/c++/13.2.0/bits/sstream.tcc \
+ /usr/include/x86_64-linux-gnu/sys/un.h /usr/include/arpa/inet.h \
+ /home/worker/webserver/server/socket/inc/socket.h \
+ /home/worker/webserver/server/socket/inc/address.h \
+ /home/worker/webserver/server/socket/inc/concept.h \
+ /home/worker/webserver/server/fiber/inc/fiber_cpp20.h \
+ /home/worker/webserver/server/fiber/inc/async.h \
+ /usr/local/include/c++/13.2.0/algorithm \
+ /usr/local/include/c++/13.2.0/bits/ranges_algo.h \
+ /usr/local/include/c++/13.2.0/pstl/glue_algorithm_defs.h \
+ /usr/local/include/c++/13.2.0/bits/fs_fwd.h \
+ /home/worker/webserver/server/fiber/inc/iomanager_cpp20.h \
+ /home/worker/webserver/server/fiber/inc/async.h \
+ /home/worker/webserver/server/fiber/inc/scheduler.h \
+ /home/worker/webserver/server/fiber/inc/scheduler_cpp20.h \
+ /home/worker/webserver/server/util/inc/threadsafe_deque.h \
+ /usr/local/include/c++/13.2.0/cassert /usr/include/assert.h \
+ /usr/local/include/c++/13.2.0/set \
+ /usr/local/include/c++/13.2.0/bits/stl_set.h \
+ /usr/local/include/c++/13.2.0/bits/stl_multiset.h

@@ -8,5 +8,6 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/fiber)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/socket)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/dev)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/http)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/server)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/ThirdModule)
 

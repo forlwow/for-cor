@@ -1,19 +1,11 @@
 #ifndef SERVER_HTTP_HTTP_H
 #define SERVER_HTTP_HTTP_H
 
-#include <atomic>
-#include <cstddef>
 #include <cstdint>
 #include <memory>
-#include <ostream>
 #include <string>
 #include <map>
-#include <iostream>
-#include <sstream>
 #include <string_view>
-#include <unordered_map>
-#include "http_parse/http11_parser.h"
-#include "http_parse/httpclient_parser.h"
 
 namespace server{
 
@@ -155,6 +147,7 @@ public:
     std::string_view GetPath() const {return m_path;}
     std::string_view GetQuery() const {return m_query;}
     std::string_view GetBody() const {return m_body;}
+    std::string_view GetFragment() const {return m_fragment;}
     const MapType& GetHeaders() const {return m_headers;}
 
     void SetMethod(HttpMethod k)  { m_method = k;}
@@ -173,6 +166,17 @@ public:
 
     bool ContainHead(const std::string& key) {return m_headers.contains(key);}
 
+
+    void clear() {
+        m_method = HTTP_METHOD_INVALID;
+        m_close=true;
+        m_version = 0;
+        m_path.clear();
+        m_query.clear();
+        m_fragment.clear();
+        m_body.clear();
+        m_headers.clear();
+    }
     std::ostream& dump(std::ostream&) const;
     std::string toString() const;
 
@@ -213,6 +217,8 @@ public:
     void DelHeader(const std::string& key) {m_headers.erase(key);}
 
     bool ContainHead(const std::string& key) {return m_headers.contains(key);}
+
+    void clear() {m_status = HTTP_STATUS_OK; m_close=true; m_version = 0; m_body.clear(); m_reason.clear(); m_headers.clear(); m_headers.clear();}
 
     std::ostream& dump(std::ostream&) const;
     std::string toString() const;
