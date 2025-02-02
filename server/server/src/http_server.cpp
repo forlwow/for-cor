@@ -133,26 +133,30 @@ bool Router::AddRoute(std::string_view method, std::string_view path, callback c
     return true;
 }
 
+void Router::SetDefaultRoute(callback cb) {
+    m_default_callback = cb;
+}
+
 Router::callback Router::GetCallback(std::string_view method, std::string_view path) const {
     if (!isVaildPath(path)) {
         SERVER_LOG_ERROR(logger) << "AddRouter Path Error, path: " << path;
-        return m_no_callback;
+        return ncb();
     }
     RouterNode::ptr cur_node = m_head;
     size_t start = 1, end = 1;
     while ((end = path.find('/', start)) != std::string::npos) {
         std::string_view sub_path = path.substr(start, end - start);
         std::string path_str(sub_path);
-        if (!cur_node->m_children.contains(path_str)) return m_no_callback;
+        if (!cur_node->m_children.contains(path_str)) return ncb();
         cur_node = cur_node->m_children[path_str];
         start = end + 1;
     }
     std::string last_path(path.substr(start));
     auto it = cur_node->m_children.find(last_path);
-    if (it == cur_node->m_children.end()) return m_no_callback;
+    if (it == cur_node->m_children.end()) return ncb();
     cur_node = cur_node->m_children[last_path];
     auto cb_it = cur_node->m_cbs.find(std::string(method));
-    return (cb_it == cur_node->m_cbs.end() ? m_no_callback : cb_it->second);
+    return (cb_it == cur_node->m_cbs.end() ? ncb() : cb_it->second);
 }
 
 
@@ -182,6 +186,10 @@ void HttpServer::GET(std::string_view path, Router::callback cb) {
 
 void HttpServer::ANY(std::string_view method, std::string_view path, Router::callback cb) {
     m_router->AddRoute(method, path, cb);
+}
+
+void HttpServer::DEFAULT(Router::callback cb) {
+    m_router->SetDefaultRoute(cb);
 }
 
 

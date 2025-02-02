@@ -35,7 +35,10 @@ IOManager_::IOManager_(size_t threads_, const std::string& name_)
     : Scheduler_(threads_, name_), m_fdContexts()
 {
     m_epfd = epoll_create(1024);
-    assert(m_epfd > 0);
+    if (m_epfd == -1) {
+        SERVER_LOG_FATAL(g_logger) << "IOManager Create Failed" << BacktraceToString(10, 0);
+        exit(-1);
+    }
 }
 
 IOManager_::~IOManager_(){
@@ -171,6 +174,11 @@ bool IOManager_::CancelEvent(int fd, Event event){
     return 0;
 }
 
+IOManager_::ptr IOManager_::GetInstance(size_t threads_, const std::string& name_) {
+    static IOManager_::ptr m_manager(new IOManager_(threads_, name_), Deleter());
+    return m_manager;
+}
+
 bool IOManager_::stopping(){
     return true;
 }
@@ -267,7 +275,6 @@ bool IOManager_::interruptEpoll(){
     write(m_interruptFd[1], "1", 1);
     return true;
 }
-
 
 } // namespace server
   //

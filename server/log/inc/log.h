@@ -89,6 +89,7 @@ extern thread_local const char* t_thread_name;
     #define SERVER_LOG_ERROR(logger) while (false) server::NullStream()
 #endif
 
+// TODO 异常退出时也会输出
 // FATAL
 #if CURRENT_LOG_LEVEL <= LOG_LEVEL_FATAL
     #define SERVER_LOG_FATAL(logger) SERVER_LOG_LEVEL(logger, server::LogLevel::FATAL)

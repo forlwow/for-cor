@@ -14,12 +14,7 @@ namespace server{
 static auto s_log = SERVER_LOGGER_SYSTEM;
 
 extern thread_local const char* t_thread_name;
-static Scheduler_* s_scheduler = nullptr;
 extern thread_local int t_thread_id;
-
-Scheduler_* Scheduler_::GetScheduler(){
-    return s_scheduler;
-}
 
 Scheduler_::Scheduler_(size_t max_, const std::string& name_)
     : m_name(name_)
@@ -28,7 +23,6 @@ Scheduler_::Scheduler_(size_t max_, const std::string& name_)
             (max_ < std::thread::hardware_concurrency() ?
                 max_ : std::thread::hardware_concurrency()));
     m_thread_count = max_; 
-    s_scheduler = this;
 }
 Scheduler_::~Scheduler_(){
     // TODO: 处理线程无法中断时的处理

@@ -54,16 +54,17 @@ private:
     };
 protected:
     RouterNode::ptr m_head;    // 头结点
-    callback m_no_callback = [](HttpContext::ptr){};    // 空回调 查找失败返回
+    callback m_default_callback = [](HttpContext::ptr){};    // 默认回调 查找失败返回
 
 public:
     Router();
     ~Router();
     // 添加路由
     bool AddRoute(std::string_view method, std::string_view path, callback cb);
+    void SetDefaultRoute(callback cb);
     // 获取回调函数 失败返回no_callback
     callback GetCallback(std::string_view method, std::string_view path) const;
-    callback ncb() const {return m_no_callback;}
+    callback ncb() const {return m_default_callback;}
 };
 
 class HttpServer: public TcpServer {
@@ -76,6 +77,7 @@ public:
     void POST(std::string_view, Router::callback);
     void GET(std::string_view, Router::callback);
     void ANY(std::string_view, std::string_view, Router::callback); // METHOD PATH callback
+    void DEFAULT(Router::callback);
 
 protected:
     Task handleClient(Socket::ptr client) override;

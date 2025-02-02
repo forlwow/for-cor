@@ -16,8 +16,8 @@ public:
     }
 
 protected:
-    Singleton() {}
-    ~Singleton() {}
+    Singleton() = default;
+    ~Singleton() = default;
 
     static std::shared_ptr<T> m_pSington;
 private:
