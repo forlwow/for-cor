@@ -70,8 +70,11 @@ public:
 class HttpServer: public TcpServer {
 public:
     typedef std::shared_ptr<HttpServer> ptr;
-    HttpServer();
+    HttpServer(int max_thread = 2);
     ~HttpServer() override ;
+
+    // 开启IPv4服务器
+    void serverV4(std::string_view IP, uint16_t port);
 
     // 添加路由方法 PATH callback
     void POST(std::string_view, Router::callback);

@@ -48,6 +48,52 @@ static auto logger = SERVER_LOGGER_SYSTEM;
         "</html>"
     };
 
+    const char pageNotFound[] = {
+        R"(
+        <!DOCTYPE html>
+        <html lang="zh">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>404 页面未找到</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    background-color: #f4f4f4;
+                    color: #333;
+                    text-align: center;
+                    padding: 50px;
+                }
+                h1 {
+                    font-size: 100px;
+                    color: #e74c3c;
+                }
+                p {
+                    font-size: 20px;
+                }
+                a {
+                    color: #3498db;
+                    text-decoration: none;
+                    font-size: 18px;
+                }
+                a:hover {
+                    text-decoration: underline;
+                }
+            </style>
+        </head>
+        <body>
+            <h1>404</h1>
+            <p>抱歉，您访问的页面无法找到。</p>
+            <p>您可以返回 <a href="/">首页</a> 或检查URL是否正确。</p>
+        </body>
+        </html>
+        )"
+    };
+
+void defaultCallBack(HttpContext::ptr c) {
+    c->HTML(404, pageNotFound);
+}
+
 std::string HttpGmtTime() {
     time_t now = time(0);
     tm* gmt = gmtime(&now);
@@ -167,13 +213,27 @@ thread_local std::queue<http::HttpRequestParser_v2::ptr> *HttpServer::m_request_
 thread_local std::queue<http::HttpResponseParser_v2::ptr> *HttpServer::m_response_parsers = new std::queue<http::HttpResponseParser_v2::ptr>;
 
 
-HttpServer::HttpServer()
-    : m_router(std::make_shared<Router>())
+HttpServer::HttpServer(int max_thread)
+    : m_router(std::make_shared<Router>()), TcpServer(max_thread)
 {
-
+    m_router->SetDefaultRoute(defaultCallBack);
 }
 
 HttpServer::~HttpServer() {
+}
+
+void HttpServer::serverV4(std::string_view IP, uint16_t port) {
+    Address::ptr addr = IPv4Address::CreateAddressPtr(IP.data(), port);
+    std::vector<Address::ptr> addrs = {addr};
+    std::vector<Address::ptr> fails;
+    if (!bind(addrs, fails )) {
+        SERVER_LOG_ERROR(logger) << "Server bind failed";
+        return;
+    }
+    auto iom = IOManager_::GetInstance();
+    this->start();
+    iom->start();
+    iom->wait();
 }
 
 void HttpServer::POST(std::string_view path, Router::callback cb) {
@@ -195,10 +255,6 @@ void HttpServer::DEFAULT(Router::callback cb) {
 
 void HttpServer::HandleCallback(HttpContext::ptr context) {
     auto req = context->m_request;
-    SERVER_LOG_DEBUG(logger) << "path: " << req->GetPath();
-    SERVER_LOG_DEBUG(logger) << "query: " << req->GetQuery();
-    SERVER_LOG_DEBUG(logger) << "fragment: " << req->GetFragment();
-    SERVER_LOG_DEBUG(logger) << "callback: " << req->toString();
     Router::callback cb = m_router->GetCallback(
         http::HttpMethod2String(req->GetMethod()),
         req->GetPath()
@@ -247,7 +303,6 @@ Task HttpServer::handleClient(Socket::ptr client) {
             HttpContext::ptr ctx = std::make_shared<HttpContextResponse>(parser->GetData());
             HandleCallback(ctx);
             std::string data = ctx->m_response->toString();
-            SERVER_LOG_DEBUG(logger) << "Context Data: " <<data;
             sender.reset(data, data.size());
             // 循环发送数据
             int wres = 0;

@@ -10,8 +10,8 @@ namespace server
     static auto logger = SERVER_LOGGER_SYSTEM;
 
 
-    TcpServer::TcpServer(IOManager* worker)
-        : m_worker(worker),
+    TcpServer::TcpServer(int max_thread)
+        : m_worker(IOManager_::GetInstance(max_thread)),
         m_readTimeOut(1000),
         m_name("server/1.0.0"),
         m_isStop(true)

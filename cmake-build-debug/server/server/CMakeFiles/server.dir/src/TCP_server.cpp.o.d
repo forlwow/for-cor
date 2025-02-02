@@ -266,6 +266,7 @@ server/server/CMakeFiles/server.dir/src/TCP_server.cpp.o: \
  /usr/local/include/c++/13.2.0/mutex \
  /usr/local/include/c++/13.2.0/bits/unique_lock.h \
  /home/worker/webserver/server/util/inc/threadsafe_deque.h \
+ /home/worker/webserver/server/util/inc/singleton.h \
  /usr/local/include/c++/13.2.0/cassert /usr/include/assert.h \
  /usr/local/include/c++/13.2.0/set \
  /usr/local/include/c++/13.2.0/bits/stl_tree.h \
@@ -311,7 +312,6 @@ server/server/CMakeFiles/server.dir/src/TCP_server.cpp.o: \
  /usr/local/include/c++/13.2.0/bits/stl_list.h \
  /usr/local/include/c++/13.2.0/bits/list.tcc \
  /home/worker/webserver/server/util/inc/util.h \
- /home/worker/webserver/server/util/inc/singleton.h \
  /home/worker/webserver/server/fiber/inc/fiber.h \
  /home/worker/webserver/server/socket/inc/socket.h \
  /home/worker/webserver/server/socket/inc/concept.h \

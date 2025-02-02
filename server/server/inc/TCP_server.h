@@ -11,7 +11,7 @@ class TcpServer : public std::enable_shared_from_this<TcpServer>
 {
 public:
     typedef std::shared_ptr<TcpServer> ptr;
-    TcpServer(IOManager* worker = IOManager::GetIOManager());
+    TcpServer(int max_thread = 2);
     virtual ~TcpServer();
 
 
@@ -34,7 +34,7 @@ protected:
 
 private:
     std::vector<Socket::ptr> m_sockets;
-    IOManager* m_worker;
+    IOManager::ptr m_worker;
     uint64_t m_readTimeOut;
     std::string m_name;
     bool m_isStop;

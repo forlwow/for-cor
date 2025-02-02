@@ -10,6 +10,7 @@ server/fiber/CMakeFiles/fiber.dir/src/async.cpp.o: /home/worker/webserver/server
   /home/worker/webserver/server/fiber/inc/scheduler_cpp20.h \
   /home/worker/webserver/server/fiber/inc/shared_vars.h \
   /home/worker/webserver/server/util/inc/enums.h \
+  /home/worker/webserver/server/util/inc/singleton.h \
   /home/worker/webserver/server/util/inc/threadsafe_deque.h \
   /usr/include/alloca.h \
   /usr/include/asm-generic/errno-base.h \
@@ -650,6 +651,7 @@ server/fiber/CMakeFiles/fiber.dir/src/fiberfunc_cpp20.cpp.o: /home/worker/webser
   /home/worker/webserver/server/fiber/inc/shared_vars.h \
   /home/worker/webserver/server/socket/inc/concept.h \
   /home/worker/webserver/server/util/inc/enums.h \
+  /home/worker/webserver/server/util/inc/singleton.h \
   /home/worker/webserver/server/util/inc/threadsafe_deque.h \
   /usr/include/alloca.h \
   /usr/include/asm-generic/errno-base.h \
@@ -1778,8 +1780,6 @@ server/fiber/CMakeFiles/fiber.dir/src/scheduler_cpp20.cpp.o: /home/worker/webser
 
 /usr/local/include/c++/13.2.0/bits/localefwd.h:
 
-/usr/local/include/c++/13.2.0/bits/ostream.tcc:
-
 /usr/local/include/c++/13.2.0/bits/cxxabi_forced.h:
 
 /usr/include/x86_64-linux-gnu/bits/unistd_ext.h:
@@ -1789,10 +1789,6 @@ server/fiber/CMakeFiles/fiber.dir/src/scheduler_cpp20.cpp.o: /home/worker/webser
 /usr/include/stdc-predef.h:
 
 /usr/local/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include/stdarg.h:
-
-/usr/include/x86_64-linux-gnu/asm/unistd.h:
-
-/usr/include/asm-generic/bitsperlong.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/wint_t.h:
 
@@ -1844,6 +1840,14 @@ server/fiber/CMakeFiles/fiber.dir/src/scheduler_cpp20.cpp.o: /home/worker/webser
 
 /usr/include/locale.h:
 
+/usr/include/x86_64-linux-gnu/bits/types/time_t.h:
+
+/usr/include/endian.h:
+
+/usr/include/semaphore.h:
+
+/usr/include/x86_64-linux-gnu/bits/pthreadtypes.h:
+
 /usr/include/assert.h:
 
 /usr/local/include/c++/13.2.0/bits/semaphore_base.h:
@@ -1858,11 +1862,9 @@ server/fiber/CMakeFiles/fiber.dir/src/scheduler_cpp20.cpp.o: /home/worker/webser
 
 /usr/local/include/c++/13.2.0/bits/unique_ptr.h:
 
-/usr/include/semaphore.h:
+/usr/include/x86_64-linux-gnu/asm/unistd.h:
 
-/usr/include/endian.h:
-
-/usr/include/x86_64-linux-gnu/bits/pthreadtypes.h:
+/usr/include/asm-generic/bitsperlong.h:
 
 /usr/include/x86_64-linux-gnu/bits/environments.h:
 
@@ -1926,8 +1928,6 @@ server/fiber/CMakeFiles/fiber.dir/src/scheduler_cpp20.cpp.o: /home/worker/webser
 
 /usr/local/include/c++/13.2.0/bits/stl_algo.h:
 
-/usr/include/x86_64-linux-gnu/bits/types/time_t.h:
-
 /home/worker/webserver/server/util/inc/enums.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h:
@@ -1970,7 +1970,15 @@ server/fiber/CMakeFiles/fiber.dir/src/scheduler_cpp20.cpp.o: /home/worker/webser
 
 /usr/include/x86_64-linux-gnu/gnu/stubs.h:
 
+/home/worker/webserver/server/util/inc/singleton.h:
+
 /usr/include/x86_64-linux-gnu/bits/endian.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/clock_t.h:
+
+/usr/include/x86_64-linux-gnu/sys/epoll.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h:
 
 /usr/local/include/c++/13.2.0/cwchar:
 
@@ -2054,11 +2062,7 @@ server/fiber/CMakeFiles/fiber.dir/src/scheduler_cpp20.cpp.o: /home/worker/webser
 
 /usr/local/include/c++/13.2.0/bits/stl_heap.h:
 
-/usr/include/x86_64-linux-gnu/bits/types/clock_t.h:
-
-/usr/include/x86_64-linux-gnu/sys/epoll.h:
-
-/usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h:
+/usr/local/include/c++/13.2.0/bits/ostream.tcc:
 
 /usr/include/pthread.h:
 
@@ -2303,8 +2307,6 @@ server/fiber/CMakeFiles/fiber.dir/src/scheduler_cpp20.cpp.o: /home/worker/webser
 /home/worker/webserver/server/log/inc/log.h:
 
 /home/worker/webserver/server/socket/inc/socket.h:
-
-/home/worker/webserver/server/util/inc/singleton.h:
 
 /home/worker/webserver/server/util/inc/util.h:
 
