@@ -1,6 +1,7 @@
 #include "async.h"
 #include "scheduler.h"
 #include <ctime>
+#include <singleton.h>
 #include <sys/types.h>
 #include <utility>
 #if __cplusplus >= 202002L
@@ -147,11 +148,12 @@ private:
     std::set<TimeEvent::ptr, TimeEvent::TimerCompareLess> m_times;
 };
 
-
+// IO线程池 单例
 class IOManager_: public Scheduler_, public TimeManager{
 public:
     typedef std::shared_ptr<IOManager_> ptr;
     typedef RWMutex RWMutexType;
+    friend ptr;
 
     enum Event{
         NONE    = 0b000,
@@ -197,16 +199,30 @@ private:
         }
         // 只在一个线程中操作 不需要锁
     };
-public:
-    IOManager_(size_t threads_ = 1, const std::string& name_ = "Schedule");
+
+    struct Deleter {
+        void operator()(IOManager_* p) {
+            delete p;
+        }
+    };
+
+protected:
+    IOManager_(size_t threads_ = 1, const std::string& name_ = "IOSchedule");
     ~IOManager_() override;
+public:
+    IOManager_& operator=(IOManager_&) = delete;
+    IOManager_& operator=(const IOManager_&) = delete;
+    IOManager_&& operator=(IOManager_&&) = delete;
+public:
+    static IOManager_::ptr GetInstance(size_t threads_ = 1, const std::string& name_ = "IOSchedule");
 
     int AddEvent(int fd, Event event, Fiber_::ptr cb);
     bool DelEvent(int fd, Event event);
     bool DelFd(int fd);
     bool CancelEvent(int fd, Event event);
 
-    static IOManager_* GetIOManager(){return dynamic_cast<IOManager_*>(Scheduler_::GetScheduler());}
+    // TODO: 改为智能指针
+    static IOManager_* GetIOManager(){return GetInstance().get();}
 
     void start() override;
 
@@ -238,6 +254,7 @@ private:
     RWMutexType m_mutex;
     std::unordered_map<int, FdContext::ptr> m_fdContexts;
     EThread::ptr handlerThread;      // IO处理线程
+
 };
  
 } // namespace server

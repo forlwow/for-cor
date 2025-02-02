@@ -14,7 +14,8 @@
 
 namespace server{
 
-class IOManager: public Scheduler, public TimerManager{
+
+class [[deprecated("Use IOManager_ class")]] IOManager: public Scheduler, public TimerManager{
 public:
     typedef std::shared_ptr<IOManager> ptr;
     typedef RWMutex RWMutexType;

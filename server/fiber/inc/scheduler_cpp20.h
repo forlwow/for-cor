@@ -30,7 +30,6 @@ public:
     bool schedule(task_type task_);
     using submit = decltype(&Scheduler_::schedule);
 
-    static Scheduler_* GetScheduler();
 protected:
     virtual void run();
     virtual void idle(){}

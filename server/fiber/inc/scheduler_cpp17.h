@@ -14,7 +14,7 @@
 
 namespace server {
 
-class Scheduler{
+class [[deprecated("Use Scheduler_ class")]] Scheduler{
 public:
     typedef std::shared_ptr<Scheduler> ptr;
     
