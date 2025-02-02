@@ -284,6 +284,7 @@ server/fiber/CMakeFiles/fiber.dir/src/iomanager_cpp20.cpp.o: \
  /usr/local/include/c++/13.2.0/mutex \
  /usr/local/include/c++/13.2.0/bits/unique_lock.h \
  /home/worker/webserver/server/util/inc/threadsafe_deque.h \
+ /home/worker/webserver/server/util/inc/singleton.h \
  /usr/local/include/c++/13.2.0/cassert /usr/include/assert.h \
  /usr/local/include/c++/13.2.0/set \
  /usr/local/include/c++/13.2.0/bits/stl_tree.h \
@@ -305,7 +306,6 @@ server/fiber/CMakeFiles/fiber.dir/src/iomanager_cpp20.cpp.o: \
  /usr/local/include/c++/13.2.0/bits/stl_list.h \
  /usr/local/include/c++/13.2.0/bits/list.tcc \
  /home/worker/webserver/server/util/inc/util.h \
- /home/worker/webserver/server/util/inc/singleton.h \
  /home/worker/webserver/server/fiber/inc/scheduler_cpp20.h \
  /usr/local/include/c++/13.2.0/cstring /usr/include/string.h \
  /usr/include/strings.h

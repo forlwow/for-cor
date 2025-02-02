@@ -28,8 +28,8 @@
 #define CURRENT_LOG_LEVEL LOG_LEVEL_DEBUG
 
 int main(){
-    // server::test::httpv2_response_test();
-    server::test::test_tcpserver();
+    // server::test::test_tcpserver();
+    server::test::test_httpserver();
 }
 
 

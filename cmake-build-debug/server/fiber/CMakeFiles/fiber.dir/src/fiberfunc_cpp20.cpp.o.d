@@ -281,6 +281,7 @@ server/fiber/CMakeFiles/fiber.dir/src/fiberfunc_cpp20.cpp.o: \
  /usr/local/include/c++/13.2.0/mutex \
  /usr/local/include/c++/13.2.0/bits/unique_lock.h \
  /home/worker/webserver/server/util/inc/threadsafe_deque.h \
+ /home/worker/webserver/server/util/inc/singleton.h \
  /usr/local/include/c++/13.2.0/cassert /usr/include/assert.h \
  /usr/local/include/c++/13.2.0/set \
  /usr/local/include/c++/13.2.0/bits/stl_tree.h \

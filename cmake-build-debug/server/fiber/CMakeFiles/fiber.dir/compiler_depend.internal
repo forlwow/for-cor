@@ -11,6 +11,7 @@ server/fiber/CMakeFiles/fiber.dir/src/async.cpp.o
  /home/worker/webserver/server/fiber/inc/scheduler_cpp20.h
  /home/worker/webserver/server/fiber/inc/shared_vars.h
  /home/worker/webserver/server/util/inc/enums.h
+ /home/worker/webserver/server/util/inc/singleton.h
  /home/worker/webserver/server/util/inc/threadsafe_deque.h
  /usr/include/alloca.h
  /usr/include/asm-generic/errno-base.h
@@ -654,6 +655,7 @@ server/fiber/CMakeFiles/fiber.dir/src/fiberfunc_cpp20.cpp.o
  /home/worker/webserver/server/fiber/inc/shared_vars.h
  /home/worker/webserver/server/socket/inc/concept.h
  /home/worker/webserver/server/util/inc/enums.h
+ /home/worker/webserver/server/util/inc/singleton.h
  /home/worker/webserver/server/util/inc/threadsafe_deque.h
  /usr/include/alloca.h
  /usr/include/asm-generic/errno-base.h
