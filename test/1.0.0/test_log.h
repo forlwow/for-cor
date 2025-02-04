@@ -3,9 +3,10 @@
 
 
 void test_output();
+void test_performance();
 
 inline void test_log(){
-    test_output();
+    test_performance();
 }
 
 #endif 
