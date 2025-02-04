@@ -21,15 +21,13 @@
 #include <csignal>
 #include <vector>
 #include "fiberfunc_cpp20.h"
-#include "test_tcpserver.h"
 
 #define in :
 
 #define CURRENT_LOG_LEVEL LOG_LEVEL_DEBUG
 
-int main(){
-    // server::test::test_tcpserver();
-    server::test::test_httpserver();
+int test_cpp20(){
+    return 0;
 }
 
 
