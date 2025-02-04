@@ -14,6 +14,8 @@
 
 namespace server {
 
+
+
 const char* TabFormatString = "  ";
 
 // FormatItem派生类 负责格式化不同对象
@@ -54,10 +56,14 @@ class LevelFormatItem: public LogFormatter::FormatItem{
 public:
     LevelFormatItem(const std::string& = "") {}
     void format(std::ostream &os, Logger::ptr, LogLevel::Level level, const LogEvent::ptr &event) override{
-        os << LogLevel::ToString(level);
+        os << LogLevel::LevelColor.find(level)->second << LogLevel::ToString(level) << LogLevel::LevelColorEnd;
     }
     inline void format(FILE* file, std::shared_ptr<Logger> logger, const LogEvent::ptr &event) override{
-        fputs(LogLevel::ToString(event->getLevel()), file);
+        // fputs(LogLevel::ToString(event->getLevel()), file);
+        if(file == stdout) 
+            fprintf(file, "%s%-5s%s", LogLevel::LevelColor.find(event->getLevel())->second, LogLevel::ToString(event->getLevel()), LogLevel::LevelColorEnd);
+        else
+            fprintf(file, "%-5s", LogLevel::ToString(event->getLevel()));
     }
 };
 

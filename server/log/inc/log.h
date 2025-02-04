@@ -11,7 +11,7 @@
 #include <memory>
 #include <cstdio>
 #include <util.h>
-
+#include <unordered_map>
 #include <ethread.h>
 #include <singleton.h>
 #include "fiber.h"
@@ -124,21 +124,32 @@ public:
         OFF
     };
 
+    inline static const std::unordered_map<Level, const char*> LevelColor = {
+        {DEBUG, "\e[34m"},
+        {INFO, "\e[32m"},
+        {WARN, "\e[33m"},
+        {ERROR, "\e[95m"},
+        {FATAL, "\e[91m"},
+        {OFF, "\e[39m"},
+        {UNKNOW, "\e[36m"},
+    };
+    inline static const char* LevelColorEnd = "\e[0m";
+
     inline static const char* ToString(LogLevel::Level level) {
         switch (level){
-        #define XX(color, name) \
+        #define XX(name) \
             case LogLevel::name: \
-                return #color#name "\e[0m"; \
+                return #name; \
                 break;
-            XX(\e[34m, DEBUG);
-            XX(\e[32m, INFO);
-            XX(\e[33m, WARN);
-            XX(\e[95m, ERROR);
-            XX(\e[91m, FATAL);
-            XX(\e[39m, OFF);
+            XX(DEBUG);
+            XX(INFO);
+            XX(WARN);
+            XX(ERROR);
+            XX(FATAL);
+            XX(OFF);
         #undef XX
             default:
-                return "\e[36mUNKNOW";
+                return "UNKNOW";
         }
     }
    
