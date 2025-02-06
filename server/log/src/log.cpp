@@ -1,4 +1,5 @@
 #include "log.h"
+#include "init_error.h"
 #include "yaml-cpp/exceptions.h"
 #include "yaml-cpp/node/parse.h"
 #include "yaml-cpp/yaml.h"
@@ -289,14 +290,18 @@ FileLogAppender::FileLogAppender(const std::string &filename)
     : m_filename(filename)
 {
     m_file = fopen(filename.data(), "w");
+    if (m_file == nullptr){
+        std::cerr << "FileLogAppender init err" << std::endl;
+        init_error(LOGAPPENDER_FILE_INIT_ERR);
+    }
 }
 
 void FileLogAppender::log(Logger::ptr logger, const LogEvent::ptr &event) {
     if (event->getLevel() < m_level) return;
     LockGuard lock(m_mutex);
+    // TODO: 错误处理
     if(!m_formatter->format(m_file, logger, event)){
-        reopen();
-        std::cout << "error" << std::endl;
+        std::cerr << "FileLogAppender log error" << std::endl;
     }
 }
 
@@ -321,12 +326,17 @@ void StdoutLogAppender::log(Logger::ptr logger, const LogEvent::ptr &event) {
 LogFormatter::LogFormatter(const std::string &pattern)
     : m_pattern(pattern)
 {
-    init();
+    int res = init();
+    if (res != INIT_OK){
+        std::cerr << "LogFormatter Init error pattern=" << m_pattern << std::endl;
+        init_error(res);
+    }
 }
 
-void LogFormatter::init() {
+int LogFormatter::init() {
     // 格式化 %xxx %xxx{xxx} %%
     // str formatter type
+    bool err = false;
     std::vector<std::tuple<std::string, std::string, int>> vec;
     std::string nstr;
     for (size_t i = 0; i < m_pattern.size(); ++i){
@@ -383,8 +393,9 @@ void LogFormatter::init() {
                 i = n - 1;
                 break;
             case 1:
-                std::cout << "pattern parse error" << m_pattern << " - " << m_pattern.substr(i) << std::endl;
+                std::cerr << "pattern parse error" << m_pattern << " - " << m_pattern.substr(i) << std::endl;
                 vec.emplace_back("<<pattern_error>>", fmt, 0);
+                err = true;
                 break;
         }
     }
@@ -400,6 +411,7 @@ void LogFormatter::init() {
             auto s_format_items = SingletonMap::GetInstance();
             auto it = s_format_items.find(tstr);
             if (it == s_format_items.end()){
+                err = true;
                 m_items.emplace_back(new StringFormatItem("<<error format %" + tstr + ">>"));
             }
             else{
@@ -407,6 +419,7 @@ void LogFormatter::init() {
             }
         }
     }
+    return err ? LOGFORMATTER_INIT_ERR : INIT_OK;
 }
 
 std::string LogFormatter::format(std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event) {
@@ -434,9 +447,10 @@ std::FILE* LogFormatter::format(FILE *file, std::shared_ptr<Logger> logger, LogE
 
 LogManager::LogManager()
 {
-    if (int res = initFromYaml("log.yml")){
-        std::cout << "log file error "<< res << std::endl;
-        init();
+    int res = initFromYaml("log.yml");
+    if (res != INIT_OK){
+        std::cerr << "log file error "<< res << std::endl;
+        server::init_error(res);
     }
     else
         std::cout << "log file OK" << std::endl;
@@ -471,7 +485,7 @@ int LogManager::initFromYaml(const std::string& file_name){
         for(auto logitem: logs){
             std::string logname = logitem.first.as<std::string>();
             if (logname.empty())
-                return 1;
+                return LOGMANAGER_INIT_ERR_EMPTY_LOG_NAME;
             Logger::ptr log = std::make_shared<Logger>(logname);
             for(auto appenditem: logitem.second){
                 LogAppender::ptr appender;
@@ -480,7 +494,7 @@ int LogManager::initFromYaml(const std::string& file_name){
                 std::string level = appenditem["level"].as<std::string>();
                 // 只要有一个没有就失败
                 if (mode.empty() || fmtpat.empty() || level.empty())
-                    return 2;
+                    return LOGMANAGER_INIT_ERR_EMPTY_ITEM;
                 // 创建Appender
                 // TODO: 添加更多输出
                 if(mode == "std"){
@@ -489,16 +503,16 @@ int LogManager::initFromYaml(const std::string& file_name){
                 else if(mode == "file"){
                     auto outname = appenditem["filename"].as<std::string>();
                     if (outname.empty())
-                        return 3;
+                        return LOGMANAGER_INIT_ERR_EMPTY_FILENAME;
                     appender.reset(new FileLogAppender(outname));
                 }
                 else{
-                    return 4;
+                    return LOGMANAGER_INIT_ERR_MODE_NAME_ERR;
                 }
                 // 设置等级
                 auto lv = LogLevel::FromString(level);
                 if (lv == LogLevel::UNKNOW)
-                    return 5;
+                    return LOGMANAGER_INIT_ERR_LEVEL_NAME_ERR;
                 appender->setLevel(lv);
                 // 创建格式化器
                 LogFormatter::ptr fmter(new LogFormatter(fmtpat));
@@ -510,10 +524,10 @@ int LogManager::initFromYaml(const std::string& file_name){
         }
     }
     catch(YAML::Exception error){
-        std::cout << error.msg << std::endl;
-        return 6;
+        std::cerr << error.msg << std::endl;
+        return LOGMANAGER_INIT_ERR_YAML_ERR;
     }
-    return 0;
+    return INIT_OK;
 }
 
 }
