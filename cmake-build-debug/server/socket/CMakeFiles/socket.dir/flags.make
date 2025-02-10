@@ -4,7 +4,7 @@
 # compile CXX with /usr/local/bin/g++
 CXX_DEFINES = -Dsocket_EXPORTS
 
-CXX_INCLUDES = -I/home/worker/webserver/server/log/inc -I/home/worker/webserver/server/util/inc -I/home/worker/webserver/server/ethread/inc -I/home/worker/webserver/server/ecoroutine/inc -I/home/worker/webserver/server/fiber/inc -I/home/worker/webserver/server/socket/inc -I/home/worker/webserver/server/http/inc -I/home/worker/webserver/server/server/inc -I/home/worker/webserver/server/dev -I/home/worker/webserver/server/tests -I/home/worker/webserver/server/ThirdModule/include
+CXX_INCLUDES = -I/home/worker/webserver/server/log/inc -I/home/worker/webserver/server/util/inc -I/home/worker/webserver/server/ethread/inc -I/home/worker/webserver/server/ecoroutine/inc -I/home/worker/webserver/server/fiber/inc -I/home/worker/webserver/server/socket/inc -I/home/worker/webserver/server/http/inc -I/home/worker/webserver/server/server/inc -I/home/worker/webserver/server/dev -I/home/worker/webserver/test -I/home/worker/webserver/server/ThirdModule/include
 
 CXX_FLAGS =  -O0 -w -g2 -ggdb -ldl -std=gnu++20 -fPIC -fdiagnostics-color=always
 
