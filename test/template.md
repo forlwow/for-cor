@@ -8,7 +8,7 @@
 - **编译器**: GCC 13.02
 - **测试工具**: Google Test, JMeter, Wireshark
 - **硬件环境**: 
-  - CPU: Intel(R) Xeon(R) CPU E5-2630 v3 @ 2.40GHz 32核 64线程
+  - CPU: Intel(R) Xeon(R) CPU E5-2630 v3 @ 2.40GHz 16核 32线程
   - 架构：x86_64
   - 内存： 32G
   - 网络带框： 1000Mbps

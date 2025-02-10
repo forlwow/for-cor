@@ -275,6 +275,7 @@ server/log/CMakeFiles/log.dir/src/log.cpp.o: \
  /usr/include/x86_64-linux-gnu/sys/epoll.h \
  /usr/include/x86_64-linux-gnu/bits/epoll.h \
  /home/worker/webserver/server/util/inc/enums.h \
+ /home/worker/webserver/server/util/inc/init_error.h \
  /home/worker/webserver/server/ThirdModule/include/yaml-cpp/exceptions.h \
  /home/worker/webserver/server/ThirdModule/include/yaml-cpp/mark.h \
  /home/worker/webserver/server/ThirdModule/include/yaml-cpp/dll.h \
