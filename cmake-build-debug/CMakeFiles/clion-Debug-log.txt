@@ -1,5 +1,0 @@
-/home/worker/.cache/JetBrains/RemoteDev/dist/bca632c2fbeff_CLion-2024.3.1.1/bin/cmake/linux/x64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "Unix Makefiles" -S /home/worker/webserver -B /home/worker/webserver/cmake-build-debug
-find test files: /home/worker/webserver/test/1.0.0
--- Configuring done (0.0s)
--- Generating done (0.0s)
--- Build files have been written to: /home/worker/webserver/cmake-build-debug
