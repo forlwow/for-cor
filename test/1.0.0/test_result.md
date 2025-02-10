@@ -20,7 +20,7 @@
 - 配置文件：log.yml
 
 **测试代码**
-```cpp
+```c++
 auto system_logger = SERVER_LOGGER_SYSTEM;
 auto file_logger = SERVER_LOGGER("file");
 auto std_logger = SERVER_LOGGER("std");
@@ -104,7 +104,7 @@ _测试10次取平均_
 
 
 测试代码
-```cpp
+```c++
 void test_performance(){
     Timer timer;
     timer.start_count();

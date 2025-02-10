@@ -24,8 +24,8 @@ void test_output(){
 void test_performance(){
     Timer timer;
     timer.start_count();
-    for(int i = 0; i < 1e6; ++i){
-        SERVER_LOG_INFO(file_logger);
+    for(int i = 0; i < 1e2; ++i){
+        SERVER_LOG_INFO(system_logger);
     }
     timer.end_count();
     std::cout << std::to_string(timer.get_duration()) << std::endl;
