@@ -279,7 +279,7 @@ public:
         virtual void format(FILE* file, std::shared_ptr<Logger> logger, const LogEvent::ptr &event) = 0;
     };
 
-    void init();
+    int init();
 
 private:
     std::string m_pattern = "%d{%Y-%m-%d %H:%M:%S}%T%t%T%F%T[%p]%T[%c]%T%f:%l%T%m%n";
@@ -349,8 +349,8 @@ class LogManager: public Singleton<LogManager>{
 public:
     LogManager();
     Logger::ptr getLogger(const std::string &name);
-    void init();
-    int initFromYaml(const std::string& file_name);
+    void init();    // 默认初始化
+    int initFromYaml(const std::string& file_name); //通过配置文件初始化
 
 private:
     std::map<std::string, Logger::ptr> m_loggers;        // 日志起容器
@@ -359,19 +359,4 @@ private:
 
 } // namespace server
 
-/*
-template<typename ...Args>
-inline static server::Logger::ptr CreateFileLogger(const std::string& file_name, Args ...args){
-    server::Logger::ptr log = std::make_shared<server::Logger>(args...);
-    log->addAppender(std::shared_ptr<server::LogAppender>(new server::FileLogAppender(file_name))); 
-    return log;
-}
-
-template<typename ...Args>
-inline static server::Logger::ptr CreateStdLogger(Args ...args){
-    server::Logger::ptr log = std::make_shared<server::Logger>(args...);
-    log->addAppender(std::shared_ptr<server::LogAppender>(new server::StdoutLogAppender)); 
-    return log;
-}
-*/
 #endif //SERVER_LOG_H

@@ -1,1 +1,0 @@
-/usr/local/bin/g++ -fPIC  -O0 -w -g2 -ggdb -ldl -shared -Wl,-soname,libthirdMould.so -o /home/worker/webserver/lib/libthirdMould.so CMakeFiles/thirdMould.dir/include/http_parse/http11_parser.cc.o CMakeFiles/thirdMould.dir/include/http_parse/httpclient_parser.cc.o   -L/home/worker/webserver/server/ThirdModule/lib  -L/home/worker/webserver/lib
