@@ -83,46 +83,30 @@ CMakeFiles/web_server.dir/server/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/web_server.dir/server/main.cpp.s"
 	/usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/worker/webserver/server/main.cpp -o CMakeFiles/web_server.dir/server/main.cpp.s
 
-CMakeFiles/web_server.dir/server/test17.cpp.o: CMakeFiles/web_server.dir/flags.make
-CMakeFiles/web_server.dir/server/test17.cpp.o: /home/worker/webserver/server/test17.cpp
-CMakeFiles/web_server.dir/server/test17.cpp.o: CMakeFiles/web_server.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/worker/webserver/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/web_server.dir/server/test17.cpp.o"
-	/usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/web_server.dir/server/test17.cpp.o -MF CMakeFiles/web_server.dir/server/test17.cpp.o.d -o CMakeFiles/web_server.dir/server/test17.cpp.o -c /home/worker/webserver/server/test17.cpp
+CMakeFiles/web_server.dir/test/test_main.cpp.o: CMakeFiles/web_server.dir/flags.make
+CMakeFiles/web_server.dir/test/test_main.cpp.o: /home/worker/webserver/test/test_main.cpp
+CMakeFiles/web_server.dir/test/test_main.cpp.o: CMakeFiles/web_server.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/worker/webserver/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/web_server.dir/test/test_main.cpp.o"
+	/usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/web_server.dir/test/test_main.cpp.o -MF CMakeFiles/web_server.dir/test/test_main.cpp.o.d -o CMakeFiles/web_server.dir/test/test_main.cpp.o -c /home/worker/webserver/test/test_main.cpp
 
-CMakeFiles/web_server.dir/server/test17.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/web_server.dir/server/test17.cpp.i"
-	/usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/worker/webserver/server/test17.cpp > CMakeFiles/web_server.dir/server/test17.cpp.i
+CMakeFiles/web_server.dir/test/test_main.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/web_server.dir/test/test_main.cpp.i"
+	/usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/worker/webserver/test/test_main.cpp > CMakeFiles/web_server.dir/test/test_main.cpp.i
 
-CMakeFiles/web_server.dir/server/test17.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/web_server.dir/server/test17.cpp.s"
-	/usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/worker/webserver/server/test17.cpp -o CMakeFiles/web_server.dir/server/test17.cpp.s
-
-CMakeFiles/web_server.dir/server/test20.cpp.o: CMakeFiles/web_server.dir/flags.make
-CMakeFiles/web_server.dir/server/test20.cpp.o: /home/worker/webserver/server/test20.cpp
-CMakeFiles/web_server.dir/server/test20.cpp.o: CMakeFiles/web_server.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/worker/webserver/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/web_server.dir/server/test20.cpp.o"
-	/usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/web_server.dir/server/test20.cpp.o -MF CMakeFiles/web_server.dir/server/test20.cpp.o.d -o CMakeFiles/web_server.dir/server/test20.cpp.o -c /home/worker/webserver/server/test20.cpp
-
-CMakeFiles/web_server.dir/server/test20.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/web_server.dir/server/test20.cpp.i"
-	/usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/worker/webserver/server/test20.cpp > CMakeFiles/web_server.dir/server/test20.cpp.i
-
-CMakeFiles/web_server.dir/server/test20.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/web_server.dir/server/test20.cpp.s"
-	/usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/worker/webserver/server/test20.cpp -o CMakeFiles/web_server.dir/server/test20.cpp.s
+CMakeFiles/web_server.dir/test/test_main.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/web_server.dir/test/test_main.cpp.s"
+	/usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/worker/webserver/test/test_main.cpp -o CMakeFiles/web_server.dir/test/test_main.cpp.s
 
 # Object files for target web_server
 web_server_OBJECTS = \
 "CMakeFiles/web_server.dir/server/main.cpp.o" \
-"CMakeFiles/web_server.dir/server/test17.cpp.o" \
-"CMakeFiles/web_server.dir/server/test20.cpp.o"
+"CMakeFiles/web_server.dir/test/test_main.cpp.o"
 
 # External object files for target web_server
 web_server_EXTERNAL_OBJECTS =
 
 /home/worker/webserver/bin/web_server: CMakeFiles/web_server.dir/server/main.cpp.o
-/home/worker/webserver/bin/web_server: CMakeFiles/web_server.dir/server/test17.cpp.o
-/home/worker/webserver/bin/web_server: CMakeFiles/web_server.dir/server/test20.cpp.o
+/home/worker/webserver/bin/web_server: CMakeFiles/web_server.dir/test/test_main.cpp.o
 /home/worker/webserver/bin/web_server: CMakeFiles/web_server.dir/build.make
 /home/worker/webserver/bin/web_server: /home/worker/webserver/lib/liblog.so
 /home/worker/webserver/bin/web_server: /home/worker/webserver/lib/libutil.so
@@ -134,8 +118,9 @@ web_server_EXTERNAL_OBJECTS =
 /home/worker/webserver/bin/web_server: /home/worker/webserver/lib/libhttp.so
 /home/worker/webserver/bin/web_server: /home/worker/webserver/lib/libserver.so
 /home/worker/webserver/bin/web_server: /home/worker/webserver/lib/libthirdMould.so
+/home/worker/webserver/bin/web_server: /home/worker/webserver/lib/libtest.so
 /home/worker/webserver/bin/web_server: CMakeFiles/web_server.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/worker/webserver/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable /home/worker/webserver/bin/web_server"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/worker/webserver/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable /home/worker/webserver/bin/web_server"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/web_server.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

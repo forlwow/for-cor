@@ -130,6 +130,30 @@ util/fast:
 	cd /home/worker/webserver/cmake-build-debug && $(MAKE) $(MAKESILENT) -f server/util/CMakeFiles/util.dir/build.make server/util/CMakeFiles/util.dir/build
 .PHONY : util/fast
 
+src/fqueue.o: src/fqueue.cpp.o
+.PHONY : src/fqueue.o
+
+# target to build an object file
+src/fqueue.cpp.o:
+	cd /home/worker/webserver/cmake-build-debug && $(MAKE) $(MAKESILENT) -f server/util/CMakeFiles/util.dir/build.make server/util/CMakeFiles/util.dir/src/fqueue.cpp.o
+.PHONY : src/fqueue.cpp.o
+
+src/fqueue.i: src/fqueue.cpp.i
+.PHONY : src/fqueue.i
+
+# target to preprocess a source file
+src/fqueue.cpp.i:
+	cd /home/worker/webserver/cmake-build-debug && $(MAKE) $(MAKESILENT) -f server/util/CMakeFiles/util.dir/build.make server/util/CMakeFiles/util.dir/src/fqueue.cpp.i
+.PHONY : src/fqueue.cpp.i
+
+src/fqueue.s: src/fqueue.cpp.s
+.PHONY : src/fqueue.s
+
+# target to generate assembly for a file
+src/fqueue.cpp.s:
+	cd /home/worker/webserver/cmake-build-debug && $(MAKE) $(MAKESILENT) -f server/util/CMakeFiles/util.dir/build.make server/util/CMakeFiles/util.dir/src/fqueue.cpp.s
+.PHONY : src/fqueue.cpp.s
+
 src/hook.o: src/hook.cpp.o
 .PHONY : src/hook.o
 
@@ -235,6 +259,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... util"
+	@echo "... src/fqueue.o"
+	@echo "... src/fqueue.i"
+	@echo "... src/fqueue.s"
 	@echo "... src/hook.o"
 	@echo "... src/hook.i"
 	@echo "... src/hook.s"

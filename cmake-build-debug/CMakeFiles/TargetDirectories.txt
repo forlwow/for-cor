@@ -1,6 +1,9 @@
 /home/worker/webserver/cmake-build-debug/CMakeFiles/web_server.dir
 /home/worker/webserver/cmake-build-debug/CMakeFiles/edit_cache.dir
 /home/worker/webserver/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/worker/webserver/cmake-build-debug/test/CMakeFiles/test.dir
+/home/worker/webserver/cmake-build-debug/test/CMakeFiles/edit_cache.dir
+/home/worker/webserver/cmake-build-debug/test/CMakeFiles/rebuild_cache.dir
 /home/worker/webserver/cmake-build-debug/server/CMakeFiles/edit_cache.dir
 /home/worker/webserver/cmake-build-debug/server/CMakeFiles/rebuild_cache.dir
 /home/worker/webserver/cmake-build-debug/server/log/CMakeFiles/log.dir

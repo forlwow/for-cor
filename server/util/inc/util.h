@@ -26,6 +26,10 @@ public:
     NullStream& operator<<(std::unordered_map<std::string, std::string>) { return *this; }
 };
 
+struct NullStruct{
+
+};
+
 /*
     合法路径检查
     基本路径：/user/profile

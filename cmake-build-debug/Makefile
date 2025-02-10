@@ -130,6 +130,19 @@ web_server/fast:
 .PHONY : web_server/fast
 
 #=============================================================================
+# Target rules for targets named test
+
+# Build rule for target.
+test: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test
+.PHONY : test
+
+# fast build rule for target.
+test/fast:
+	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/build
+.PHONY : test/fast
+
+#=============================================================================
 # Target rules for targets named log
 
 # Build rule for target.
@@ -283,53 +296,29 @@ server/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/web_server.dir/build.make CMakeFiles/web_server.dir/server/main.cpp.s
 .PHONY : server/main.cpp.s
 
-server/test17.o: server/test17.cpp.o
-.PHONY : server/test17.o
+test/test_main.o: test/test_main.cpp.o
+.PHONY : test/test_main.o
 
 # target to build an object file
-server/test17.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/web_server.dir/build.make CMakeFiles/web_server.dir/server/test17.cpp.o
-.PHONY : server/test17.cpp.o
+test/test_main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/web_server.dir/build.make CMakeFiles/web_server.dir/test/test_main.cpp.o
+.PHONY : test/test_main.cpp.o
 
-server/test17.i: server/test17.cpp.i
-.PHONY : server/test17.i
-
-# target to preprocess a source file
-server/test17.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/web_server.dir/build.make CMakeFiles/web_server.dir/server/test17.cpp.i
-.PHONY : server/test17.cpp.i
-
-server/test17.s: server/test17.cpp.s
-.PHONY : server/test17.s
-
-# target to generate assembly for a file
-server/test17.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/web_server.dir/build.make CMakeFiles/web_server.dir/server/test17.cpp.s
-.PHONY : server/test17.cpp.s
-
-server/test20.o: server/test20.cpp.o
-.PHONY : server/test20.o
-
-# target to build an object file
-server/test20.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/web_server.dir/build.make CMakeFiles/web_server.dir/server/test20.cpp.o
-.PHONY : server/test20.cpp.o
-
-server/test20.i: server/test20.cpp.i
-.PHONY : server/test20.i
+test/test_main.i: test/test_main.cpp.i
+.PHONY : test/test_main.i
 
 # target to preprocess a source file
-server/test20.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/web_server.dir/build.make CMakeFiles/web_server.dir/server/test20.cpp.i
-.PHONY : server/test20.cpp.i
+test/test_main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/web_server.dir/build.make CMakeFiles/web_server.dir/test/test_main.cpp.i
+.PHONY : test/test_main.cpp.i
 
-server/test20.s: server/test20.cpp.s
-.PHONY : server/test20.s
+test/test_main.s: test/test_main.cpp.s
+.PHONY : test/test_main.s
 
 # target to generate assembly for a file
-server/test20.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/web_server.dir/build.make CMakeFiles/web_server.dir/server/test20.cpp.s
-.PHONY : server/test20.cpp.s
+test/test_main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/web_server.dir/build.make CMakeFiles/web_server.dir/test/test_main.cpp.s
+.PHONY : test/test_main.cpp.s
 
 # Help Target
 help:
@@ -347,18 +336,16 @@ help:
 	@echo "... log"
 	@echo "... server"
 	@echo "... socket"
+	@echo "... test"
 	@echo "... thirdMould"
 	@echo "... util"
 	@echo "... web_server"
 	@echo "... server/main.o"
 	@echo "... server/main.i"
 	@echo "... server/main.s"
-	@echo "... server/test17.o"
-	@echo "... server/test17.i"
-	@echo "... server/test17.s"
-	@echo "... server/test20.o"
-	@echo "... server/test20.i"
-	@echo "... server/test20.s"
+	@echo "... test/test_main.o"
+	@echo "... test/test_main.i"
+	@echo "... test/test_main.s"
 .PHONY : help
 
 

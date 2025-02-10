@@ -66,7 +66,7 @@ Generater<T> _range(T begin, T end, T step){
 template<typename T = int>
 Generater<T> range(T end){return _range(0, end, 1);}
 template<typename T = int>
-Generater<T> range(T begin, T end){return _range(begin, end, 1);}
+Generater<T> range(T begin, T end){return _range(begin, end, 0);}
 template<typename T = int>
 Generater<T> range(T begin, T end, T step){return _range(begin, end, step);}
 
