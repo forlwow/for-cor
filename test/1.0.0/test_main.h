@@ -12,23 +12,11 @@
 #include <atomic>
 #include <unistd.h>
 #include "range.h"
+#include "time_wheel.h"
 
 int test_main(){
     std::cout << "Test Version 1.0.0" << std::endl;
-    test_que();
-    // std::shared_ptr<int> p(new int);
-    // std::shared_ptr<int> tmp;
-    // server::util::fpipe<std::shared_ptr<int>, 1> pipe;
-    //
-    // SERVER_LOG_DEBUG(logger) << "count1:" << p.use_count();
-    // pipe.write(p, false);
-    // SERVER_LOG_DEBUG(logger) << "count2:" << p.use_count();
-    // pipe.write(p, false);
-    // SERVER_LOG_DEBUG(logger) << "count3:" << p.use_count();
-    // pipe.read_block(tmp);
-    // SERVER_LOG_DEBUG(logger) << "count4:" << p.use_count();
-    // pipe.read_block(tmp);
-    // SERVER_LOG_DEBUG(logger) << "count5:" << p.use_count();
+    server::util::TimeWheel tm(100);
     return 0;
 }
 

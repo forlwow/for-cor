@@ -1,9 +1,3 @@
 /build
-/.vscode
-/.idea
 /.cache
-/server/tests
-/clion-work/
-/cmake-build-debug/
-/server/log/info.md
 *.TODO.md
