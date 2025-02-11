@@ -1,6 +1,0 @@
-<component name="InspectionProjectProfileManager">
-  <profile version="1.0">
-    <option name="myName" value="Project Default" />
-    <inspection_tool class="TodoComment" enabled="false" level="HINT" enabled_by_default="false" editorAttributes="HINT" />
-  </profile>
-</component>
