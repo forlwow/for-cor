@@ -16,7 +16,7 @@
 
 int test_main(){
     std::cout << "Test Version 1.0.0" << std::endl;
-    server::util::TimeWheel tm(100);
+    test_timewheel();
     return 0;
 }
 

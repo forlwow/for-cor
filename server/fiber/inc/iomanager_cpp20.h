@@ -33,7 +33,7 @@ struct TimeEvent{
     TimeEvent(timeval t): m_until(t){}
 
     TimeEvent(int m_ms, bool is_cir, Fiber_::ptr cb)
-        : m_cycle_ms(m_ms), m_iscirculate(is_cir), m_cb(cb)
+        :  m_iscirculate(is_cir), m_cycle_ms(m_ms), m_cb(cb)
     {
         gettimeofday(&m_until, NULL);
         m_until.tv_sec += m_ms / 1000;

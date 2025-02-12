@@ -31,11 +31,19 @@ typedef struct TimeEvent {
 // 事件链表 使用头结点
 typedef struct TimeEventList {
     typedef std::shared_ptr<TimeEventList> ptr;
-    std::list<TimeEvent_t::ptr> m_events;
+    TimeEventList()=default;
+    ~TimeEventList()=default;
 
-    void splice_front(TimeEventList::ptr list) {
-        m_events.splice(m_events.begin(), list->m_events, list->m_events.begin());
+    // 从目标list中转移尾部元素到自身尾部
+    void splice_back(TimeEventList &list) {
+        m_events.push_back(list.m_events.back());
+        list.m_events.pop_back();
     }
+    // 从目标list中转移尾部元素到自身尾部
+    void splice_back(TimeEventList *list){
+        splice_back(*list);
+    }
+    TimeEvent_t::ptr pop_back() { auto res = m_events.back(); m_events.pop_back(); return res; }
 
     bool empty() const { return m_events.empty(); }
 
@@ -43,6 +51,7 @@ typedef struct TimeEventList {
         m_events.push_back(event);
     }
 
+    std::vector<TimeEvent_t::ptr> m_events;
 }TimeEventList_t;
 
 constexpr uint16_t kMsPerSec = 1000;
@@ -59,14 +68,13 @@ class TimeWheel {
 public:
     typedef std::shared_ptr<TimeWheel> ptr;
     typedef void(*func_callback_t)(Fiber::ptr);
-    TimeWheel(uint16_t step_ms, uint64_t max_ms = kTimeWheelMaxMs);
+    TimeWheel(uint16_t step_ms = kTimeWheelTickMs, uint64_t max_ms = kTimeWheelMaxMs);
 
     // 添加事件
     void AddEvent(
         Fiber::ptr event,
-        bool circle = false,
-        uint16_t ms = kTimeWheelTickMs, uint8_t s = 0, uint8_t min = 0, uint8_t hour = 0,
-        bool cancel = true
+        uint16_t ms = kTimeWheelTickMs*100, uint8_t s = 0, uint8_t min = 0, uint8_t hour = 0,
+        bool circle = true // 是否循环执行
         );
     // 取消事件，在下一轮执行时取消
     // 返回取消是否成功
@@ -77,20 +85,22 @@ public:
 
     uint16_t GetStepMs() const {return m_step_ms_;}
 
-private:
+    void SetCallBack(func_callback_t cb) {m_cb = cb;}// 设置处理函数
+
     void tick();
 
-    void handle_events(TimeEventList_t::ptr);
+
+    void handle_events(TimeEventList_t&);
 
 private:
     func_callback_t m_cb = [](Fiber::ptr cb)->void{cb->swapIn();}; // 回调函数，定时值调用这个函数执行事件的fiber
     const uint16_t m_step_ms_;
-    TimePos_t m_cur_timepos_;
+    TimePos_t m_cur_timepos_ = {0, 0, 0, 0};
 
-    std::vector<TimeEventList_t::ptr> m_slot_ms_;
-    std::vector<TimeEventList_t::ptr> m_slot_s_;
-    std::vector<TimeEventList_t::ptr> m_slot_min_;
-    std::vector<TimeEventList_t::ptr> m_slot_hour_;
+    std::vector<TimeEventList_t> m_slot_ms_;
+    std::vector<TimeEventList_t> m_slot_s_;
+    std::vector<TimeEventList_t> m_slot_min_;
+    std::vector<TimeEventList_t> m_slot_hour_;
 };
 
 }

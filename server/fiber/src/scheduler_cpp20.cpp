@@ -85,6 +85,7 @@ void Scheduler_::run(){
     }
 }
 
+// 等待time秒，小于0则无线阻塞
 void Scheduler_::wait(int time){
     if (time < 0)
         while(1);
