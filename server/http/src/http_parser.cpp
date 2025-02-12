@@ -235,7 +235,7 @@ int on_request_url_complete_v2(llhttp_t *llparser){
     int n = buf.size();
     int query = buf.size();
     int frag = query;
-    for (int i = 0; i < buf.size(); ++i) {
+    for (auto i = 0; i < buf.size(); ++i) {
         if (buf.at(i) == '?') {
             query = i;
         }

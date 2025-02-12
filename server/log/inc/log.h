@@ -10,7 +10,6 @@
 #include <list>
 #include <memory>
 #include <cstdio>
-#include <util.h>
 #include <unordered_map>
 #include <ethread.h>
 #include <singleton.h>
