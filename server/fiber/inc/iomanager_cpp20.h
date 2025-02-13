@@ -3,6 +3,7 @@
 #include <ctime>
 #include <singleton.h>
 #include <sys/types.h>
+#include <memory>
 #include <utility>
 #if __cplusplus >= 202002L
 #ifndef IOMANAGER_20_H
@@ -27,7 +28,7 @@ struct TimeEvent{
     typedef std::shared_ptr<TimeEvent> ptr;
     static TimeEvent::ptr GetNow(){
         timeval cur;
-        gettimeofday(&cur, NULL);
+        gettimeofday(&cur, nullptr);
         return std::make_shared<TimeEvent>(cur);
     }
     TimeEvent(timeval t): m_until(t){}
@@ -39,12 +40,14 @@ struct TimeEvent{
         m_until.tv_sec += m_ms / 1000;
         m_until.tv_usec += (m_ms % 1000) * 1000;
     }
+    // 刷新剩余时间
     void refresh(){
         gettimeofday(&m_until, NULL);
         m_until.tv_sec += m_cycle_ms / 1000;
         m_until.tv_usec += (m_cycle_ms % 1000) * 100;
     }
 
+    // 获取剩余时间ms
     int getLeftTime(){
         timeval cur;
         gettimeofday(&cur, NULL);
@@ -52,6 +55,7 @@ struct TimeEvent{
         return res;
     }
 
+    // 执行内部函数
     void trigger(){
         if(!m_cb->done())
             m_cb->swapIn();
@@ -73,7 +77,8 @@ struct TimeEvent{
             }
         }
     }
-    
+
+    // 比较函数 <
     struct TimerCompareLess{
         bool operator() (const TimeEvent::ptr& l, const TimeEvent::ptr& r) const {
             if (l->getSec() < r->getSec()){
@@ -116,8 +121,8 @@ public:
         m_times.insert(timer);
     }
     void addTimer(int m_ms, bool is_cir, std::function<void()> cb){
-        Fiber_::ptr fib = FuncFiber::ptr(new FuncFiber(cb));
-        auto te = TimeEvent::ptr(new TimeEvent(m_ms, is_cir, fib));
+        Fiber_::ptr fib = std::make_shared<FuncFiber>(cb);
+        auto te = std::make_shared<TimeEvent>(m_ms, is_cir, fib);
         m_times.insert(te);
     }
 
@@ -234,7 +239,7 @@ public:
     }
 
     void addTimer(TimeEvent::ptr timer){
-        TimeManager::addTimer(std::move(timer));
+        TimeManager::addTimer(timer);
         if (timer->m_cycle_ms < 3000){
             interruptEpoll();
         }
