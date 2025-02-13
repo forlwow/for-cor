@@ -8,6 +8,7 @@
 #include <string>
 #include <sys/socket.h>
 #include <thread>
+#include <valarray>
 #if __cplusplus >= 202002L
 #include "iomanager_cpp20.h"
 #include "ethread.h"
@@ -200,13 +201,21 @@ void IOManager_::idle(){
         do{
             ret = epoll_wait(m_epfd, events, MAX_EVENTS, next_time);
             if(ret == -1 && errno == EINTR){}
+            else if(ret >= 0){break;}
             else {
+                SERVER_LOG_FATAL(g_logger) << "IOManager epoll wait error: " << errno << " str=" << std::string_view(strerror(errno));
+                m_stopping = true;
                 break;
             }
         }while(true);
-
+        // 处理到期定时器
         for(auto exp : GetExpireTimers()){
+            // SERVER_LOG_DEBUG(g_logger) << "IOManager expire timer expired";
             if(exp->GetFunc() && !exp->GetFunc()->done()){
+                if (exp->m_iscirculate){
+                    exp->refresh();
+                    addTimer(exp);
+                }
                 schedule(exp->GetFunc());
             }
         }
@@ -260,6 +269,7 @@ void IOManager_::run(){
 
 bool IOManager_::addInterrupt(){
     if(pipe(m_interruptFd) == -1){
+        SERVER_LOG_ERROR(g_logger) << "IOManager pipe error: " << errno << " str=" << std::string_view(strerror(errno));
         return false;
     }
     AddEvent(m_interruptFd[0], READ, FuncFiber::CreatePtr([fd = m_interruptFd[0]]{
@@ -273,6 +283,7 @@ bool IOManager_::interruptEpoll(){
     if(m_interruptFd[1] == -1){
         return false;
     }
+    // SERVER_LOG_INFO(g_logger) << "IOManager epoll interrupt";
     write(m_interruptFd[1], "1", 1);
     return true;
 }
