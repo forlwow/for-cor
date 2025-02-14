@@ -86,25 +86,31 @@ void test_que(){
 auto test_timewheel_func = [](){
     SERVER_LOG_DEBUG(logger) << "time func";
 };
+auto test_timewheel_func2 = [](){
+    SERVER_LOG_DEBUG(logger) << "time func2";
+};
 
 void tick(server::util::TimeWheel::ptr tw) {
     SERVER_LOG_DEBUG(logger) << "tick";
+    std::this_thread::sleep_for(std::chrono::milliseconds(tw->GetStepMs()));
     tw->tick();
 }
 
 int test_timewheel() {
     auto io = server::IOManager_::GetInstance(5);
-    // server::util::TimeWheel::ptr timewheel = std::make_shared<server::util::TimeWheel>();
-    // timewheel->AddEvent(
-    //     std::make_shared<server::FuncFiber>(test_timewheel_func),
-    //     500, 1, 0, 0
-    //     );
-    // io->addTimer(timewheel->GetStepMs(), true, std::bind_front(::tick, timewheel));
-    io->addTimer(4000, true,
-        []{
-            SERVER_LOG_DEBUG(logger) << "test_timewheel";
-        }
+    server::util::TimeWheel::ptr timewheel = std::make_shared<server::util::TimeWheel>(50);
+    timewheel->AddEvent(
+        std::make_shared<server::FuncFiber>(test_timewheel_func2),
+        0, 2, 0, 0
         );
+    timewheel->AddEvent(
+        std::make_shared<server::FuncFiber>(test_timewheel_func),
+        0, 1, 0, 0
+        );
+    io->addTimer(timewheel->GetStepMs(), true, std::bind_front(::tick, timewheel));
+    // while (true) {
+    //     tick(timewheel);
+    // }
     io->start();
     io->wait();
     return 0;
