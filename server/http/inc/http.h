@@ -205,7 +205,7 @@ public:
     const MapType& GetHeaders() const {return m_headers;}
 
     void SetStatus(HttpStatus k)  { m_status = k;}
-    void SetVersion(uint8_t k)  { m_version;}
+    void SetVersion(uint8_t k)  { m_version = k;}
     void SetBody(std::string_view k)  { m_body = k;}
     void SetReason(std::string_view k) { m_reason = k;}
     void SetHeaders(const std::string& key, std::string_view value)  { m_headers[key] = value;}

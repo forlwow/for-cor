@@ -8,6 +8,7 @@
 #include <string>
 #include <sys/socket.h>
 #include <thread>
+#include <valarray>
 #if __cplusplus >= 202002L
 #include "iomanager_cpp20.h"
 #include "ethread.h"
@@ -25,6 +26,7 @@
 #include <unistd.h>
 #include <memory>
 #include <utility>
+#include "util.h"
 
 
 namespace server{
@@ -190,22 +192,36 @@ void IOManager_::idle(){
            events, 
            [](epoll_event* ptr){delete [] ptr;}
     );
-    uint64_t next_time = UINT64_MAX;
+    int next_time = INT32_MAX;
     while (!m_stopping) {
         int ret;
-        const uint64_t MAX_TIMEOUT = 3000;
+        const int MAX_TIMEOUT = 3000;
         next_time = GetNextTimeDuration();
         next_time = next_time > MAX_TIMEOUT ? MAX_TIMEOUT : next_time;
+        if (next_time == -1) {
+            next_time = MAX_TIMEOUT;
+        }
+        // SERVER_LOG_DEBUG(g_logger) << "next_time: " << next_time;
         do{
             ret = epoll_wait(m_epfd, events, MAX_EVENTS, next_time);
             if(ret == -1 && errno == EINTR){}
+            else if(ret >= 0){break;}
             else {
+                SERVER_LOG_FATAL(g_logger) << "IOManager epoll wait error: " << errno << " str=" << std::string_view(strerror(errno));
+                m_stopping = true;
                 break;
             }
         }while(true);
-
-        for(auto exp : GetExpireTimers()){
+        // 处理到期定时器
+        auto timers = GetExpireTimers();
+        // SERVER_LOG_DEBUG(g_logger) << "IOManager left timers: " << size();
+        for(auto exp : timers){
+            // SERVER_LOG_DEBUG(g_logger) << "IOManager expire timer expired";
             if(exp->GetFunc() && !exp->GetFunc()->done()){
+                if (exp->m_iscirculate){
+                    exp->refresh();
+                    addTimer(exp);
+                }
                 schedule(exp->GetFunc());
             }
         }
@@ -213,9 +229,9 @@ void IOManager_::idle(){
             ReadLockGuard rlock(m_mutex);
             for(int i = 0; i < ret; ++i){
                 epoll_event cur_evt = events[i];
-                SERVER_LOG_INFO(g_logger) << "epoll accept fd:" << cur_evt.data.fd 
-                                                << " write:" << (bool)(cur_evt.events & EPOLLOUT)
-                                                << " read:" << (bool)(cur_evt.events & EPOLLIN);
+                // SERVER_LOG_INFO(g_logger) << "epoll accept fd:" << cur_evt.data.fd
+                //                                 << " write:" << (bool)(cur_evt.events & EPOLLOUT)
+                //                                 << " read:" << (bool)(cur_evt.events & EPOLLIN);
                 auto cur_fdcont = m_fdContexts[cur_evt.data.fd];
                 assert(cur_fdcont);
                 // 描述符出错或已关闭
@@ -259,11 +275,18 @@ void IOManager_::run(){
 
 bool IOManager_::addInterrupt(){
     if(pipe(m_interruptFd) == -1){
+        // SERVER_LOG_ERROR(g_logger) << "IOManager pipe error: " << errno << " str=" << std::string_view(strerror(errno));
         return false;
     }
+    int flags = fcntl(m_interruptFd[0], F_GETFL);
+    if (flags == -1){SERVER_LOG_ERROR(g_logger) << "IOManager read pipe get flag fail";}
+    flags |= O_NONBLOCK;
+    int res = fcntl(m_interruptFd[0], F_SETFL, flags);
+    if (res == -1){SERVER_LOG_ERROR(g_logger) << "IOManager read pipe set flag fail";}
+
     AddEvent(m_interruptFd[0], READ, FuncFiber::CreatePtr([fd = m_interruptFd[0]]{
         char bytes;
-        while (read(fd, &bytes, 1) != 0);
+        while (read(fd, &bytes, 1) > 0);
     }));
     return true;
 }
@@ -272,6 +295,7 @@ bool IOManager_::interruptEpoll(){
     if(m_interruptFd[1] == -1){
         return false;
     }
+    // SERVER_LOG_INFO(g_logger) << "IOManager epoll interrupt";
     write(m_interruptFd[1], "1", 1);
     return true;
 }
