@@ -43,7 +43,11 @@ typedef struct TimeEventList {
     void splice_back(TimeEventList *list){
         splice_back(*list);
     }
-    TimeEvent_t::ptr pop_back() { auto res = m_events.back(); m_events.pop_back(); return res; }
+    TimeEvent_t::ptr pop_back() {
+        auto res = m_events.back();
+        m_events.pop_back();
+        return res;
+    }
 
     bool empty() const { return m_events.empty(); }
 

@@ -223,9 +223,9 @@ void IOManager_::idle(){
             ReadLockGuard rlock(m_mutex);
             for(int i = 0; i < ret; ++i){
                 epoll_event cur_evt = events[i];
-                SERVER_LOG_INFO(g_logger) << "epoll accept fd:" << cur_evt.data.fd 
-                                                << " write:" << (bool)(cur_evt.events & EPOLLOUT)
-                                                << " read:" << (bool)(cur_evt.events & EPOLLIN);
+                // SERVER_LOG_INFO(g_logger) << "epoll accept fd:" << cur_evt.data.fd
+                //                                 << " write:" << (bool)(cur_evt.events & EPOLLOUT)
+                //                                 << " read:" << (bool)(cur_evt.events & EPOLLIN);
                 auto cur_fdcont = m_fdContexts[cur_evt.data.fd];
                 assert(cur_fdcont);
                 // 描述符出错或已关闭
@@ -269,7 +269,7 @@ void IOManager_::run(){
 
 bool IOManager_::addInterrupt(){
     if(pipe(m_interruptFd) == -1){
-        SERVER_LOG_ERROR(g_logger) << "IOManager pipe error: " << errno << " str=" << std::string_view(strerror(errno));
+        // SERVER_LOG_ERROR(g_logger) << "IOManager pipe error: " << errno << " str=" << std::string_view(strerror(errno));
         return false;
     }
     AddEvent(m_interruptFd[0], READ, FuncFiber::CreatePtr([fd = m_interruptFd[0]]{
