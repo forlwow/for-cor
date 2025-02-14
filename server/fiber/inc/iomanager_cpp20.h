@@ -1,6 +1,7 @@
 #include "async.h"
 #include "scheduler.h"
 #include <ctime>
+#include <log.h>
 #include <singleton.h>
 #include <sys/types.h>
 #include <memory>
@@ -44,7 +45,7 @@ struct TimeEvent{
     void refresh(){
         gettimeofday(&m_until, NULL);
         m_until.tv_sec += m_cycle_ms / 1000;
-        m_until.tv_usec += (m_cycle_ms % 1000) * 100;
+        m_until.tv_usec += (m_cycle_ms % 1000) * 1000;
     }
 
     // 获取剩余时间ms
@@ -126,16 +127,14 @@ public:
         m_times.insert(te);
     }
 
-    // 获取已经过期的定时器
+    // 返回并删除已经过期的定时器
+    // 不会重新插入循环计时器，需要手动刷新并插入
     std::vector<TimeEvent::ptr> GetExpireTimers(){
         std::vector<TimeEvent::ptr> res;
         auto curtime = TimeEvent::GetNow();
         auto iter = m_times.upper_bound(curtime);
         for(auto it = m_times.begin(); it != iter;++it){
             res.push_back(*it);
-            if ((*it)->m_iscirculate){
-                m_times.insert(*it);
-            }
         }
         m_times.erase(m_times.begin(), iter);
         return res;
@@ -148,6 +147,7 @@ public:
         }
         return (*m_times.begin())->getLeftTime();
     }
+    int size() const {return m_times.size();}
 
 private:
     std::set<TimeEvent::ptr, TimeEvent::TimerCompareLess> m_times;

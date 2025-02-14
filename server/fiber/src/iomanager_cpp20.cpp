@@ -192,12 +192,16 @@ void IOManager_::idle(){
            events, 
            [](epoll_event* ptr){delete [] ptr;}
     );
-    uint64_t next_time = UINT64_MAX;
+    int next_time = INT32_MAX;
     while (!m_stopping) {
         int ret;
-        const uint64_t MAX_TIMEOUT = 3000;
+        const int MAX_TIMEOUT = 3000;
         next_time = GetNextTimeDuration();
         next_time = next_time > MAX_TIMEOUT ? MAX_TIMEOUT : next_time;
+        if (next_time == -1) {
+            next_time = MAX_TIMEOUT;
+        }
+        // SERVER_LOG_DEBUG(g_logger) << "next_time: " << next_time;
         do{
             ret = epoll_wait(m_epfd, events, MAX_EVENTS, next_time);
             if(ret == -1 && errno == EINTR){}
@@ -209,7 +213,9 @@ void IOManager_::idle(){
             }
         }while(true);
         // 处理到期定时器
-        for(auto exp : GetExpireTimers()){
+        auto timers = GetExpireTimers();
+        // SERVER_LOG_DEBUG(g_logger) << "IOManager left timers: " << size();
+        for(auto exp : timers){
             // SERVER_LOG_DEBUG(g_logger) << "IOManager expire timer expired";
             if(exp->GetFunc() && !exp->GetFunc()->done()){
                 if (exp->m_iscirculate){
@@ -272,9 +278,15 @@ bool IOManager_::addInterrupt(){
         // SERVER_LOG_ERROR(g_logger) << "IOManager pipe error: " << errno << " str=" << std::string_view(strerror(errno));
         return false;
     }
+    int flags = fcntl(m_interruptFd[0], F_GETFL);
+    if (flags == -1){SERVER_LOG_ERROR(g_logger) << "IOManager read pipe get flag fail";}
+    flags |= O_NONBLOCK;
+    int res = fcntl(m_interruptFd[0], F_SETFL, flags);
+    if (res == -1){SERVER_LOG_ERROR(g_logger) << "IOManager read pipe set flag fail";}
+
     AddEvent(m_interruptFd[0], READ, FuncFiber::CreatePtr([fd = m_interruptFd[0]]{
         char bytes;
-        while (read(fd, &bytes, 1) != 0);
+        while (read(fd, &bytes, 1) > 0);
     }));
     return true;
 }
