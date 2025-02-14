@@ -1,8 +1,10 @@
 #include "async.h"
 #include "scheduler.h"
 #include <ctime>
+#include <log.h>
 #include <singleton.h>
 #include <sys/types.h>
+#include <memory>
 #include <utility>
 #if __cplusplus >= 202002L
 #ifndef IOMANAGER_20_H
@@ -27,24 +29,26 @@ struct TimeEvent{
     typedef std::shared_ptr<TimeEvent> ptr;
     static TimeEvent::ptr GetNow(){
         timeval cur;
-        gettimeofday(&cur, NULL);
+        gettimeofday(&cur, nullptr);
         return std::make_shared<TimeEvent>(cur);
     }
     TimeEvent(timeval t): m_until(t){}
 
     TimeEvent(int m_ms, bool is_cir, Fiber_::ptr cb)
-        : m_cycle_ms(m_ms), m_iscirculate(is_cir), m_cb(cb)
+        :  m_iscirculate(is_cir), m_cycle_ms(m_ms), m_cb(cb)
     {
         gettimeofday(&m_until, NULL);
         m_until.tv_sec += m_ms / 1000;
         m_until.tv_usec += (m_ms % 1000) * 1000;
     }
+    // 刷新剩余时间
     void refresh(){
         gettimeofday(&m_until, NULL);
         m_until.tv_sec += m_cycle_ms / 1000;
-        m_until.tv_usec += (m_cycle_ms % 1000) * 100;
+        m_until.tv_usec += (m_cycle_ms % 1000) * 1000;
     }
 
+    // 获取剩余时间ms
     int getLeftTime(){
         timeval cur;
         gettimeofday(&cur, NULL);
@@ -52,6 +56,7 @@ struct TimeEvent{
         return res;
     }
 
+    // 执行内部函数
     void trigger(){
         if(!m_cb->done())
             m_cb->swapIn();
@@ -73,7 +78,8 @@ struct TimeEvent{
             }
         }
     }
-    
+
+    // 比较函数 <
     struct TimerCompareLess{
         bool operator() (const TimeEvent::ptr& l, const TimeEvent::ptr& r) const {
             if (l->getSec() < r->getSec()){
@@ -116,21 +122,19 @@ public:
         m_times.insert(timer);
     }
     void addTimer(int m_ms, bool is_cir, std::function<void()> cb){
-        Fiber_::ptr fib = FuncFiber::ptr(new FuncFiber(cb));
-        auto te = TimeEvent::ptr(new TimeEvent(m_ms, is_cir, fib));
+        Fiber_::ptr fib = std::make_shared<FuncFiber>(cb);
+        auto te = std::make_shared<TimeEvent>(m_ms, is_cir, fib);
         m_times.insert(te);
     }
 
-    // 获取已经过期的定时器
+    // 返回并删除已经过期的定时器
+    // 不会重新插入循环计时器，需要手动刷新并插入
     std::vector<TimeEvent::ptr> GetExpireTimers(){
         std::vector<TimeEvent::ptr> res;
         auto curtime = TimeEvent::GetNow();
         auto iter = m_times.upper_bound(curtime);
         for(auto it = m_times.begin(); it != iter;++it){
             res.push_back(*it);
-            if ((*it)->m_iscirculate){
-                m_times.insert(*it);
-            }
         }
         m_times.erase(m_times.begin(), iter);
         return res;
@@ -143,6 +147,7 @@ public:
         }
         return (*m_times.begin())->getLeftTime();
     }
+    int size() const {return m_times.size();}
 
 private:
     std::set<TimeEvent::ptr, TimeEvent::TimerCompareLess> m_times;
@@ -234,7 +239,7 @@ public:
     }
 
     void addTimer(TimeEvent::ptr timer){
-        TimeManager::addTimer(std::move(timer));
+        TimeManager::addTimer(timer);
         if (timer->m_cycle_ms < 3000){
             interruptEpoll();
         }

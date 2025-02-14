@@ -498,13 +498,15 @@ int LogManager::initFromYaml(const std::string& file_name){
                 // 创建Appender
                 // TODO: 添加更多输出
                 if(mode == "std"){
-                    appender.reset(new StdoutLogAppender);
+                    // appender.reset(new StdoutLogAppender);
+                    appender = std::make_shared<StdoutLogAppender>();
                 }
                 else if(mode == "file"){
                     auto outname = appenditem["filename"].as<std::string>();
                     if (outname.empty())
                         return LOGMANAGER_INIT_ERR_EMPTY_FILENAME;
-                    appender.reset(new FileLogAppender(outname));
+                    // appender.reset(new FileLogAppender(outname));
+                    appender = std::make_shared<FileLogAppender>(outname);
                 }
                 else{
                     return LOGMANAGER_INIT_ERR_MODE_NAME_ERR;
@@ -515,7 +517,8 @@ int LogManager::initFromYaml(const std::string& file_name){
                     return LOGMANAGER_INIT_ERR_LEVEL_NAME_ERR;
                 appender->setLevel(lv);
                 // 创建格式化器
-                LogFormatter::ptr fmter(new LogFormatter(fmtpat));
+                // LogFormatter::ptr fmter(new LogFormatter(fmtpat));
+                LogFormatter::ptr fmter = std::make_shared<LogFormatter>(fmtpat);
                 appender->setFormatter(fmter);
 
                 log->addAppender(appender);
