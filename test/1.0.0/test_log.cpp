@@ -1,4 +1,7 @@
 #include "test_log.h"
+
+#include <async_log_pool.h>
+
 #include "log.h"
 #include "timer.h"
 #include <vector>
@@ -29,4 +32,21 @@ void test_performance(){
     }
     timer.end_count();
     std::cout << std::to_string(timer.get_duration()) << std::endl;
+}
+
+void test_async_log() {
+    server::log::AsyncLogPool asy;
+    SERVER_LOG_DEBUG(system_logger) << asy.GetTime();
+    asy.SyncTime();
+    SERVER_LOG_DEBUG(system_logger) << asy.GetTime();
+    asy.TickTime();
+    SERVER_LOG_DEBUG(system_logger) << asy.GetTime();
+    asy.TickTime();
+    SERVER_LOG_DEBUG(system_logger) << asy.GetTime();
+    asy.TickTime();
+    SERVER_LOG_DEBUG(system_logger) << asy.GetTime();
+    asy.TickTime();
+    SERVER_LOG_DEBUG(system_logger) << asy.GetTime();
+    asy.TickTime();
+
 }

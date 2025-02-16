@@ -19,10 +19,11 @@ LOGAPPENDER_FILE_INIT_ERR,
 
 inline int init_error(int err = -1){
     exit(err);
+    return err;
 }
 
 inline int init_error(INIT_ERROR err){
-    init_error((int)err);
+    return init_error((int)err);
 }
 
 
