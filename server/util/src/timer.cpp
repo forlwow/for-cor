@@ -5,7 +5,7 @@
 #include <sys/socket.h>
 #include <vector>
 
-namespace server {
+namespace server::util {
 
 bool Timer::Compare::operator()(const Timer::ptr& lp, const Timer::ptr& rp) const {
     if(!lp && !rp)
@@ -69,7 +69,7 @@ void TimerManager::OnInsertAtFront(){
 }
 
 Timer::ptr TimerManager::addTimer(uint64_t ms, std::function<void()> cb, bool circulate){
-    Timer::ptr timer(new Timer(ms, cb, circulate, this));
+    Timer::ptr timer = std::make_shared<Timer>(ms, cb, circulate, this);
     WriteLockGuard wlock(m_mutex);
 
     auto it = m_timers.insert(timer).first;

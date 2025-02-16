@@ -55,10 +55,10 @@ inline string to_string(chrono::nanoseconds dur){
 }
 }
 
-namespace server {
+namespace server::util {
 
 class TimerManager;
-class Timer: public std::enable_shared_from_this<server::Timer>{
+class Timer: public std::enable_shared_from_this<server::util::Timer>{
 friend class TimerManager;
 public:
     typedef std::shared_ptr<Timer> ptr;
@@ -68,8 +68,7 @@ public:
     static bool InsertIntoManager(Timer::ptr timer);
 
     ~Timer()=default;
-private:
-    Timer(uint64_t ms, std::function<void()> cb, bool circulate = false, 
+    Timer(uint64_t ms, std::function<void()> cb, bool circulate = false,
             TimerManager* manager = nullptr);
     Timer(uint64_t next_time);
     struct Compare{

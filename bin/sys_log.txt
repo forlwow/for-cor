@@ -1,0 +1,7 @@
+2025-02-16 12:56:32  2196158  Main Thread    0    [DEBUG]  [system]  /home/worker/webserver/test/1.0.0/test_log.cpp:39  20191231235958
+2025-02-16 12:56:32  2196158  Main Thread    0    [DEBUG]  [system]  /home/worker/webserver/test/1.0.0/test_log.cpp:41  20250216125632
+2025-02-16 12:56:32  2196158  Main Thread    0    [DEBUG]  [system]  /home/worker/webserver/test/1.0.0/test_log.cpp:43  20250216125633
+2025-02-16 12:56:32  2196158  Main Thread    0    [DEBUG]  [system]  /home/worker/webserver/test/1.0.0/test_log.cpp:45  20250216125634
+2025-02-16 12:56:32  2196158  Main Thread    0    [DEBUG]  [system]  /home/worker/webserver/test/1.0.0/test_log.cpp:47  20250216125635
+2025-02-16 12:56:32  2196158  Main Thread    0    [DEBUG]  [system]  /home/worker/webserver/test/1.0.0/test_log.cpp:49  20250216125636
+2025-02-16 12:56:32  2196158  Main Thread    0    [INFO ]  [system]  /home/worker/webserver/server/fiber/src/scheduler_cpp20.cpp:34  Scheduler delete
