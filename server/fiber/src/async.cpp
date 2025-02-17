@@ -50,6 +50,7 @@ bool AsyncFiber::swapIn(){
 bool FuncFiber::swapIn(){
     t_fiber_ = weak_from_this();
     m_cb();
+    m_done = true;
     t_fiber_.reset();
     return true;
 }

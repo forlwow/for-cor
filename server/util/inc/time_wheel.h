@@ -71,7 +71,8 @@ constexpr uint64_t kTimeWheelMaxMs = kMsPerSec * kSecsPerMin * kMinsPerHour * kH
 class TimeWheel {
 public:
     typedef std::shared_ptr<TimeWheel> ptr;
-    typedef void(*func_callback_t)(Fiber::ptr);
+    // typedef void(*func_callback_t)(Fiber_::ptr);
+    typedef std::function<void(Fiber_::ptr)> func_callback_t;
     TimeWheel(uint16_t step_ms = kTimeWheelTickMs, uint64_t max_ms = kTimeWheelMaxMs);
 
     // 添加事件

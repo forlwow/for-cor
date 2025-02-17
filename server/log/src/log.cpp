@@ -1,4 +1,5 @@
 #include "log.h"
+#include "async_log_pool.h"
 #include "init_error.h"
 #include "yaml-cpp/exceptions.h"
 #include "yaml-cpp/node/parse.h"
@@ -10,12 +11,15 @@
 #include <iomanip>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
+#include <format>
 #include <memory>
+#include <util.h>
 #include <utility>
 
+
+
 namespace server {
-
-
 
 const char* TabFormatString = "  ";
 
@@ -125,22 +129,88 @@ public:
 
 class DateTimeFormatItem: public LogFormatter::FormatItem{
 public:
-    DateTimeFormatItem(const std::string format="%Y:%m:%d %H:%M:%S")
-        :m_format(format)
-        {}
+    DateTimeFormatItem(const std::string &format="%Y:%m:%d %H:%M:%S"){
+    #if (LOG_MODE == ASYNC_LOG)
+        for (size_t i = 0; i < format.size(); ++i) {
+            if (format[i] != '%') {
+                m_format.push_back(format[i]);
+                continue;
+            }
+            if (i + 1 >= format.size()) {
+                break;
+            }
+            switch (format[i+1]) {
+            case 'Y':
+                m_year = m_format.size();
+                m_format.append("yyyy");
+                break;
+            case 'm':
+                m_mon = m_format.size();
+                m_format.append("mm");
+                break;
+            case 'd':
+                m_day = m_format.size();
+                m_format.append("dd");
+                break;
+            case 'H':
+                m_hour = m_format.size();
+                m_format.append("hh");
+                break;
+            case 'M':
+                m_min = m_format.size();
+                m_format.append("mm");
+                break;
+            case 'S':
+                m_sec = m_format.size();
+                m_format.append("ss");
+                break;
+            default:
+                std::cerr << "DateTime format error" << std::endl;
+                init_error(LOGFORMATTER_INIT_ERR);
+            }
+            ++i;
+        }
+    #else
+        m_format = format;
+    #endif
+
+    }
 
     void format(std::ostream &os, Logger::ptr, LogLevel::Level level, const LogEvent::ptr &event) override{
         // os << event->getTime();
         os << std::put_time(std::localtime(event->getTimePtr()), m_format.data());
     }
     inline void format(FILE* file, std::shared_ptr<Logger> logger, const LogEvent::ptr &event) override{
+#if (LOG_MODE == ASYNC_LOG)
+        auto str = server::log::AsyncLogPool::GetInstance()->GetTime();
+        if (m_year != -1) m_format.replace(m_year, 4, str.substr(0, 4));
+        if (m_mon != -1) m_format.replace(m_mon, 2, str.substr(4, 2));
+        if (m_day != -1) m_format.replace(m_day, 2, str.substr(6, 2));
+        if (m_hour != -1) m_format.replace(m_hour, 2, str.substr(8, 2));
+        if (m_min != -1) m_format.replace(m_min, 2, str.substr(10, 2));
+        if (m_sec != -1) m_format.replace(m_sec, 2, str.substr(12, 2));
+        fwrite(m_format.c_str(), m_format.size(), 1, file);
+#else
         char buffer[30];
         int res = strftime(buffer, 30, m_format.data(), std::localtime(event->getTimePtr()));
         fwrite(buffer, res, 1, file);
+#endif
+
     }
 
 private:
+#if (LOG_MODE == ASYNC_LOG)
+    int8_t m_year = -1;
+    int8_t m_mon = -1;
+    int8_t m_day = -1;
+    int8_t m_hour = -1;
+    int8_t m_min = -1;
+    int8_t m_sec = -1;
+    // inline static thread_local std::string m_format = "";
     std::string m_format;
+#else
+    std::string m_format;
+#endif
 };
 
 class StringFormatItem: public LogFormatter::FormatItem{
@@ -233,7 +303,20 @@ LogEventWrap::LogEventWrap(LogEvent::ptr e)
 }
 
 LogEventWrap::~LogEventWrap(){
-    m_event->getLogger()->log(m_event);
+    if (m_event->getLogger()) {
+#if LOG_MODE == ASYNC_LOG
+        auto as = log::AsyncLogPool::GetInstance();
+        if (as)
+            as->schedule(log::FiberLog::CreatePtr(&Logger::log, m_event->getLogger().get(), m_event));
+#else
+        m_event->getLogger()->log(m_event);
+#endif
+    }
+    else {
+        std::cerr << "LogEventWrap Log Failed" << std::endl;
+        std::cerr << m_event->getFile() << std::endl;
+        std::cerr << m_event->getLine() << std::endl;
+    }
 }
 
 
@@ -397,6 +480,8 @@ int LogFormatter::init() {
                 vec.emplace_back("<<pattern_error>>", fmt, 0);
                 err = true;
                 break;
+            default:
+                break;
         }
     }
     if (!nstr.empty())
@@ -454,6 +539,17 @@ LogManager::LogManager()
     }
     else
         std::cout << "log file OK" << std::endl;
+}
+
+std::shared_ptr<LogManager> LogManager::GetInstance() {
+    // std::cout << "LogManager Init" << std::endl;
+    static std::shared_ptr<LogManager> instance;
+    static std::once_flag once1;
+    std::call_once(once1, [&](){
+        instance =  std::shared_ptr<LogManager>(new LogManager(), Deleter());
+        return instance;
+    });
+    return instance;
 }
 
 Logger::ptr LogManager::getLogger(const std::string &name){
@@ -532,5 +628,18 @@ int LogManager::initFromYaml(const std::string& file_name){
     }
     return INIT_OK;
 }
+
+#if (LOG_MODE == ASYNC_LOG)
+// 饿汉式初始化日志线程池
+struct LogInitHelper {
+    LogInitHelper() {
+        SERVER_LOG_DEBUG(SERVER_LOGGER_SYSTEM) << "Init Async";
+        auto as = log::AsyncLogPool::GetInstance(ASYNC_LOG_THREADS);
+        as->start();
+    }
+};
+static LogInitHelper log_init_helper;
+#endif
+
 
 }

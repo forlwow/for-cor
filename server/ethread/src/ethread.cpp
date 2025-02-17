@@ -58,13 +58,13 @@ void EThread::SetName(const std::string &name){
 }
 
 EThread::EThread(std::function<void()> cb, const std::string& name)
-    :m_cb(cb), m_name(name)
+    :m_cb(cb), m_name(name), m_start_flag(false)
 {
     if (name.empty()){
         m_name = "UNKNOW";
     }
     m_thread = std::thread(&EThread::run, this);
-    m_semaphore.wait();     // 保证在线程构造完毕开始运行后才完成构造
+    while (!m_start_flag);     // 保证在线程构造完毕开始运行后才完成构造
     if(!m_thread.joinable()){
         SERVER_LOG_ERROR(g_logger) << "create thread error";
         throw std::logic_error("thread create error");
@@ -92,7 +92,7 @@ void* EThread::run(void *arg){
     std::function<void()> cb;
     cb.swap(thread->m_cb);
 
-    thread->m_semaphore.notify();       // 初始化完成 主线程返回
+    thread->m_start_flag.store(true, std::memory_order_acq_rel);       // 初始化完成 主线程返回
     cb();                               // 执行任务
     SERVER_LOG_INFO(g_logger) << t_thread_name << " finish thread";
     return 0;

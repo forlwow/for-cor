@@ -22,7 +22,7 @@ public:
     virtual ~Scheduler_();
     
     virtual void start();
-    virtual void wait_stop();
+    virtual void wait_stop(int time = -1);   // 等待time秒后停止 小于0无线等待
     virtual void stop();
     virtual void wait(int time = -1);
 

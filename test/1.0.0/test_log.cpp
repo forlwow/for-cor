@@ -35,18 +35,17 @@ void test_performance(){
 }
 
 void test_async_log() {
-    server::log::AsyncLogPool asy;
-    SERVER_LOG_DEBUG(system_logger) << asy.GetTime();
-    asy.SyncTime();
-    SERVER_LOG_DEBUG(system_logger) << asy.GetTime();
-    asy.TickTime();
-    SERVER_LOG_DEBUG(system_logger) << asy.GetTime();
-    asy.TickTime();
-    SERVER_LOG_DEBUG(system_logger) << asy.GetTime();
-    asy.TickTime();
-    SERVER_LOG_DEBUG(system_logger) << asy.GetTime();
-    asy.TickTime();
-    SERVER_LOG_DEBUG(system_logger) << asy.GetTime();
-    asy.TickTime();
+    SERVER_LOG_DEBUG(system_logger) << "0";
+    auto asy = server::log::AsyncLogPool::GetInstance();
+    asy->start();
 
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+    SERVER_LOG_DEBUG(system_logger) << "1";
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+    SERVER_LOG_DEBUG(system_logger) << "2";
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+    SERVER_LOG_DEBUG(system_logger) << "3";
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+    SERVER_LOG_DEBUG(system_logger) << "4";
+    asy->wait_stop(1);
 }

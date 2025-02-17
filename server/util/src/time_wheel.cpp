@@ -24,6 +24,7 @@ TimeWheel::TimeWheel(uint16_t step_ms, uint64_t max_ms)
     max_ms /= kMinsPerHour; // 换成小时
     if (!max_ms) return;
     m_slot_hour_ = std::vector<TimeEventList_t>(kHoursPerDay);
+
 }
 
 void TimeWheel::AddEvent(Fiber::ptr event, uint16_t ms, uint8_t s, uint8_t min,
@@ -132,6 +133,7 @@ void TimeWheel::handle_events(TimeEventList_t &events) {
     while (!events.m_events.empty()) {
         TimeEvent_t::ptr event = events.pop_back();
         if (event->m_cancel) continue;
+        event->m_cb->setDone();
         m_cb(event->m_cb);
         if (event->m_circle) InsertEvent(event);
     }

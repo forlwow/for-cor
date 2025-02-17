@@ -52,6 +52,7 @@ public:
 
     virtual bool swapIn() = 0;                               // 切换到当前协程执行
     virtual bool done() = 0;
+    virtual void setDone(bool done = false) = 0;         // 设置done，仅对FuncFiber有效
 public:
     static std::weak_ptr<Fiber_> GetThis();                                   // 返回当前执行的协程
     static void SetThis(std::weak_ptr<Fiber_>);                                   // 设置当前执行的协程
