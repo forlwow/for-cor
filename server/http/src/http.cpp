@@ -19,15 +19,15 @@ std::unordered_map<HttpStatus, std::string> HttpStatus2StringMap;
 void init(){
     #define XX(num, name, string) HttpString2MethodMap[#name] = HttpMethod::HTTP_##name;
     #define YY(num, name, string) HttpMethod2StringMap[HttpMethod::HTTP_##name] = #name;
-        HTTP_METHOD_MAP(YY)
-        HTTP_METHOD_MAP(XX)
+        HTTP_METHOD_MAP_(YY)
+        HTTP_METHOD_MAP_(XX)
     #undef YY
     #undef XX
     
     #define XX(num, name, string) HttpString2StatusMap[#num] = HttpStatus::HTTP_STATUS_##name;
     #define YY(num, name, string) HttpStatus2StringMap[HttpStatus::HTTP_STATUS_##name] = #string;
-        HTTP_STATUS_MAP(XX)
-        HTTP_STATUS_MAP(YY)
+        HTTP_STATUS_MAP_(XX)
+        HTTP_STATUS_MAP_(YY)
     #undef YY
     #undef XX
 }

@@ -75,6 +75,8 @@ public:
     virtual bool done() override{
         return m_cb.done();
     }
+
+    void setDone(bool done = false) override {}
     
 private:
     std::atomic_flag m_flag = ATOMIC_FLAG_INIT;
@@ -82,6 +84,7 @@ private:
 };
 
 // 函数包装
+// 执行后会将done设置为true，需要自行置位
 class FuncFiber: public Fiber_{
 public:
     typedef std::shared_ptr<FuncFiber> ptr;
@@ -101,9 +104,12 @@ public:
     ~FuncFiber()=default;
 
     virtual bool swapIn() override;
-    virtual bool done() override{return false;}
+    virtual bool done() override{return m_done;}
+
+    void setDone(bool d = false){m_done = d;}
 
 private:
+    bool m_done = false;
     std::function<void()> m_cb;
 };
 

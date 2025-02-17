@@ -14,6 +14,7 @@
 #include <ethread.h>
 #include <singleton.h>
 #include "fiber.h"
+#include "macro.h"
 
 #if __cplusplus >= 202002L
 // TODO: 添加多线程
@@ -47,18 +48,6 @@ namespace server{
 extern thread_local int t_thread_id;
 extern thread_local const char* t_thread_name;
 
-// 日志等级
-#define LOG_LEVEL_DEBUG 0
-#define LOG_LEVEL_INFO 1
-#define LOG_LEVEL_WARN 2
-#define LOG_LEVEL_ERROR 3
-#define LOG_LEVEL_FATAL 4
-#define LOG_LEVEL_OFF 5
-
-// 当前日志等级 默认为INFO
-#ifndef CURRENT_LOG_LEVEL
-    #define CURRENT_LOG_LEVEL LOG_LEVEL_DEBUG
-#endif
 
 // DEBUG
 #if CURRENT_LOG_LEVEL <= LOG_LEVEL_DEBUG
@@ -344,12 +333,22 @@ private:
     char buffer[1024];
 };
 
-class LogManager: public Singleton<LogManager>{
-public:
+class LogManager{
+private:
     LogManager();
+    ~LogManager() = default;
+public:
+    static std::shared_ptr<LogManager> GetInstance();
+
     Logger::ptr getLogger(const std::string &name);
     void init();    // 默认初始化
     int initFromYaml(const std::string& file_name); //通过配置文件初始化
+
+    struct Deleter {
+        void operator()(LogManager* ptr) const {
+            delete ptr;
+        }
+    };
 
 private:
     std::map<std::string, Logger::ptr> m_loggers;        // 日志起容器

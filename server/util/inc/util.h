@@ -19,6 +19,7 @@ public:
     template<typename T>
     NullStream& operator<<(const T&) { return *this; }
     NullStream& operator<<(const std::string_view&) { return *this; }
+    NullStream& operator<<(const std::string&) {return *this; }
     NullStream& operator<<(const char*) { return *this; }
     NullStream& operator<<(int) { return *this; }
     NullStream& operator<<(char) { return *this; }

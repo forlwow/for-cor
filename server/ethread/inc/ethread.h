@@ -190,9 +190,10 @@ public:
     
     int getId() const {return m_id;}
     const std::string& getName() const {return m_name;}
+    std::atomic_bool& getStartFlag() {return m_start_flag;}
 
     void join();
-    static EThread* GetThis();
+    static EThread* GetThis();      // 获取当前处于的线程
     static const char* GetName();
     static void SetName(const std::string& name);
 
@@ -209,7 +210,7 @@ private:
     std::function<void()> m_cb;     //
     std::string m_name = "None";    // 线程名
 
-    Semaphore m_semaphore;          // 用于等待启动的信号量
+    std::atomic_bool m_start_flag;          // 用于等待启动的信号量
 };
 
 }

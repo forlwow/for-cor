@@ -47,7 +47,8 @@ void Scheduler_::start(){
     SERVER_LOG_INFO(s_log) << "Scheduler start";
 }
 
-void Scheduler_::wait_stop(){
+void Scheduler_::wait_stop(int time){
+    wait(time);
     m_autoStop = true;
     for(auto &t: m_threads)
         t->join();
@@ -88,8 +89,8 @@ void Scheduler_::run(){
 // 等待time秒，小于0则无线阻塞
 void Scheduler_::wait(int time){
     if (time < 0)
-        while(1)
-    sleep(time);
+        while(1) std::this_thread::yield();
+    std::this_thread::sleep_for(std::chrono::seconds(time));
 }
 
 
