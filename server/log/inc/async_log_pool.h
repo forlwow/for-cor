@@ -134,6 +134,7 @@ public:
     // 等待time秒 -1则无限阻塞
     void wait(int time = -1);
     // 等待time秒后停止
+    // -1则无限阻塞 -2 则等待到无剩余任务
     void wait_stop(int time = -1);
 
     bool is_stopping() {return m_stopping;}
@@ -221,6 +222,8 @@ private:
     // 处理定时器线程
     void Handler();
     void InitTimerfd();
+
+
     static constexpr uint8_t m_buf_size = 15;   // 时间缓冲长度
 
     std::atomic_bool m_buf_flag = false;

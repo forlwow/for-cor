@@ -231,6 +231,10 @@ public:
         return false;
     }
 
+    inline bool check_read() {
+        return m_pipe.check_read();
+    }
+
     inline void write(const T& value_, bool incomplete = false){
         m_pipe.write(value_, incomplete);
         if (incomplete) return ;

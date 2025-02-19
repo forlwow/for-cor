@@ -11,4 +11,6 @@ inline void test_log(){
     test_async_log();
 }
 
+void test_async_log_performance();
+
 #endif

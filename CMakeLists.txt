@@ -18,6 +18,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -g2 -ggdb -ldl")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
 
 include_directories(${PROJECT_SOURCE_DIR}/server/log/inc)
+include_directories(${PROJECT_SOURCE_DIR}/server/memory/inc)
 include_directories(${PROJECT_SOURCE_DIR}/server/util/inc)
 include_directories(${PROJECT_SOURCE_DIR}/server/ethread/inc)
 include_directories(${PROJECT_SOURCE_DIR}/server/ecoroutine/inc)
@@ -53,7 +54,7 @@ add_executable(
 )
 
 
-target_link_libraries(${PROJECT_NAME} log util ethread ecoroutine fiber socket dev http server)
+target_link_libraries(${PROJECT_NAME} log memory util ethread ecoroutine fiber socket dev http server)
 target_link_libraries(${PROJECT_NAME} thirdMould)
 target_link_libraries(${PROJECT_NAME} yaml-cpp)
 target_link_libraries(${PROJECT_NAME} llhttp)
