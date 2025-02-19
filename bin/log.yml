@@ -20,4 +20,10 @@ file:
     out: file
     level: INFO
     filename: log.txt
+nullfile:
+  -
+    fmt: "null%n"
+    out: file
+    level: DEBUG
+    filename: null.txt
 

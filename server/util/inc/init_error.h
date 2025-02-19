@@ -15,14 +15,18 @@ LOGMANAGER_INIT_ERR_YAML_ERR,
 LOGFORMATTER_INIT_ERR,
 // LogAppender
 LOGAPPENDER_FILE_INIT_ERR,
+// AsyncLogPool
+ASYNCLOGPOOL_INIT_ERR,
+ASYNCLOGPOOL_TIMERFD_INIT_ERR,
 };
 
 inline int init_error(int err = -1){
     exit(err);
+    return err;
 }
 
 inline int init_error(INIT_ERROR err){
-    init_error((int)err);
+    return init_error((int)err);
 }
 
 

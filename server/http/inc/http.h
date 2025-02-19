@@ -11,7 +11,7 @@ namespace server{
 
 namespace http{
 /* Request Methods */
-#define HTTP_METHOD_MAP(XX)           \
+#define HTTP_METHOD_MAP_(XX)           \
     XX(0,  DELETE,      DELETE)       \
     XX(1,  GET,         GET)          \
     XX(2,  HEAD,        HEAD)         \
@@ -57,12 +57,12 @@ namespace http{
 
 enum HttpMethod{
 #define XX(num, name, string) HTTP_##name = num,
-    HTTP_METHOD_MAP(XX)
+    HTTP_METHOD_MAP_(XX)
 #undef XX
     HTTP_METHOD_INVALID
 };
 
-#define HTTP_STATUS_MAP(XX)                                                   \
+#define HTTP_STATUS_MAP_(XX)                                                   \
     XX(100, CONTINUE,                        Continue)                        \
     XX(101, SWITCHING_PROTOCOLS,             Switching Protocols)             \
     XX(102, PROCESSING,                      Processing)                      \
@@ -125,7 +125,7 @@ enum HttpMethod{
 
 enum HttpStatus{
 #define XX(num, name, string) HTTP_STATUS_##name = num,
-    HTTP_STATUS_MAP(XX)
+    HTTP_STATUS_MAP_(XX)
 #undef XX
     HTTP_STATUS_INVALID = 0
 };
