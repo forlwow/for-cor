@@ -56,7 +56,7 @@ void CoRet::promise_type::return_value(State s){
 }
 
 Fiber_::~Fiber_(){
-    SERVER_LOG_DEBUG(g_logger) << "fiber destory";
+    // SERVER_LOG_DEBUG(g_logger) << "fiber destory";
 }
 
 std::weak_ptr<Fiber_> Fiber_::GetThis(){
