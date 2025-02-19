@@ -205,7 +205,11 @@ void AsyncLogPool::wait(int time) {
 }
 
 void AsyncLogPool::wait_stop(int time) {
-    wait(time);
+    if (time >= -1)
+        wait(time);
+    else if (time == -2) {
+        while (!m_tasks.empty()) std::this_thread::yield();
+    }
     m_stopping = true;
 }
 
