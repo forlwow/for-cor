@@ -2,6 +2,7 @@
 #define SERVER_FQUEUE_H
 
 #include "atomic_ptr.h"
+#include "ethread.h"
 #include <cassert>
 #include <condition_variable>
 #include <mutex>
@@ -165,7 +166,8 @@ public:
         if(!check_read()){
             return false;
         }
-        *value = std::move(m_queue.front());
+        // *value = std::move(m_queue.front());
+        *value = m_queue.front();
         m_queue.pop();
         return true;
     }
@@ -208,10 +210,10 @@ protected:
 template<typename T, int N=8>
 class fpipe{
 public:
-    inline fpipe()=default;
-    inline ~fpipe()=default;
+    fpipe()=default;
+    virtual ~fpipe()=default;
 
-    inline void read_block(T &value_){
+    virtual void read_block(T &value_){
         T tmp;
         while (!m_pipe.read(&tmp)){
             std::unique_lock<std::mutex> lock(m_lock);
@@ -222,7 +224,7 @@ public:
         // value_ = tmp;
     }
 
-    inline bool read_noblock(T &value_){
+    virtual bool read_noblock(T &value_){
         T tmp;
         if (m_pipe.read(&tmp)){
             value_ = std::move(tmp);
@@ -231,11 +233,11 @@ public:
         return false;
     }
 
-    inline bool check_read() {
+    virtual bool check_read() {
         return m_pipe.check_read();
     }
 
-    inline void write(const T& value_, bool incomplete = false){
+    virtual void write(const T& value_, bool incomplete = false){
         m_pipe.write(value_, incomplete);
         if (incomplete) return ;
         if (!m_pipe.flush()){
@@ -243,7 +245,7 @@ public:
         }
     }
 
-    inline void write(const std::vector<T> &values_){
+    virtual void write(const std::vector<T> &values_){
         int n = values_.size();
         for (int i = 0; i < n-1; ++i){
             m_pipe.write(values_[i], true);
@@ -254,7 +256,7 @@ public:
         }
     }
 
-    inline void notify() {
+    virtual void notify() {
         m_pipe.flush();
         m_condition_var.notify_all();
     }
@@ -264,6 +266,33 @@ private:
     std::condition_variable m_condition_var;
     std::mutex m_lock;
 };
+
+template<typename T, int N = 8>
+class fpipe_muti_write: public fpipe<T, N> {
+public:
+    void write(const T &value_, bool incomplete = false) override {
+        LockGuard lock(m_wlock);
+        fpipe<T, N>::write(value_, incomplete);
+    }
+
+    void notify() override {
+        LockGuard lock(m_wlock);
+        fpipe<T, N>::notify();
+    }
+    bool read_noblock(T &value) override {
+        LockGuard lock(m_rlock);
+        return fpipe<T, N>::read_noblock(value);
+    }
+    void read_block(T &value) override {
+        LockGuard lock(m_rlock);
+        fpipe<T, N>::read_block(value);
+    }
+
+private:
+    SpinLock m_wlock;
+    SpinLock m_rlock;
+};
+
 
 }
 

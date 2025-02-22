@@ -5,6 +5,7 @@
 #ifndef TEST_PAGECACHE_H
 #define TEST_PAGECACHE_H
 
+#include <cstdlib>
 #include "common.h"
 #include "objectPool.h"
 #include "unordered_map"

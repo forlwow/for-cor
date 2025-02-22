@@ -5,6 +5,8 @@
 #ifndef TEST_OBJECTPOOL_H
 #define TEST_OBJECTPOOL_H
 
+#include <memory>
+
 #include "common.h"
 #include <set>
 #include <queue>
@@ -22,7 +24,8 @@ public:
         _remainBytes = init_mem;
     }
 
-    T* New(){
+    template<typename ... Args>
+    T* New(Args... args){
         T* obj;
         if(_freeList){
             void* next = NextObj(_freeList);
@@ -44,7 +47,7 @@ public:
         }
         // 定位new显式调用T类型构造函数:在内存地址obj处创建一个新的T类型的对象，并调用该对象的构造函数。
         // 与普通的new运算符不同的是，它不会使用动态内存分配器来分配内存，而是使用指定的内存地址
-        new(obj)T;
+        new(obj)T(args...);
         return obj;
     }
 
@@ -67,7 +70,7 @@ private:
 
 template<typename T>
 class ObjectPool_{
-    typedef struct memory{
+    struct memory{
         memory()=default;
         explicit memory(size_t objNum): _freeList(){
             size_t tsize = sizeof(T);
@@ -133,6 +136,34 @@ private:
 
     std::set<memory*, Compare> m_empty;
     std::set<memory*, Compare> m_availabe;
+};
+
+template<typename T>
+class ObjectPoolPtr {
+public:
+    typedef std::shared_ptr<T> ptr;
+    template<class... Args>
+    ptr New(Args... args) {
+        if (m_objs.empty()) {
+            auto p = std::make_shared<T>(std::forward<Args>(args)...);
+            return p;
+        }
+        else {
+            auto p = m_objs.back();
+            m_objs.pop_back();
+            new(p.get())T(std::forward<Args>(args)...);
+            return p;
+        }
+    }
+    void Delete(ptr &&p) {
+        if (p.unique()) {
+            (*p.get()).~T();
+        }
+        m_objs.push_back(p);
+    }
+
+private:
+    std::vector<ptr> m_objs;
 };
 
 
