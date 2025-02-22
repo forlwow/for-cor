@@ -5,8 +5,8 @@
 #ifndef TEST_PAGETREE_H
 #define TEST_PAGETREE_H
 
-#include "Common.h"
-#include "objectPool.h"
+#include <cstring>
+#include "common.h"
 #include "objectPool.h"
 
 // Single-level array

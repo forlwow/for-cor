@@ -122,3 +122,55 @@ void test_performance(){
 
 时间格式化占用了近一半耗时，可以优化。其他部分符合预期。
 
+
+## 异步日志
+
+### 简介
+
+> 异步日志使用线程池与时间轮定时器驱动，输出日志语句将日志推入任务队列，由任务线程进行输出
+> 它由两个线程组成，一个负责输出日志，另一个负责驱动时间轮定时器。
+> 引入时间轮定时器解决了时间格式化的性能问题，它定时格式化时间，这样输出时只需要直接输出格式化后的时间字符串即可。
+
+### 性能测试
+
+- 计时器：Timer(utils库中，chrono实现)
+- 输出数量: 1e6条数据
+- 测试10次取平均
+- 第一次输出内容：
+  - > %d{%Y-%m-%d %H:%M:%S}%T%t%T%N%T%F%T[%p]%T[%c]%T%f:%l%T%m%n
+  - > 2025-02-04 19:51:37  1453358  Main Thread    0    [INFO ]  [file]  /home/worker/webserver/test/1.0.0/test_log.cpp:28
+  - 全部可格式化的数据
+  - 无额外输入
+
+### 测试结果
+- 平均耗时：4613ms
+- 单条输出耗时：4.613us
+- 单条插入平均耗时：898ns
+- 文件大小: 
+  - 总大小：1.2g
+  - 单次大小：114M
+
+**测试代码**
+```c++
+int test_async_log_performance_() {
+    auto as = server::log::AsyncLogPool::GetInstance();
+    Timer timer;
+    timer.start_count();
+    for (int i = 0; i < 1e6; ++i) {
+        SERVER_LOG_INFO(file_logger);
+    }
+    as->wait_empty();
+    timer.end_count();
+    std::cout << std::to_string(timer.get_duration()) << std::endl;
+    return timer.get_duration().count();
+}
+
+void test_async_log_performance() {
+    const int times = 10;
+    int sum = 0;
+    for (int i : range(times)) {
+        sum += test_async_log_performance_();
+    }
+    std::cout << sum/times << std::endl;
+}
+```

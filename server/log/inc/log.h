@@ -12,19 +12,28 @@
 #include <cstdio>
 #include <unordered_map>
 #include <ethread.h>
+#include <objectPool.h>
 #include <singleton.h>
 #include "fiber.h"
 #include "macro.h"
 
 #if __cplusplus >= 202002L
-// TODO: 添加多线程
+// #define SERVER_LOG_LEVEL(logger, level)  \
+//     server::LogEventWrap(server::LogEvent::ptr(\
+//         new server::LogEvent(logger, level, \
+//         __FILE__, __LINE__, \
+//         0, server::t_thread_id, server::Fiber::GetCurFiberId(), \
+//         time(0), server::t_thread_name\
+//         )))
+
 #define SERVER_LOG_LEVEL(logger, level)  \
-    server::LogEventWrap(server::LogEvent::ptr(\
-        new server::LogEvent(logger, level, \
-        __FILE__, __LINE__, \
-        0, server::t_thread_id, server::Fiber::GetCurFiberId(), \
-        time(0), server::t_thread_name\
-        )))
+    server::LogEventWrap(logger, level, \
+    __FILE__, __LINE__, \
+    0, server::t_thread_id, server::Fiber::GetCurFiberId(), \
+    time(0), server::t_thread_name\
+    )
+
+
 #else
 
 #define SERVER_LOG_LEVEL2(logger, level)  \
@@ -37,13 +46,20 @@
 #endif
 
 namespace server{
+
+// #define SERVER_LOG_LEVEL(logger, level)  \
+//     server::LogEventWrap(server::LogEvent::ptr(\
+//         new server::LogEvent(logger, level, \
+//         __FILE__, __LINE__, \
+//         0, server::t_thread_id, server::Fiber::GetCurFiberId(), \
+//         time(0), server::t_thread_name\
+//         )))
 #define SERVER_LOG_LEVEL(logger, level)  \
-    server::LogEventWrap(server::LogEvent::ptr(\
-        new server::LogEvent(logger, level, \
+    server::LogEventWrap(logger, level, \
         __FILE__, __LINE__, \
         0, server::t_thread_id, server::Fiber::GetCurFiberId(), \
         time(0), server::t_thread_name\
-        )))
+        )
 
 extern thread_local int t_thread_id;
 extern thread_local const char* t_thread_name;
@@ -165,7 +181,8 @@ public:
 // 日志事件
 class LogEvent{
 public:
-    typedef std::shared_ptr<LogEvent> ptr;
+    typedef std::unique_ptr<LogEvent> ptr;
+    LogEvent()=default;
     LogEvent(std::shared_ptr<Logger> logger, LogLevel::Level level
         ,const char* file, int32_t line, uint32_t elapse
         ,uint32_t thread_id, uint32_t fiber_id, uint64_t time
@@ -193,16 +210,21 @@ private:
     std::string m_ss;               // 日志内容流
     std::shared_ptr<Logger> m_logger;
     LogLevel::Level m_level;
-     
+
 };
 
 // 事件包装类
 class LogEventWrap{
 public:
-    LogEventWrap(LogEvent::ptr e);
+    template<typename ...Args>
+    LogEventWrap(Args... args) {
+        m_event = std::make_unique<LogEvent>(std::forward<Args>(args)...);
+    }
+    explicit LogEventWrap(LogEvent::ptr &e);
     ~LogEventWrap();
+
     auto& getSS() {return m_event->getSS();}
-    auto getEvent() {return m_event;}
+    auto& getEvent() {return m_event;}
 
     inline LogEventWrap& operator<<(const std::string& str){
         m_event->getSS().append(str);
@@ -254,9 +276,9 @@ public:
     typedef std::shared_ptr<LogFormatter> ptr;
     LogFormatter(const std::string &pattern);
 
-    std::string format(std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event);
-    std::ostream& format(std::ostream& ofs, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event);
-    FILE* format(FILE* file, std::shared_ptr<Logger> logger, LogEvent::ptr event);
+    std::string format(std::shared_ptr<Logger> logger, LogLevel::Level level, const LogEvent::ptr &event);
+    std::ostream& format(std::ostream& ofs, std::shared_ptr<Logger> logger, LogLevel::Level level, const LogEvent::ptr &event);
+    FILE* format(FILE* file, std::shared_ptr<Logger> logger, const LogEvent::ptr &event);
 public:
     class FormatItem{
     public:

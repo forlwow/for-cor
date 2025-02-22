@@ -27,6 +27,8 @@ include_directories(${PROJECT_SOURCE_DIR}/server/socket/inc)
 include_directories(${PROJECT_SOURCE_DIR}/server/http/inc)
 include_directories(${PROJECT_SOURCE_DIR}/server/server/inc)
 include_directories(${PROJECT_SOURCE_DIR}/server/dev)
+# 第三方库
+include_directories(${PROJECT_SOURCE_DIR}/server/ThirdModule/include)
 
 # 测试文件
 if(${TEST})
@@ -39,10 +41,8 @@ else()
 endif()
 
 aux_source_directory(${PROJECT_SOURCE_DIR}/server src_dir)
-# 第三方库
-include_directories(${PROJECT_SOURCE_DIR}/server/ThirdModule/include)
-link_directories(${PROJECT_SOURCE_DIR}/server/ThirdModule/lib)
 # 项目自己的库
+link_directories(${PROJECT_SOURCE_DIR}/server/ThirdModule/lib)
 link_directories(${PROJECT_SOURCE_DIR}/lib)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/server)
 

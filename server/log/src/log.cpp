@@ -14,12 +14,17 @@
 #include <cstring>
 #include <format>
 #include <memory>
+#include <objectPool.h>
 #include <util.h>
 #include <utility>
 
 
 
 namespace server {
+
+#if (LOG_MODE == ASYNC)
+    auto as = server::log::AsyncLogPool::GetInstance();
+#endif
 
 const char* TabFormatString = "  ";
 
@@ -182,13 +187,19 @@ public:
     }
     inline void format(FILE* file, std::shared_ptr<Logger> logger, const LogEvent::ptr &event) override{
 #if (LOG_MODE == ASYNC_LOG)
-        auto str = server::log::AsyncLogPool::GetInstance()->GetTime();
-        if (m_year != -1) m_format.replace(m_year, 4, str.substr(0, 4));
-        if (m_mon != -1) m_format.replace(m_mon, 2, str.substr(4, 2));
-        if (m_day != -1) m_format.replace(m_day, 2, str.substr(6, 2));
-        if (m_hour != -1) m_format.replace(m_hour, 2, str.substr(8, 2));
-        if (m_min != -1) m_format.replace(m_min, 2, str.substr(10, 2));
-        if (m_sec != -1) m_format.replace(m_sec, 2, str.substr(12, 2));
+        auto str = as->GetTime();
+        // if (m_year != -1) m_format.replace(m_year, 4, str.substr(0, 4));
+        // if (m_mon != -1) m_format.replace(m_mon, 2, str.substr(4, 2));
+        // if (m_day != -1) m_format.replace(m_day, 2, str.substr(6, 2));
+        // if (m_hour != -1) m_format.replace(m_hour, 2, str.substr(8, 2));
+        // if (m_min != -1) m_format.replace(m_min, 2, str.substr(10, 2));
+        // if (m_sec != -1) m_format.replace(m_sec, 2, str.substr(12, 2));
+        if (m_year != -1) replace(m_format, str, m_year, 4);
+        if (m_mon != -1) replace(m_format, str, m_mon, 2, 4);
+        if (m_day != -1) replace(m_format, str, m_day, 2, 6);
+        if (m_hour != -1) replace(m_format, str, m_hour, 2, 8);
+        if (m_min != -1) replace(m_format, str, m_min, 2, 10);
+        if (m_sec != -1) replace(m_format, str, m_sec, 2, 12);
         fwrite(m_format.c_str(), m_format.size(), 1, file);
 #else
         char buffer[30];
@@ -296,8 +307,8 @@ LogEvent::LogEvent(std::shared_ptr<Logger> logger, LogLevel::Level level
 
 
 // LogEventWrap
-LogEventWrap::LogEventWrap(LogEvent::ptr e)
-    :m_event(e)
+LogEventWrap::LogEventWrap(LogEvent::ptr &e)
+    :m_event(std::move(e))
 {
 
 }
@@ -305,9 +316,8 @@ LogEventWrap::LogEventWrap(LogEvent::ptr e)
 LogEventWrap::~LogEventWrap(){
     if (m_event->getLogger()) {
 #if LOG_MODE == ASYNC_LOG
-        auto as = log::AsyncLogPool::GetInstance();
         if (as)
-            as->schedule(log::FiberLog::CreatePtr(&Logger::log, m_event->getLogger().get(), m_event));
+            as->schedule(std::move(m_event));
 #else
         m_event->getLogger()->log(m_event);
 #endif
@@ -507,7 +517,7 @@ int LogFormatter::init() {
     return err ? LOGFORMATTER_INIT_ERR : INIT_OK;
 }
 
-std::string LogFormatter::format(std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event) {
+std::string LogFormatter::format(std::shared_ptr<Logger> logger, LogLevel::Level level, const LogEvent::ptr &event) {
     std::stringstream ss;
     for (auto &i : m_items){
         i->format(ss, logger, level, event);
@@ -515,14 +525,14 @@ std::string LogFormatter::format(std::shared_ptr<Logger> logger, LogLevel::Level
     return ss.str();
 }
 
-std::ostream& LogFormatter::format(std::ostream& ofs, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event){
+std::ostream& LogFormatter::format(std::ostream& ofs, std::shared_ptr<Logger> logger, LogLevel::Level level, const LogEvent::ptr &event){
     for (auto &i: m_items){
         i->format(ofs, logger, level, event);
     }
     return ofs;
 }
 
-std::FILE* LogFormatter::format(FILE *file, std::shared_ptr<Logger> logger, LogEvent::ptr event){
+std::FILE* LogFormatter::format(FILE *file, std::shared_ptr<Logger> logger, const LogEvent::ptr &event){
     for (auto &i: m_items){
         i->format(file, logger, event); 
     }

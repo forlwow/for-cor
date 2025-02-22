@@ -3,6 +3,7 @@
 //
 #include "async_log_pool.h"
 #include "util.h"
+#include "range.h"
 #include <cstring>
 #include <init_error.h>
 #include <iostream>
@@ -10,6 +11,8 @@
 
 namespace server::log
 {
+static std::atomic_int i = 0;
+static std::atomic_int j = 0;
 
 // 北京时区
 const std::chrono::time_zone *beijing_tz = std::chrono::locate_zone("Asia/Shanghai");
@@ -18,7 +21,7 @@ const auto beijing_td = std::chrono::hours(8);  // 北京时差
 const auto local_td = beijing_td;   // 本地时差
 
 AsyncLogPool::AsyncLogPool(int max_)
-    : m_time_wheel(new util::TimeWheel(50))
+    : m_time_wheel(new util::TimeWheel(50)), m_events()
 {
     std::cout << "AsyncLogPool::AsyncLogPool()" << std::endl;
     max_ = (max_ < 0 ? std::thread::hardware_concurrency() :
@@ -32,7 +35,7 @@ AsyncLogPool::AsyncLogPool(int max_)
     memcpy(m_time_buf[1], time_tmp, sizeof(time_tmp));
 
     SyncTime();
-    m_time_wheel->SetCallBack(std::bind_front(&AsyncLogPool::schedule, this));
+    m_time_wheel->SetCallBack([this](log_task_type_t l){this->schedule(l);});
     // 同步与增加时间缓冲, 每秒调用一次
     m_time_wheel->AddEvent(
         FuncFiber::CreatePtr(
@@ -100,10 +103,10 @@ void AsyncLogPool::start() {
 }
 
 void AsyncLogPool::run() {
+    event_t eve;
     while (!m_stopping){
-        log_task_type_t ta;
-        if(m_tasks.pop_front(ta)){
-            ta->swapIn();
+        if (m_events.try_dequeue(eve)) {
+            eve->getLogger()->log(eve);
         }
         else{
             std::this_thread::yield();
@@ -197,6 +200,16 @@ bool AsyncLogPool::schedule(log_task_type_t t) {
     return true;
 }
 
+// void AsyncLogPool::schedule(const event_t &e) {
+//     if (!m_events.enqueue(e)) {
+//         throw std::runtime_error("AsyncLogPool::schedule event failed");
+//     }
+// }
+
+void AsyncLogPool::schedule(event_t &&e) {
+    m_events.enqueue(std::move(e));
+}
+
 void AsyncLogPool::wait(int time) {
     if (time < 0) {
         while (true) std::this_thread::yield();
@@ -208,20 +221,23 @@ void AsyncLogPool::wait_stop(int time) {
     if (time >= -1)
         wait(time);
     else if (time == -2) {
-        while (!m_tasks.empty()) std::this_thread::yield();
+        wait_empty();
     }
     m_stopping = true;
 }
 
 void AsyncLogPool::Handler() {
     uint16_t i = 0;
+    log_task_type_t ta;
     while (!m_stopping) {
         uint64_t expire;
         ssize_t s = read(m_timerfd, &expire, sizeof(expire));
         // 未到期
         if (s == -1) {
             if (errno == EAGAIN || errno == EWOULDBLOCK) {
-                // std::cout << "yield" << std::endl;
+                if (m_tasks.pop_front(ta)) {
+                    ta->swapIn();
+                }
                 std::this_thread::yield();
             }
             else {
