@@ -1,7 +1,7 @@
 #include "test_log.h"
 
 #include <async_log_pool.h>
-
+#include "range.h"
 #include "log.h"
 #include "timer.h"
 #include <vector>
@@ -51,14 +51,25 @@ void test_async_log() {
     asy->wait_stop(1);
 }
 
-void test_async_log_performance() {
+int test_async_log_performance_() {
     auto as = server::log::AsyncLogPool::GetInstance();
     Timer timer;
     timer.start_count();
-    for (int i; i < 1e6; ++i) {
-        SERVER_LOG_INFO(null_logger);
+    for (int i = 0; i < 1e6; ++i) {
+        SERVER_LOG_INFO(file_logger);
     }
-    as->wait_stop(-2);
+    as->wait_empty();
     timer.end_count();
     std::cout << std::to_string(timer.get_duration()) << std::endl;
+    return timer.get_duration().count();
 }
+
+void test_async_log_performance() {
+    const int times = 10;
+    int sum = 0;
+    for (int i : range(times)) {
+        sum += test_async_log_performance_();
+    }
+    std::cout << sum/times << std::endl;
+}
+

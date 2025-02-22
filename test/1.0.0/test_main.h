@@ -11,9 +11,6 @@
 
 int test_main(){
     std::cout << "Test Version 1.0.0" << std::endl;
-    // test_log();
-    // test_performance();
-    test_async_log_performance();
     return 0;
 }
 
