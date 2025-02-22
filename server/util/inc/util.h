@@ -47,6 +47,13 @@ static inline bool IsLeapYear(int year) {
     return false;
 }
 
+// 替换dst字符串pos位置长度为len的子字符串为src从src_pos开始的长为len的字符串
+static void replace(std::string& dst, std::string_view src, size_t pos, size_t len, size_t src_pos = 0) {
+    while (len--) {
+        dst[pos++] = src[src_pos++];
+    }
+}
+
 }
 
 

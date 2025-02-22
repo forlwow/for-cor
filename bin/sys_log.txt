@@ -1,2 +1,3 @@
-2025-02-19 13:02:31  2663140  Main Thread    0    [INFO ]  [system]  /home/worker/webserver/server/ethread/src/ethread.cpp:73  create ethread:_0
-2025-02-19 13:02:31  2663140  Main Thread    0    [INFO ]  [system]  /home/worker/webserver/server/ethread/src/ethread.cpp:73  create ethread:AsyncLogPoolHandler
+2025-02-21 16:54:58  2889566  Main Thread    0    [DEBUG]  [system]  /home/worker/webserver/server/log/src/log.cpp:646  Init Async
+2025-02-21 16:54:58  2889566  Main Thread    0    [INFO ]  [system]  /home/worker/webserver/server/ethread/src/ethread.cpp:73  create ethread:_0
+2025-02-21 16:54:58  2889566  Main Thread    0    [INFO ]  [system]  /home/worker/webserver/server/ethread/src/ethread.cpp:73  create ethread:AsyncLogPoolHandler

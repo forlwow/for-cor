@@ -6,10 +6,12 @@
 #define SERVER_ASYNC_LOG_POOL_H
 
 #include "scheduler_cpp20.h"
+#include "concurrentqueue.h"
 #include <chrono>
 #include <atomic>
+#include <fqueue.h>
+#include <log.h>
 #include <macro.h>
-#include <range.h>
 #include <time_wheel.h>
 
 namespace server::log
@@ -87,6 +89,7 @@ class AsyncLogPool{
     typedef std::shared_ptr<AsyncLogPool> ptr;
     // typedef void(*log_task_type_t)();
     typedef FiberLog::ptr log_task_type_t;
+    typedef LogEvent::ptr event_t;
     // timepoint ms s min hour day week month year
     typedef std::chrono::time_point<std::chrono::system_clock, std::chrono::milliseconds> ms_tp_t;
     typedef std::chrono::time_point<std::chrono::system_clock, std::chrono::seconds> secs_tp_t;
@@ -130,12 +133,16 @@ public:
 
     // 调度任务
     bool schedule(log_task_type_t);
+    // void schedule(const event_t&);
+    void schedule(event_t&&);
 
     // 等待time秒 -1则无限阻塞
     void wait(int time = -1);
     // 等待time秒后停止
     // -1则无限阻塞 -2 则等待到无剩余任务
     void wait_stop(int time = -1);
+    // 等待直到没有待输出日志
+    void wait_empty() const {while (m_events.size_approx() > 0) std::this_thread::yield();}
 
     bool is_stopping() {return m_stopping;}
     bool is_deleting() {return m_delete;}
@@ -229,13 +236,15 @@ private:
     std::atomic_bool m_buf_flag = false;
     std::atomic_bool m_stopping = true;            // 是否停止
     std::atomic_bool m_delete = false;              // 是否正在析构
-    char m_time_buf[2][m_buf_size];
-    int m_timerfd;
+    char m_time_buf[2][m_buf_size] = {};
+    int m_timerfd = -1;
     int m_thread_count;         // 任务线程数量
     EThread::ptr handler;       // 处理时间的线程
     util::TimeWheel::ptr m_time_wheel;
     std::vector<EThread::ptr> m_threads;
     threadsafe_deque<log_task_type_t> m_tasks;
+    // util::fpipe_muti_write<event_t> m_events;
+    moodycamel::ConcurrentQueue<event_t> m_events;
     std::string m_name;
 
 };

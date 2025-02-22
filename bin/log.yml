@@ -22,7 +22,7 @@ file:
     filename: log.txt
 nullfile:
   -
-    fmt: "null%n"
+    fmt: "%d{%Y-%m-%d %H:%M:%S} null%n"
     out: file
     level: DEBUG
     filename: null.txt
