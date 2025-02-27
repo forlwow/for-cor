@@ -123,9 +123,17 @@ void HttpContextResponse::JSON(http::HttpStatus s, const std::unordered_map<std:
     m_response->SetReason(http::HttpStatus2String(s));
     m_response->SetHeaders("Content-Type", "application/json");
     std::string ss;
-    for (auto it = j.begin(); it != j.end(); ++it) {
-        ss += it->first + ": " + it->second + "\r\n";
+    ss.push_back('{');
+    for (auto it = j.begin(); it != j.end(); ) {
+        // ss += "\"" + it->first + "\":\"" + it->second + "\"" + (++it == j.end() ? "" : ",");
+        ss.push_back('\"');
+        ss.append(it->first);
+        ss.append("\":\"");
+        ss.append(it->second);
+        ss.push_back('"');
+        ss.push_back(++it == j.end() ? ' ' : ',');
     }
+    ss.push_back('}');
     m_response->SetBody(ss);
 }
 
@@ -134,6 +142,14 @@ void HttpContextResponse::HTML(http::HttpStatus s, std::string_view b) {
     m_response->SetStatus(s);
     m_response->SetReason(http::HttpStatus2String(s));
     m_response->SetBody(b);
+}
+
+void HttpContextResponse::SetHeader(const std::string& key, std::string_view value) {
+    m_response->SetHeaders(key, value);
+}
+
+std::string_view HttpContextResponse::GetHeader(const std::string& key) {
+    return m_request->GetHeader(key);
 }
 
 // TODO: test

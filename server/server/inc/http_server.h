@@ -21,6 +21,8 @@ struct HttpContext {
     virtual void HTML(http::HttpStatus, std::string_view)=0;
     virtual void JSON(int, const std::unordered_map<std::string, std::string>&)=0;
     virtual void HTML(int, std::string_view)=0;
+    virtual void SetHeader(const std::string&, std::string_view)=0;
+    virtual std::string_view GetHeader(const std::string&)=0;
     http::HttpRequest::ptr m_request;
     http::HttpResponse::ptr m_response;
     MiddlewareHandler m_handler;
@@ -35,6 +37,8 @@ struct HttpContextResponse:public HttpContext {
     void HTML(http::HttpStatus, std::string_view) override;
     void JSON(int s, const std::unordered_map<std::string, std::string>& j) override {JSON(static_cast<http::HttpStatus>(s), j);}
     void HTML(int s, std::string_view v) override {HTML(static_cast<http::HttpStatus>(s), v);}
+    void SetHeader(const std::string&, std::string_view) override;
+    std::string_view GetHeader(const std::string&) override;
 };
 
 struct Router {
@@ -76,7 +80,7 @@ public:
     // 开启IPv4服务器
     void serverV4(std::string_view IP, uint16_t port);
 
-    // 添加路由方法 PATH callback
+    // 添加路由方法 PATH callback m
     void POST(std::string_view, Router::callback);
     void GET(std::string_view, Router::callback);
     void ANY(std::string_view, std::string_view, Router::callback); // METHOD PATH callback

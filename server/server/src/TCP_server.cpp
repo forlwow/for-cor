@@ -39,13 +39,13 @@ namespace server
         for (auto &i: addresses){
             Socket::ptr sock = Socket::CreateTCP(i);
             if (!sock->bind(i)){
-                SERVER_LOG_ERROR(logger) << "TCP server bind failed" << "errno= " << errno << "addr=[" << i->toString() << "]";
+                SERVER_LOG_ERROR(logger) << "TCP server bind failed " << "errno= " << errno << "addr=[" << i->toString() << "]";
                 res = false;
                 fail.push_back(i);
                 continue;
             }
             if (!sock->listen()){
-                SERVER_LOG_ERROR(logger) << "TCP server listen failed" << "errno = " << errno << "addr=[" << i->toString() << "]";
+                SERVER_LOG_ERROR(logger) << "TCP server listen failed " << "errno = " << errno << "addr=[" << i->toString() << "]";
                 res = false;
                 fail.push_back(i);
                 continue;
