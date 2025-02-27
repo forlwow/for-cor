@@ -7,10 +7,12 @@
 #include "test_log.h"
 #include "test_util.h"
 #include "log.h"
+#include "test_dashboard.h"
 
 
 int test_main(){
     std::cout << "Test Version 1.0.0" << std::endl;
+    test_dashboard();
     return 0;
 }
 
