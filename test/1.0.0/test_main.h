@@ -11,8 +11,12 @@
 
 
 int test_main(){
-    std::cout << "Test Version 1.0.0" << std::endl;
+    auto logger = SERVER_LOGGER_SYSTEM;
+    // std::cout << "Test Version 1.0.0" << std::endl;
+    SERVER_LOG_DEBUG(logger) << "Test Version 1.0.0";
     test_dashboard();
+    SERVER_LOG_DEBUG(logger) << "Test END";
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
     return 0;
 }
 

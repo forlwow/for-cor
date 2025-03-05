@@ -53,15 +53,15 @@ add_executable(
         ${user_dir}
 )
 
+if(${TEST})
+        target_link_libraries(${PROJECT_NAME} test)
+endif()
 
-target_link_libraries(${PROJECT_NAME} log memory util ethread ecoroutine fiber socket dev http server)
+target_link_libraries(${PROJECT_NAME} server log memory util ethread ecoroutine fiber socket dev http )
 target_link_libraries(${PROJECT_NAME} thirdMould)
 target_link_libraries(${PROJECT_NAME} yaml-cpp)
 target_link_libraries(${PROJECT_NAME} llhttp)
 target_link_libraries(${PROJECT_NAME} pthread)
 
-if(${TEST})
-        target_link_libraries(${PROJECT_NAME} test)
-endif()
 
 
