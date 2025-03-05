@@ -62,8 +62,12 @@ namespace server
             return true;
         }
         m_isStop = false;
-        for (auto &i: m_sockets) {
-            m_worker->schedule(std::make_shared<AsyncFiber>(std::bind_front(&TcpServer::startAccept, shared_from_this(), i)));
+        for (Socket::ptr & i: m_sockets) {
+            m_worker->schedule(
+                std::make_shared<AsyncFiber>(
+                    std::bind_front(&TcpServer::startAccept, shared_from_this(), i)
+                    )
+                );
         }
         return true;
     }
