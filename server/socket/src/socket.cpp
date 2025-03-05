@@ -145,7 +145,7 @@ Socket::ptr Socket::accept(){
     int newsock = ::accept(m_sock, addr->getAddr(), &len);
     if(newsock == -1){
         if (errno != EAGAIN){
-            SERVER_LOG_DEBUG(s_log) << "accept error sock=" << m_sock
+            SERVER_LOG_ERROR(s_log) << "accept error sock=" << m_sock
                 << " errno=" << errno << " errstr=" << std::string(strerror(errno));
         }
         return {};

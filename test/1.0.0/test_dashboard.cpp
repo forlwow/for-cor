@@ -27,17 +27,35 @@ void serverinfo(server::HttpContext::ptr c) {
 }
 
 void server_load(server::HttpContext::ptr c) {
-
+    c->SetHeader("Access-Control-Allow-Credentials", "true");
+    c->SetHeader("Access-Control-Allow-Methods", "POST,GET,OPTIONS,DELETE,PUT,HEAD,PATCH");
+    c->SetHeader("Access-Control-Allow-Origin", "*");
+    c->SetHeader("Access-Control-Allow-Headers", "*");
+    auto cpu = server::util::getCpuUse();
+    auto m = server::util::getMemUsage();
+    server::util::DiskInfo d;
+    server::util::getDiskInfo_(d, "/");
+    server::util::NetInfo netinfo;
+    server::util::getNetInfo_(netinfo, "eth0");
+    c->JSON(200, {
+        {"cpu", std::to_string(cpu)},
+        {"mem", std::to_string(m)},
+        {"disk-total", std::to_string(d.total)},
+        {"disk-free", std::to_string(d.free)},
+        {"net-w", std::to_string(netinfo.wbytes)},
+        {"net-r", std::to_string(netinfo.rbytes)},
+    }
+    );
 }
 
 void test_dashboard_() {
     static server::HttpServer::ptr s = std::make_shared<server::HttpServer>();
     s->GET("/api/server/info", serverinfo);
+    s->GET("/api/server/load", server_load);
 
-    s->serverV4("192.168.1.110", 39000);
+    s->serverV4("10.120.115.120", 39000);
 }
 
 void test_dashboard(){
-    // test_dashboard_();
-    SERVER_LOG_DEBUG(logger) << std::to_string(server::util::getCpuUse());
+    test_dashboard_();
 }
