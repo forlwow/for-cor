@@ -28,6 +28,7 @@ public:
 
     static bool host2Address(std::vector<ptr>&, const std::string& host, const std::string& service, int family, int type, int protocol = 0);
 
+    // 获取协议
     int getFamily() const;
     virtual const sockaddr* getAddr() const=0;
     virtual sockaddr* getAddr() =0;

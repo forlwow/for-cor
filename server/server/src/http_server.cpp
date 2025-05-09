@@ -285,8 +285,8 @@ void HttpServer::HandleCallback(HttpContext::ptr context) {
 Task HttpServer::handleClient(Socket::ptr client) {
     const int BUFFER_SIZE = 1024;
     char recv_buffer[BUFFER_SIZE];
-    auto recver = server::recv(client, recv_buffer, BUFFER_SIZE);
-    auto sender = server::send(client); // 在发送前会重设 开始不需要设置缓冲
+    // auto recver = server::recv(client, recv_buffer, BUFFER_SIZE);
+    // auto sender = server::send(client); // 在发送前会重设 开始不需要设置缓冲
     http::HttpRequestParser_v2::ptr parser;
     if (m_request_parsers->empty()) {
         parser = std::make_shared<http::HttpRequestParser_v2>();
@@ -296,11 +296,13 @@ Task HttpServer::handleClient(Socket::ptr client) {
         m_request_parsers->pop();
     }
     while (true) {
-        recver.reset(recv_buffer, BUFFER_SIZE);
+        // recver.reset(recv_buffer, BUFFER_SIZE);
         // 接收数据
-        int res = co_await recver;
+        // int res = co_await recver;
+        int res = co_await server::recv(client, recv_buffer, BUFFER_SIZE);
         if (res < 0) {
-            SERVER_LOG_WARN(logger) << "HTTPServer recv fail err=" << Sock_Result2String(res);
+            if (res != SOCK_EAGAIN)
+                SERVER_LOG_WARN(logger) << "HTTPServer recv fail err=" << Sock_Result2String(res);
             if (res == SOCK_CLOSE)
                 break;
             continue;
@@ -320,11 +322,12 @@ Task HttpServer::handleClient(Socket::ptr client) {
             HttpContext::ptr ctx = std::make_shared<HttpContextResponse>(parser->GetData());
             HandleCallback(ctx);
             std::string data = ctx->m_response->toString();
-            sender.reset(data, data.size());
+            // sender.reset(data, data.size());
             // 循环发送数据
             int wres = 0;
             do {
-                wres = co_await sender;
+                // wres = co_await sender;
+                wres = co_await server::send(client, data, data.size());
                 if (wres < 0) {
                     SERVER_LOG_WARN(logger) << "HTTPServer send fail err=" << Sock_Result2String(wres);
                     if (wres == SOCK_CLOSE)
@@ -344,6 +347,7 @@ Task HttpServer::handleClient(Socket::ptr client) {
     }
 
     m_request_parsers->push(parser);
+    SERVER_LOG_DEBUG(logger) << "HttpServer Client close " << client->getFd();
     co_return;
 }
 

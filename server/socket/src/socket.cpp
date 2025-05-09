@@ -236,9 +236,9 @@ bool Socket::listen(int backlog){
 }
 
 void Socket::close(){
-    SERVER_LOG_DEBUG(s_log) << "socket close:" << m_sock;
     if(!m_isConnected && m_sock == -1)
         return ;
+    SERVER_LOG_DEBUG(s_log) << "socket close:" << m_sock;
     if(m_sock != -1){
         ::close(m_sock);
         if(IOManager::GetIOManager()){

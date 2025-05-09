@@ -13,6 +13,9 @@ set(CMAKE_C_COMPILER /usr/local/bin/gcc)
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 
+add_compile_definitions(CURRENT_LOG_LEVEL=0)
+# 同步 SYNC_LOG 异步 ASYNC_LOG
+add_compile_definitions(LOG_MODE=SYNC_LOG)
 set(CMAKE_BUILD_TYPE "Debug")
 set(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -g2 -ggdb -ldl")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
