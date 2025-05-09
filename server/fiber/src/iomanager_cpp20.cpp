@@ -75,18 +75,23 @@ int IOManager_::AddEvent(int fd, Event event, Fiber_::ptr cb){
     int op = nfd->events == NONE ? EPOLL_CTL_ADD : EPOLL_CTL_MOD;
     epoll_event evt;
     memset(&evt, 0, sizeof(evt));
-    evt.events = (uint32_t)EPOLLET | nfd->events | event; 
+    evt.events = (uint32_t)EPOLLET | nfd->events | event | EPOLLONESHOT;
     evt.data.fd = fd;
     int ret = epoll_ctl(m_epfd, op, fd, &evt);
     if (ret){
-        SERVER_LOG_ERROR(g_logger) << "epoll ctl error " 
+        if (ret < 0 && errno ==ENOENT) {
+            ret = epoll_ctl(m_epfd, EPOLL_CTL_ADD, fd, &evt);
+        }
+        if (ret < 0) {
+        SERVER_LOG_ERROR(g_logger) << "epoll ctl error "
             << "epoll fd:" << m_epfd << ", "
-            << "operator:" << op << ", " 
-            << "fd:"<< fd << ", " 
+            << "operator:" << op << ", "
+            << "fd:"<< fd << ", "
              << "epoll_event:" << (evt.events & WRITE) << "-" << (evt.events & READ) << ", "
              << "errno:" << errno << ", "
              << "errstr:" << std::string(strerror(errno));
-        return 2;
+            return 2;
+        }
     }
 
     nfd->events = (Event)(event | nfd->events);
@@ -133,7 +138,8 @@ bool IOManager_::DelEvent(int fd, Event event){
 bool IOManager_::DelFd(int fd){
     int res = epoll_ctl(m_epfd, EPOLL_CTL_DEL, fd, NULL);
     if(res < 0 && errno != EBADF){
-        SERVER_LOG_ERROR(g_logger) << "epoll ctl error " << m_epfd << ", " << fd 
+        if (errno != 2)
+            SERVER_LOG_ERROR(g_logger) << "epoll ctl error, epollfd: " << m_epfd << ", fd: " << fd
                                             << ", errno: " << errno << ", error:"
                                             << std::string(strerror(errno));
         return false;

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>静态博客测试页面</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans">
+  <!-- Header -->
+  <header class="bg-white shadow p-6">
+    <div class="max-w-5xl mx-auto flex justify-between items-center">
+      <h1 class="text-2xl font-bold text-blue-600">我的博客</h1>
+      <nav class="space-x-4">
+        <a href="index" class="text-gray-700 hover:text-blue-500">首页</a>
+        <a href="about" class="text-gray-700 hover:text-blue-500">关于</a>
+        <a href="contact" class="text-gray-700 hover:text-blue-500">联系</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-5xl mx-auto py-8 px-4">
+    <h2 class="text-xl font-semibold mb-4">最新文章</h2>
+    <div class="grid md:grid-cols-2 gap-6">
+      <!-- Blog Post Card -->
+      <article class="bg-white p-5 rounded-xl shadow hover:shadow-lg transition">
+        <h3 class="text-lg font-bold mb-2">如何构建你的第一个网页应用</h3>
+        <p class="text-gray-600 text-sm mb-3">2025年5月1日 • 编程</p>
+        <p class="text-gray-700">本教程将带你从零开始创建一个简单但实用的网页应用……</p>
+        <a href="/post1" class="text-blue-500 hover:underline mt-2 inline-block">阅读全文 →</a>
+      </article>
+
+      <article class="bg-white p-5 rounded-xl shadow hover:shadow-lg transition">
+        <h3 class="text-lg font-bold mb-2">使用 Tailwind CSS 美化你的博客</h3>
+        <p class="text-gray-600 text-sm mb-3">2025年4月20日 • 前端</p>
+        <p class="text-gray-700">你是否厌倦了传统 CSS？Tailwind 提供了一种更快更现代的方式来美化你的网页。</p>
+        <a href="/post2" class="text-blue-500 hover:underline mt-2 inline-block">阅读全文 →</a>
+      </article>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t mt-10 p-6 text-center text-sm text-gray-500">
+    © 2025 我的博客. 保留所有权利.
+  </footer>
+</body>
+</html>

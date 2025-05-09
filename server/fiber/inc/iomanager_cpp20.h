@@ -181,7 +181,7 @@ private:
         FdContext(int fd_):fd(fd_){}
         ~FdContext(){}
         int fd = -1;
-        Event events = NONE;
+        Event events = NONE;    // 当前监视的事件
         EventContext read;
         EventContext write;
         EventContext& GetEventContext(Event event) {
@@ -200,7 +200,7 @@ private:
         void TriggerEvent(Event event){
             EventContext& evt = GetEventContext(event);
             evt.scheduler->schedule(evt.fiber);
-            // events = (Event)(events & ~event);
+            // events = (Event)(events & (~event));
         }
         // 只在一个线程中操作 不需要锁
     };

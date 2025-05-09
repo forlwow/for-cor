@@ -34,6 +34,12 @@ public:
         return std::chrono::duration_cast<T>(
                 end_time - start_time);
     }
+
+    template<typename T = std::chrono::milliseconds>
+    static auto get_now() {
+        return std::chrono::duration_cast<T>(std::chrono::system_clock::now().time_since_epoch()).count();
+    }
+
 private:
     std::chrono::time_point<std::chrono::high_resolution_clock> start_time;
     std::chrono::time_point<std::chrono::high_resolution_clock> end_time;

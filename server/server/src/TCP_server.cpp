@@ -95,7 +95,8 @@ namespace server
             Socket::ptr client = co_await server::accept(sock);
 
             if (client == nullptr) {
-                SERVER_LOG_ERROR(logger) << "TCP server accept failed " << "errno=" << errno << " errstr=" << std::string(strerror(errno));
+                if (errno != EAGAIN)
+                    SERVER_LOG_ERROR(logger) << "TCP server accept failed " << "errno=" << errno << " errstr=" << std::string(strerror(errno));
             }
             else {
                 m_worker->schedule(std::make_shared<AsyncFiber>(&TcpServer::handleClient, this, client));

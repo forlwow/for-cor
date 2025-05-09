@@ -166,7 +166,7 @@ public:
         if(!check_read()){
             return false;
         }
-        // *value = std::move(m_queue.front());
+        // *value = std::move(m_queue.front());     // 使用move解决内存销毁问题
         *value = m_queue.front();
         m_queue.pop();
         return true;

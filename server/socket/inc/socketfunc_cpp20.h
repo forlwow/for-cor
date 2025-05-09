@@ -109,7 +109,7 @@ struct send{
         if(m_isAddEvent){
             IOManager_::GetIOManager()->DelEvent(m_sock->getFd(), IOManager_::WRITE);
         }
-        SERVER_LOG_DEBUG(s_log) << "sender destory";
+        // SERVER_LOG_DEBUG(s_log) << "sender destory";
     }
 
     bool await_ready() {
@@ -194,7 +194,7 @@ struct recv{
         if(m_isAddEvent){
             IOManager_::GetIOManager()->DelEvent(m_sock->getFd(), IOManager_::READ);
         }
-        SERVER_LOG_DEBUG(s_log) << "recv destroy";
+        // SERVER_LOG_DEBUG(s_log) << "recv destroy";
     }
 
     bool await_ready() {
@@ -255,7 +255,7 @@ struct accept{
         if(m_isAddEvent){
             IOManager_::GetIOManager()->DelEvent(m_sock->getFd(), IOManager_::READ);
         }
-        SERVER_LOG_DEBUG(s_log) << "accepter destory";
+        // SERVER_LOG_DEBUG(s_log) << "accepter destory";
     }
 
     bool await_ready() {
@@ -275,7 +275,7 @@ struct accept{
             return;
         }
         if (errno == EAGAIN){
-            int res = iom->AddEvent(m_sock->getFd(), IOManager_::READ, fib);
+            iom->AddEvent(m_sock->getFd(), IOManager_::READ, fib);
         }
         else{
             handle.resume();

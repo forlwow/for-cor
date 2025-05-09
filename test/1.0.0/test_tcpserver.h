@@ -6,6 +6,11 @@
 #define SERVER_TEST_TCP_SERVER_H
 #include <http_server.h>
 #include "log.h"
+#include "configuration.h"
+
+static auto logger = SERVER_LOGGER_SYSTEM;
+static std::string IP = server::util::Config::GetInstance()->ReadString("IP");
+static uint16_t PORT = server::util::Config::GetInstance()->Read<uint16_t>("PORT");
 
 namespace server{
 
@@ -117,6 +122,17 @@ namespace test
         server->serverV4("192.168.1.110", 39001);
     }
 
+
+    void test_http_performance(){
+        auto server = std::make_shared<HttpServer>(5);
+        server->DEFAULT([](HttpContext::ptr ctx){
+           ctx->HTML(404, "404 not found");
+        });
+        server->GET("/ping", [](HttpContext::ptr ctx) {
+          ctx->JSON(200, {{"msg", "pong"}});
+        });
+        server->serverV4(IP, PORT);
+    }
 }
 }
 

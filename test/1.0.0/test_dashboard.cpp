@@ -6,8 +6,12 @@
 
 #include <http_server.h>
 #include <sys_info.h>
+#include "configuration.h"
 
 static auto logger = SERVER_LOGGER_SYSTEM;
+static std::string IP = server::util::Config::GetInstance()->ReadString("IP");
+static uint16_t PORT = server::util::Config::GetInstance()->Read<uint16_t>("PORT");
+
 
 void serverinfo(server::HttpContext::ptr c) {
     c->SetHeader("Access-Control-Allow-Credentials", "true");
@@ -19,7 +23,7 @@ void serverinfo(server::HttpContext::ptr c) {
         {"version", "ubuntu-20.04"},
         {"kernel_version", "5.4.0"},
         {"system", "x86_64"},
-        {"start_time", "2025-07-21"},
+        {"start_time", "2025-04-21"},
         {"run_time", "54h-46m-12s"},
         {"status", "run"}
         }
@@ -53,7 +57,7 @@ void test_dashboard_() {
     s->GET("/api/server/info", serverinfo);
     s->GET("/api/server/load", server_load);
 
-    s->serverV4("10.120.115.120", 39000);
+    s->serverV4(IP, PORT);
 }
 
 void test_dashboard(){

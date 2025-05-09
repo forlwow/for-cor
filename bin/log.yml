@@ -1,9 +1,9 @@
 system:
   - 
     # fmt: "%N%T%F%T[%p]%T[%c]%T%f:%l%T%m%n"
-    fmt: "%d{%Y-%m-%d %H:%M:%S}%T%t%T%N%T[%p]%T[%c]:%l%T%m%n"
+    fmt: "%d{%Y-%m-%d %H:%M:%S}%T%t%T%N%T[%p]%T[%c]%T%f:%l%T%m%n"
     out: std
-    level: DEBUG
+    level: INFO
   - 
     fmt: "%d{%Y-%m-%d %H:%M:%S}%T%t%T%N%T%F%T[%p]%T[%c]%T%f:%l%T%m%n"
     out: file
@@ -17,6 +17,7 @@ std:
 file:
   - 
     fmt: "%d{%Y-%m-%d %H:%M:%S}%T%t%T%N%T%F%T[%p]%T[%c]%T%f:%l%T%m%n"
+#    fmt: "%T%t%T%N%T%F%T[%p]%T[%c]%T%f:%l%T%m%n"
     out: file
     level: INFO
     filename: log.txt
@@ -26,4 +27,3 @@ nullfile:
     out: file
     level: DEBUG
     filename: null.txt
-

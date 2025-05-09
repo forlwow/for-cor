@@ -3,6 +3,7 @@
 
 #include <atomic>
 #include <concepts>
+#include <log.h>
 #if __cplusplus >= 202002L
 
 #include <coroutine>
@@ -30,6 +31,7 @@ struct Task{
         std::suspend_always initial_suspend() const noexcept {return {};}
         std::suspend_never final_suspend() const noexcept {return {};}
         void unhandled_exception() {
+            SERVER_LOG_ERROR(SERVER_LOGGER_SYSTEM) << "Task Error: " << errnum;
             if(handler) handler(errnum);
         }
         Task get_return_object() {
@@ -42,7 +44,8 @@ struct Task{
 
     std::coroutine_handle<promise_type> h_;
     void operator()(){h_.resume();}
-    bool done(){return h_.done();}
+    bool done(){return h_.done() || iserror();}
+    bool iserror() {return h_.address() == nullptr || h_.promise().errnum != 0;}
 }; 
 
 
