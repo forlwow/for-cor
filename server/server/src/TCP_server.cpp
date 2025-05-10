@@ -91,16 +91,22 @@ namespace server
     }
 
     Task TcpServer::startAccept(Socket::ptr sock) {
+        auto strongSock = sock;
         while (1) {
             // Socket::ptr client = sock->accept();
-            Socket::ptr client = co_await server::accept(sock);
+            Socket::ptr client = co_await server::accept(strongSock);
 
-            if (client == nullptr) {
-                if (errno != EAGAIN)
-                    SERVER_LOG_ERROR(logger) << "TCP server accept failed " << "errno=" << errno << " errstr=" << std::string(strerror(errno));
+            if (!client) {
+                if (errno != EAGAIN && errno != 0) {
+                    SERVER_LOG_ERROR(logger) << "TCP server accept failed " <<
+                        "accept socket: " << sock->getFd() << " " <<
+                        "socket error: " << sock->getError() << " " <<
+                        "errno=" << errno <<
+                            " errstr=" << std::string(strerror(errno));
+                }
             }
             else {
-                SERVER_LOG_INFO(logger) << "TCP server accept: " << client->getFd();
+                SERVER_LOG_DEBUG(logger) << "TCP server accept: " << client->getFd();
                 m_worker->schedule(std::make_shared<AsyncFiber>(&TcpServer::handleClient, this, client));
             }
         }

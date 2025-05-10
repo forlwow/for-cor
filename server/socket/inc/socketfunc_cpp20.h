@@ -61,7 +61,11 @@ struct connect{
         }
     }
     bool await_ready() {
-        return false;
+        int res = m_sock->connect(m_address);
+        if(res == EINPROGRESS){
+            return false;
+        }
+        return true;
     }
     template<FiberPromise T>
     void await_suspend(T handle){
@@ -72,13 +76,8 @@ struct connect{
             throw std::logic_error("fib|iomanager not found");
             return;
         }
-        int res = m_sock->connect(m_address);
-        if(res == EINPROGRESS){
-            int res = iom->AddEvent(m_sock->getFd(), IOManager_::WRITE, fib);
-            m_isAddEvent = true;
-            if(res)
-                handle.resume();
-        }
+        iom->AddEvent(m_sock->getFd(), IOManager_::WRITE, fib);
+        m_isAddEvent = true;
         return;
     }
     int await_resume() {
@@ -113,36 +112,16 @@ struct send{
     }
 
     bool await_ready() {
-        return false;
-    }
-    template<FiberPromise T>
-    void await_suspend(T handle){
-        auto fib = Fiber_::GetThis().lock();
-        // auto fib = std::dynamic_pointer_cast<FiberIO>(Fiber_::GetThis().lock());
-        auto iom = IOManager_::GetIOManager();
-        if(!iom || !fib){
-            SERVER_LOG_ERROR(s_log) << ("fib|iomanager not found");
-            return;
-        }
         res = m_sock->send(m_str.data(), m_len, m_flag);
         if(res == - 1 && (errno == EAGAIN || errno == EWOULDBLOCK)){
             res = SOCK_EAGAIN;
-            int tr = iom->AddEvent(m_sock->getFd(), IOManager_::WRITE, fib);
-            m_isAddEvent = true;
-            if(tr)
-                handle.resume();
+            return false;
         }
         else if (res == 0){
             res = SOCK_CLOSE;
-            handle.resume();
+            return true;
         }
         else if(res > 0){
-            // m_str = m_str.substr(res);
-            // m_len = std::min(m_len, (int)m_str.length());
-            // res = SOCK_REMAIN_DATA;
-            // if (m_str.empty()) {
-            //     res = SOCK_SUCCESS;
-            // }
             if (res == m_str.size()) {
                 res = SOCK_SUCCESS;
             }
@@ -151,13 +130,24 @@ struct send{
                 m_len = m_str.size() - res;
                 res = SOCK_REMAIN_DATA;
             }
-            handle.resume();
+            return true;
         }
         else {
             res = SOCK_OTHER;
+            return true;
         }
-
-
+        return false;
+    }
+    template<FiberPromise T>
+    void await_suspend(T handle){
+        auto fib = Fiber_::GetThis().lock();
+        auto iom = IOManager_::GetIOManager();
+        if(!iom || !fib){
+            SERVER_LOG_ERROR(s_log) << ("fib|iomanager not found");
+            return;
+        }
+        int tr = iom->AddEvent(m_sock->getFd(), IOManager_::WRITE, fib);
+        m_isAddEvent = true;
     }
     int await_resume() {
         return res;
@@ -198,6 +188,22 @@ struct recv{
     }
 
     bool await_ready() {
+        res = m_sock->recv(m_buf, m_len, m_flag);
+        if(res == - 1 && (errno == EAGAIN || errno == EWOULDBLOCK)){
+            res = SOCK_EAGAIN;
+            return false;
+        }
+        else if (res == 0){
+            res = SOCK_CLOSE;
+            return true;
+        }
+        else if(res > 0){
+            return true;
+        }
+        else {
+            res = SOCK_OTHER;
+            return true;
+        }
         return false;
     }
     template<FiberPromise T>
@@ -208,23 +214,7 @@ struct recv{
             throw std::logic_error("fib|iomanager not found");
             return;
         }
-        res = m_sock->recv(m_buf, m_len, m_flag);
-        if(res == - 1 && (errno == EAGAIN || errno == EWOULDBLOCK)){
-            res = SOCK_EAGAIN;
-            int res = iom->AddEvent(m_sock->getFd(), IOManager_::READ, fib);
-            if(res)
-                handle.resume();
-        }
-        else if (res == 0){
-            res = SOCK_CLOSE;
-            handle.resume();
-        }
-        else if(res > 0){
-            handle.resume();
-        }
-        else {
-            res = SOCK_OTHER;
-        }
+        int res = iom->AddEvent(m_sock->getFd(), IOManager_::READ, fib);
     }
     int await_resume() {
         return res;
@@ -260,7 +250,10 @@ struct accept{
 
     bool await_ready() {
         m_res = m_sock->accept();
-        if (m_res) return true;
+        if (m_res) {
+            m_isAddEvent = false;
+            return true;
+        }
         return false;
     }
     template<FiberPromise T>
@@ -272,8 +265,12 @@ struct accept{
             return;
         }
         iom->AddEvent(m_sock->getFd(), IOManager_::READ, fib);
+        m_isAddEvent = true;
     }
     Socket::ptr await_resume() {
+        if (m_isAddEvent) {
+            m_res = m_sock->accept();
+        }
         return m_res;
     }
 

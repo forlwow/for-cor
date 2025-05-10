@@ -154,6 +154,8 @@ Socket::ptr Socket::accept(){
     // Socket::ptr sock(new Socket(m_family, m_type, m_protocol));
     if(sock->init(newsock))
         return sock;
+    SERVER_LOG_ERROR(s_log) << "accept error sock=" << m_sock << "init error"
+                << " errno=" << errno << " errstr=" << std::string(strerror(errno));
     return {};
 }
 
