@@ -27,10 +27,6 @@ static std::string post2 = server::util::FileReader::readFile("./template/post2.
 
 
 void IndexHandler(server::HttpContext::ptr c) {
-    c->SetHeader("Access-Control-Allow-Credentials", "true");
-    c->SetHeader("Access-Control-Allow-Methods", "POST,GET,OPTIONS,DELETE,PUT,HEAD,PATCH");
-    c->SetHeader("Access-Control-Allow-Origin", "*");
-    c->SetHeader("Access-Control-Allow-Headers", "*");
     c->HTML(200, indexPage);
 }
 void AboutHandler(server::HttpContext::ptr c) {

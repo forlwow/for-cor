@@ -20,10 +20,10 @@ int test_main(){
     SERVER_LOG_DEBUG(logger) << "Test Version 1.0.0";
     // test_fiber();
     // test_iomanager();
-    // server::test::test_http_performance();  // 测试http服务器性能
+    server::test::test_http_performance();  // 测试http服务器性能
     // test_performance_web();
     // test_async_log_performance();    // 测试异步日志
-    test_performance();  // 测试日志
+    // test_performance();  // 测试日志
     // test_dashboard();    // 测试动态网页
     // test_static_web();  // 测试静态网页
     SERVER_LOG_DEBUG(logger) << "Test END";

@@ -49,7 +49,7 @@ namespace server::util
         CPUInfo f, s;
         if (!getCpuUse_(f))
             return -1;
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
         if (!getCpuUse_(s))
             return -1;
         return ComCpuUse_(f, s);

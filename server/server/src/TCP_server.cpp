@@ -63,11 +63,12 @@ namespace server
         }
         m_isStop = false;
         for (Socket::ptr & i: m_sockets) {
-            m_worker->schedule(
-                std::make_shared<AsyncFiber>(
-                    std::bind_front(&TcpServer::startAccept, shared_from_this(), i)
-                    )
-                );
+            // m_worker->schedule(
+            //     std::make_shared<AsyncFiber>(
+            //         std::bind_front(&TcpServer::startAccept, shared_from_this(), i)
+            //         )
+            //     );
+            m_worker->schedule(AsyncFiber::CreatePtr(&TcpServer::startAccept, shared_from_this(), i));
         }
         return true;
     }
@@ -90,7 +91,7 @@ namespace server
     }
 
     Task TcpServer::startAccept(Socket::ptr sock) {
-        while (!m_isStop) {
+        while (1) {
             // Socket::ptr client = sock->accept();
             Socket::ptr client = co_await server::accept(sock);
 
@@ -99,10 +100,11 @@ namespace server
                     SERVER_LOG_ERROR(logger) << "TCP server accept failed " << "errno=" << errno << " errstr=" << std::string(strerror(errno));
             }
             else {
+                SERVER_LOG_INFO(logger) << "TCP server accept: " << client->getFd();
                 m_worker->schedule(std::make_shared<AsyncFiber>(&TcpServer::handleClient, this, client));
-
             }
         }
+        SERVER_LOG_WARN(logger) << "TCP server accept close";
         co_return;
     }
 

@@ -40,7 +40,8 @@ void server_load(server::HttpContext::ptr c) {
     server::util::DiskInfo d;
     server::util::getDiskInfo_(d, "/");
     server::util::NetInfo netinfo;
-    server::util::getNetInfo_(netinfo, "eth0");
+    server::util::getNetInfo_(netinfo, "eno1");
+    // server::util::getNetInfo_(netinfo, "eth0");
     c->JSON(200, {
         {"cpu", std::to_string(cpu)},
         {"mem", std::to_string(m)},

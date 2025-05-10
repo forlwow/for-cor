@@ -41,7 +41,7 @@ protected:
     int m_thread_count;
     std::atomic_int m_working_thread = 0;       // 正在工作的线程的数量 
     std::vector<EThread::ptr> m_threads;          // 所有线程
-    threadsafe_deque<task_type> m_tasks;          // 工作队列 
+    threadsafe_deque<task_type> m_tasks;          // 工作队列
 
 };
 

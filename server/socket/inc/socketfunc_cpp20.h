@@ -259,6 +259,8 @@ struct accept{
     }
 
     bool await_ready() {
+        m_res = m_sock->accept();
+        if (m_res) return true;
         return false;
     }
     template<FiberPromise T>
@@ -269,21 +271,9 @@ struct accept{
             throw std::logic_error("fib|iomanager not found");
             return;
         }
-        m_res = m_sock->accept();
-        if (m_res){
-            handle.resume();
-            return;
-        }
-        if (errno == EAGAIN){
-            iom->AddEvent(m_sock->getFd(), IOManager_::READ, fib);
-        }
-        else{
-            handle.resume();
-        }
+        iom->AddEvent(m_sock->getFd(), IOManager_::READ, fib);
     }
     Socket::ptr await_resume() {
-        if(!m_res)
-            m_res = m_sock->accept();
         return m_res;
     }
 

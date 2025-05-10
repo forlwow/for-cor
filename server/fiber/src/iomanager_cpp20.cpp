@@ -79,7 +79,7 @@ int IOManager_::AddEvent(int fd, Event event, Fiber_::ptr cb){
     evt.data.fd = fd;
     int ret = epoll_ctl(m_epfd, op, fd, &evt);
     if (ret){
-        if (ret < 0 && errno ==ENOENT) {
+        if (ret < 0 && errno == ENOENT) {
             ret = epoll_ctl(m_epfd, EPOLL_CTL_ADD, fd, &evt);
         }
         if (ret < 0) {
