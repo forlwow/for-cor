@@ -7,3 +7,5 @@
 /cmake-build-debug/
 /server/log/info.md
 *.TODO.md
+/bin/*.txt
+/package

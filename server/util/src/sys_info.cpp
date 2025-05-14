@@ -7,6 +7,7 @@
 #include <fcntl.h>
 #include <cstdio>
 #include <cstring>
+#include <iostream>
 #include <thread>
 #include <sys/statfs.h>
 
@@ -130,14 +131,28 @@ namespace server::util
         std::string line;
         while (getline(file, line)) {
             if (line.find(iface) ==  std::string::npos) {continue;}
-            std::istringstream ss(line);
-            std::string name;
-            ss >> name >> net.rbytes >> ws >> ws >> ws >> ws >> ws >> ws >> ws >> ws >> net.wbytes;
+            // std::istringstream ss(line);
+            // std::string name;
+            auto pos = line.find(':');
+            if (pos == std::string::npos) continue;
+
+            std::string name = line.substr(0, pos);
+            name.erase(0, name.find_first_not_of(" \t"));  // 去除左空格
+            if (name != iface) continue;
+
+            std::istringstream ss(line.substr(pos + 1));
+            uint64_t fields[16] = {0};
+            for (int i = 0; i < 16; ++i) {
+                ss >> fields[i];
+            }
+            net.rbytes = fields[0];
+            net.wbytes = fields[8];
+            // SERVER_LOG_INFO(logger) << net.rbytes << " " << net.wbytes;
             file.close();
             return true;
         }
         file.close();
-        SERVER_LOG_ERROR(logger) << "System Info: failed to get net";
+        SERVER_LOG_ERROR(logger) << "System Info: failed to get net iface: " << iface;
         return false;
     }
 

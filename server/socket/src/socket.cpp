@@ -141,7 +141,7 @@ bool Socket::setOption(int level, int option, const void *result, socklen_t len)
 Socket::ptr Socket::accept(){
     // auto addr = IPv4Address::ptr(new IPv4Address);
     auto addr = std::make_shared<IPv4Address>();
-    socklen_t len;
+    socklen_t len = addr->getAddrLen();
     int newsock = ::accept(m_sock, addr->getAddr(), &len);
     if(newsock == -1){
         if (errno != EAGAIN){
@@ -240,11 +240,11 @@ bool Socket::listen(int backlog){
 void Socket::close(){
     if(!m_isConnected && m_sock == -1)
         return ;
-    SERVER_LOG_DEBUG(s_log) << "socket close:" << m_sock;
     if(m_sock != -1){
-        ::close(m_sock);
-        if(IOManager::GetIOManager()){
-            IOManager::GetIOManager()->DelFd(m_sock);
+        SERVER_LOG_DEBUG(s_log) << "socket close:" << m_sock;
+        IOManager::GetIOManager()->DelFd(m_sock);
+        if (::close(m_sock) == -1) {
+            SERVER_LOG_ERROR(s_log) << "socket close error:" << m_sock << " error: " << std::string(strerror(errno));
         }
         m_sock = -1;
     }

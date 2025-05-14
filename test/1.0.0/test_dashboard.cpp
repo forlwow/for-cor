@@ -11,6 +11,7 @@
 static auto logger = SERVER_LOGGER_SYSTEM;
 static std::string IP = server::util::Config::GetInstance()->ReadString("IP");
 static uint16_t PORT = server::util::Config::GetInstance()->Read<uint16_t>("PORT");
+static std::string CARD = server::util::Config::GetInstance()->Read<std::string>("NET_CARD");
 
 
 void serverinfo(server::HttpContext::ptr c) {
@@ -40,7 +41,7 @@ void server_load(server::HttpContext::ptr c) {
     server::util::DiskInfo d;
     server::util::getDiskInfo_(d, "/");
     server::util::NetInfo netinfo;
-    server::util::getNetInfo_(netinfo, "eno1");
+    server::util::getNetInfo_(netinfo, CARD);
     // server::util::getNetInfo_(netinfo, "eth0");
     c->JSON(200, {
         {"cpu", std::to_string(cpu)},

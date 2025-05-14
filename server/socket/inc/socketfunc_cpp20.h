@@ -245,7 +245,7 @@ struct accept{
         if(m_isAddEvent){
             IOManager_::GetIOManager()->DelEvent(m_sock->getFd(), IOManager_::READ);
         }
-        // SERVER_LOG_DEBUG(s_log) << "accepter destory";
+        // SERVER_LOG_WARN(s_log) << "accepter destory";
     }
 
     bool await_ready() {
@@ -264,8 +264,8 @@ struct accept{
             throw std::logic_error("fib|iomanager not found");
             return;
         }
-        iom->AddEvent(m_sock->getFd(), IOManager_::READ, fib);
         m_isAddEvent = true;
+        iom->AddEvent(m_sock->getFd(), IOManager_::READ, fib);
     }
     Socket::ptr await_resume() {
         if (m_isAddEvent) {
@@ -278,6 +278,65 @@ struct accept{
     Socket::ptr m_sock;
     Socket::ptr m_res;
 };
+
+    class ExecAwaitable {
+    public:
+        ExecAwaitable(std::string cmd)
+            : m_cmd(std::move(cmd)) {}
+
+        bool await_ready() const noexcept { return false; }
+
+        template<FiberPromise T>
+        void await_suspend(T handle) {
+            auto iom = IOManager_::GetIOManager();
+            auto fiber = Fiber_::GetThis().lock();
+            if (!iom || !fiber) {
+                throw std::logic_error("No IOManager or Fiber");
+            }
+
+            int pipefd[2];
+            if (pipe(pipefd) == -1) {
+                throw std::runtime_error("pipe failed");
+            }
+
+            m_pipeRead = pipefd[0];
+            int pipeWrite = pipefd[1];
+
+            pid_t pid = fork();
+            if (pid == -1) {
+                throw std::runtime_error("fork failed");
+            } else if (pid == 0) {
+                // 子进程
+                dup2(pipeWrite, STDOUT_FILENO);
+                dup2(pipeWrite, STDERR_FILENO);
+                close(pipefd[0]);
+                close(pipefd[1]);
+                execl("/bin/sh", "sh", "-c", m_cmd.c_str(), (char*) nullptr);
+                _exit(127); // exec失败
+            }
+
+            close(pipeWrite); // 父进程关闭写端
+
+            // 异步等待 pipe 可读
+            iom->AddEvent(m_pipeRead, IOManager_::READ, fiber);
+        }
+
+        std::string await_resume() {
+            char buf[1024];
+            std::ostringstream oss;
+            ssize_t n = 0;
+            while ((n = ::read(m_pipeRead, buf, sizeof(buf))) > 0) {
+                oss.write(buf, n);
+            }
+            close(m_pipeRead);
+            return oss.str();
+        }
+
+    private:
+        std::string m_cmd;
+        int m_pipeRead = -1;
+    };
+
 
 } // namespace server
 

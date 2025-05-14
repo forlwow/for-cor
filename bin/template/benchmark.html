@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <title>协程式 HTTP 测试面板</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2em auto;
+      max-width: 800px;
+      background: #f9fafb;
+      color: #333;
+    }
+    input, textarea, button, select {
+      padding: 8px;
+      margin: 4px 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    button {
+      background: #4f46e5;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #4338ca;
+    }
+    pre {
+      background: #e2e8f0;
+      padding: 10px;
+      white-space: pre-wrap;
+      border-radius: 4px;
+    }
+    h2 {
+      margin-top: 1.5em;
+      border-bottom: 1px solid #cbd5e1;
+      padding-bottom: 0.3em;
+    }
+  </style>
+</head>
+<body>
+  <h1>协程式 HTTP 测试面板</h1>
+
+  <h2>功能测试</h2>
+  <label>URL</label>
+  <input id="url" type="text" value="http://localhost:39000/ping" />
+
+  <label>方法</label>
+  <label><input type="radio" name="method" value="GET" checked> GET</label>
+  <label><input type="radio" name="method" value="POST"> POST</label>
+
+  <label>请求体（JSON，仅 POST）</label>
+  <textarea id="body" rows="4">{ "msg": "hello" }</textarea>
+
+  <button onclick="sendRequest()">发送请求</button>
+
+  <pre id="output">等待请求...</pre>
+
+  <h2>压力测试</h2>
+  <label>并发数</label>
+  <input id="concurrency" type="number" value="10" min="1" />
+
+  <label>持续时间（秒）</label>
+  <input id="duration" type="number" value="5" min="1" />
+
+  <button onclick="startBenchmark()">开始压测</button>
+
+  <pre id="benchResult">等待开始压测...</pre>
+
+  <script>
+    async function sendRequest() {
+      const url = document.getElementById("url").value.trim();
+      const method = document.querySelector('input[name="method"]:checked').value;
+      const bodyInput = document.getElementById("body").value.trim();
+      const output = document.getElementById("output");
+
+      const options = {
+        method,
+        headers: {},
+      };
+
+      if (method === "POST") {
+        try {
+          JSON.parse(bodyInput); // 验证合法 JSON
+          options.headers["Content-Type"] = "application/json";
+          options.body = bodyInput;
+        } catch (e) {
+          output.innerText = "❌ 请求体不是合法 JSON";
+          return;
+        }
+      }
+
+      const start = performance.now();
+      try {
+        const res = await fetch(url, options);
+        const elapsed = (performance.now() - start).toFixed(2);
+        const text = await res.text();
+        let json;
+        try {
+          json = JSON.stringify(JSON.parse(text), null, 2);
+        } catch (e) {
+          json = text;
+        }
+
+        output.innerText = `✅ 状态: ${res.status} ${res.statusText}\n⏱️ 耗时: ${elapsed} ms\n📦 响应:\n${json}`;
+      } catch (err) {
+        output.innerText = `❌ 请求失败: ${err.message}`;
+      }
+    }
+
+    async function startBenchmark() {
+      const url = document.getElementById("url").value.trim();
+      const concurrency = parseInt(document.getElementById("concurrency").value);
+      const duration = parseInt(document.getElementById("duration").value) * 1000;
+      const benchResult = document.getElementById("benchResult");
+
+      let totalRequests = 0;
+      let failedRequests = 0;
+
+      const endTime = Date.now() + duration;
+
+      const worker = async () => {
+        while (Date.now() < endTime) {
+          try {
+            const res = await fetch(url);
+            if (!res.ok) failedRequests++;
+            totalRequests++;
+          } catch {
+            failedRequests++;
+            totalRequests++;
+          }
+        }
+      };
+
+      const start = Date.now();
+      const workers = Array.from({ length: concurrency }, () => worker());
+      await Promise.all(workers);
+      const elapsed = (Date.now() - start) / 1000;
+
+      const qps = (totalRequests / elapsed).toFixed(2);
+      benchResult.innerText =
+        `🚀 压测完成\n` +
+        `并发数: ${concurrency}\n持续时间: ${elapsed.toFixed(1)} 秒\n` +
+        `总请求: ${totalRequests}\n失败: ${failedRequests}\n` +
+        `QPS: ${qps}`;
+    }
+  </script>
+</body>
+</html>

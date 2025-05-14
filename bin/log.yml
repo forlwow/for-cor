@@ -7,8 +7,9 @@ system:
   - 
     fmt: "%d{%Y-%m-%d %H:%M:%S}%T%t%T%N%T%F%T[%p]%T[%c]%T%f:%l%T%m%n"
     out: file
-    level: DEBUG
-    filename: sys_log.txt
+    level: INFO
+#    filename: sys_log.txt
+    filename: system.txt
 std:
   - 
     fmt: "%d{%Y-%m-%d %H:%M:%S}%T%t%T%N%T%F%T[%p]%T[%c]%T%f:%l%T%m%n"
@@ -20,7 +21,7 @@ file:
 #    fmt: "%T%t%T%N%T%F%T[%p]%T[%c]%T%f:%l%T%m%n"
     out: file
     level: INFO
-    filename: log.txt
+    filename: file.txt
 nullfile:
   -
     fmt: "%d{%Y-%m-%d %H:%M:%S} null%n"

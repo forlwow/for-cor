@@ -303,6 +303,7 @@ public:
     virtual ~LogAppender() = default;
 
     virtual void log(std::shared_ptr<Logger>, const LogEvent::ptr &event) = 0;
+    virtual void flush()=0;
 
     void setFormatter(LogFormatter::ptr val);
     LogFormatter::ptr getFormatter() const;
@@ -325,6 +326,12 @@ public:
     void addAppender(LogAppender::ptr appender);
     void delAppender(LogAppender::ptr appender);
     auto getName() const {return m_name;}
+
+    void flush() {
+        for (auto &i : m_appenders) {
+            i->flush();
+        }
+    }
 private:
     std::string m_name;                 // 日志名称
     std::list<LogAppender::ptr>  m_appenders;     // Appender集合
@@ -337,6 +344,7 @@ class StdoutLogAppender: public LogAppender{
 public:
     typedef std::shared_ptr<StdoutLogAppender> ptr;
     void log(Logger::ptr logger, const LogEvent::ptr &event) override;
+    void flush() override {};
 };
 
 // 输出到文件的Appender
@@ -347,6 +355,7 @@ public:
     void log(Logger::ptr logger, const LogEvent::ptr &event) override;
     ~FileLogAppender() override {fclose(m_file);}
 
+    void flush() override {fflush(m_file);};
     bool reopen();      // 重新打开文件，打开成功返回true
 private:
     std::string m_filename;

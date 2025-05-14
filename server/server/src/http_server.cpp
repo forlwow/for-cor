@@ -2,52 +2,13 @@
 #include "util.h"
 #include <socketfunc_cpp20.h>
 #include <yaml-cpp/null.h>
+#include "Json/json.hpp"
 
 namespace server
 {
 
 static auto logger = SERVER_LOGGER_SYSTEM;
 
-    const char request[] =
-        "GET /example-path HTTP/1.0\r\n"
-        "Host: www.example.com\r\n"
-        "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36\r\n"
-        "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n"
-        "Accept-Language: en-US,en;q=0.5\r\n"
-        "Accept-Encoding: gzip, deflate, br\r\n"
-        "Connection: keep-alive\r\n"
-        "\r\n";
-
-    const char response[] =
-        "HTTP/1.1 200 OK\r\n"
-        "Date: Thu, 23 Jan 2025 12:34:56 GMT\r\n"
-        "Server: Apache/2.4.41 (Ubuntu)\r\n"
-        "Content-Type: text/html; charset=UTF-8\r\n"
-        "Content-Length: 120\r\n"
-        "Connection: keep-alive\r\n"
-        "\r\n"
-        "<!DOCTYPE html>"
-        "<html>"
-        "<head>"
-        "    <title>Example Page</title>"
-        "</head>"
-        "<body>"
-        "    <h1>Welcome to Example Page</h1>"
-        "</body>"
-        "</html>"
-    ;
-
-    const char body[] = {
-        "<!DOCTYPE html>"
-        "<html>"
-        "<head>"
-        "    <title>Example Page</title>"
-        "</head>"
-        "<body>"
-        "    <h1>Welcome to Example Page</h1>"
-        "</body>"
-        "</html>"
-    };
 
     const char pageNotFound[] = {
         R"(
@@ -122,19 +83,21 @@ void HttpContextResponse::JSON(http::HttpStatus s, const std::unordered_map<std:
     m_response->SetStatus(s);
     m_response->SetReason(http::HttpStatus2String(s));
     m_response->SetHeaders("Content-Type", "application/json");
-    std::string ss;
-    ss.push_back('{');
-    for (auto it = j.begin(); it != j.end(); ) {
-        // ss += "\"" + it->first + "\":\"" + it->second + "\"" + (++it == j.end() ? "" : ",");
-        ss.push_back('\"');
-        ss.append(it->first);
-        ss.append("\":\"");
-        ss.append(it->second);
-        ss.push_back('"');
-        ss.push_back(++it == j.end() ? ' ' : ',');
-    }
-    ss.push_back('}');
-    m_response->SetBody(ss);
+    // std::string ss;
+    // ss.push_back('{');
+    // for (auto it = j.begin(); it != j.end(); ) {
+    //     // ss += "\"" + it->first + "\":\"" + it->second + "\"" + (++it == j.end() ? "" : ",");
+    //     ss.push_back('\"');
+    //     ss.append(it->first);
+    //     ss.append("\":\"");
+    //     ss.append(it->second);
+    //     ss.push_back('"');
+    //     ss.push_back(++it == j.end() ? ' ' : ',');
+    // }
+    // ss.push_back('}');
+    // m_response->SetBody(ss);
+    nlohmann::json js(j);
+    m_response->SetBody(js.dump());
 }
 
 void HttpContextResponse::HTML(http::HttpStatus s, std::string_view b) {
@@ -143,6 +106,14 @@ void HttpContextResponse::HTML(http::HttpStatus s, std::string_view b) {
     m_response->SetReason(http::HttpStatus2String(s));
     m_response->SetBody(b);
 }
+
+void HttpContextResponse::TEXT(http::HttpStatus s, std::string_view b) {
+    m_response->SetHeaders("Content-Type", "text/plain; charset=UTF-8");
+    m_response->SetStatus(s);
+    m_response->SetReason(http::HttpStatus2String(s));
+    m_response->SetBody(b);
+}
+
 
 void HttpContextResponse::SetHeader(const std::string& key, std::string_view value) {
     m_response->SetHeaders(key, value);
@@ -247,6 +218,7 @@ void HttpServer::serverV4(std::string_view IP, uint16_t port) {
         SERVER_LOG_ERROR(logger) << "Server bind failed";
         return;
     }
+    SERVER_LOG_INFO(logger) << "Server bind success on " << IP << ":" << port;
     auto iom = IOManager_::GetInstance();
     this->start();
     iom->start();
@@ -269,6 +241,10 @@ void HttpServer::DEFAULT(Router::callback cb) {
     m_router->SetDefaultRoute(cb);
 }
 
+void HttpServer::SetDefaultHeader(const std::string& key, std::string_view value) {
+    m_default_headers[key] = value;
+}
+
 
 void HttpServer::HandleCallback(HttpContext::ptr context) {
     auto req = context->m_request;
@@ -277,12 +253,20 @@ void HttpServer::HandleCallback(HttpContext::ptr context) {
         req->GetPath()
         );
     // UserCB(context);
+    for (auto &i: m_default_headers) {
+        context->SetHeader(i.first, i.second);
+    }
     cb(std::move(context));
     return;
 }
 
+static std::atomic_uint64_t SocketNum = 0;
+static std::atomic_uint64_t MaxSocketNum = 0;
 
 Task HttpServer::handleClient(Socket::ptr client) {
+    ++SocketNum;
+    MaxSocketNum.store(std::max(MaxSocketNum, SocketNum));
+
     const int BUFFER_SIZE = 1024;
     char recv_buffer[BUFFER_SIZE];
     // auto recver = server::recv(client, recv_buffer, BUFFER_SIZE);
@@ -348,6 +332,7 @@ Task HttpServer::handleClient(Socket::ptr client) {
 
     m_request_parsers->push(parser);
     SERVER_LOG_DEBUG(logger) << "HttpServer Client close " << client->getFd();
+    --SocketNum;
     co_return;
 }
 

@@ -567,9 +567,9 @@ Logger::ptr LogManager::getLogger(const std::string &name){
     auto it = m_loggers.find(name);
     if (it != m_loggers.end())
         return it->second;
-    Logger::ptr logger(new Logger(name));
-    m_loggers[name] = logger;
-    return logger;
+    // Logger::ptr logger(new Logger(name));
+    // m_loggers[name] = logger;
+    return {};
 }
 
 // 通过Log.yaml初始化失败的默认初始化

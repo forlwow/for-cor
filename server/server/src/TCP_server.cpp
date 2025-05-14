@@ -62,13 +62,18 @@ namespace server
             return true;
         }
         m_isStop = false;
+        static std::vector<EThread::ptr> threads;
         for (Socket::ptr & i: m_sockets) {
             // m_worker->schedule(
             //     std::make_shared<AsyncFiber>(
             //         std::bind_front(&TcpServer::startAccept, shared_from_this(), i)
             //         )
             //     );
-            m_worker->schedule(AsyncFiber::CreatePtr(&TcpServer::startAccept, shared_from_this(), i));
+            // m_worker->schedule(AsyncFiber::CreatePtr(&TcpServer::startAccept, shared_from_this(), i));
+            threads.push_back(std::make_shared<EThread>([this, i]()
+            {
+                this->startAcceptSync(i);
+            }, "accepter"));
         }
         return true;
     }
@@ -112,6 +117,20 @@ namespace server
         }
         SERVER_LOG_WARN(logger) << "TCP server accept close";
         co_return;
+    }
+
+    void TcpServer::startAcceptSync(Socket::ptr sock) {
+        auto strongSock = sock;
+        while (1) {
+            Socket::ptr client;
+            do {
+                client = sock->accept();
+            }while (!client);
+            // Socket::ptr client = co_await server::accept(strongSock);
+            m_worker->schedule(std::make_shared<AsyncFiber>(&TcpServer::handleClient, this, client));
+        }
+        SERVER_LOG_WARN(logger) << "TCP server accept close";
+        return;
     }
 
     Task TcpEchoServer::handleClient(Socket::ptr client) {

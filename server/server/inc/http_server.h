@@ -22,6 +22,8 @@ struct HttpContext {
     virtual void JSON(int, const std::unordered_map<std::string, std::string>&)=0;
     virtual void HTML(int, std::string_view)=0;
     virtual void SetHeader(const std::string&, std::string_view)=0;
+    virtual void TEXT(http::HttpStatus, std::string_view)=0;
+    virtual void TEXT(int, std::string_view)=0;
     virtual std::string_view GetHeader(const std::string&)=0;
     http::HttpRequest::ptr m_request;
     http::HttpResponse::ptr m_response;
@@ -37,6 +39,8 @@ struct HttpContextResponse:public HttpContext {
     void HTML(http::HttpStatus, std::string_view) override;
     void JSON(int s, const std::unordered_map<std::string, std::string>& j) override {JSON(static_cast<http::HttpStatus>(s), j);}
     void HTML(int s, std::string_view v) override {HTML(static_cast<http::HttpStatus>(s), v);}
+    void TEXT(http::HttpStatus, std::string_view) override;
+    void TEXT(int s, std::string_view v) override {TEXT(static_cast<http::HttpStatus>(s), v);}
     void SetHeader(const std::string&, std::string_view) override;
     std::string_view GetHeader(const std::string&) override;
 };
@@ -86,10 +90,13 @@ public:
     void ANY(std::string_view, std::string_view, Router::callback); // METHOD PATH callback
     void DEFAULT(Router::callback);
 
+    void SetDefaultHeader(const std::string& k, std::string_view v);
+
 protected:
     Task handleClient(Socket::ptr client) override;
 
 private:
+    std::unordered_map<std::string, std::string> m_default_headers;
     Router::ptr m_router;
     // http报文解析器 每个连接分配一个
     // TODO: 改线程安全

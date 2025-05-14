@@ -31,6 +31,7 @@ public:
 protected:
     virtual Task handleClient(Socket::ptr client);
     virtual Task startAccept(Socket::ptr sock);
+    virtual void startAcceptSync(Socket::ptr sock);
 
 private:
     std::vector<Socket::ptr> m_sockets;

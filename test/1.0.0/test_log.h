@@ -3,7 +3,7 @@
 
 
 void test_output();
-void test_performance();
+void test_performance();        // 同步日志性能测试
 
 void test_async_log();
 

@@ -108,9 +108,11 @@ bool Fiber_2::swapIn(){
         if(m_flag.test_and_set())   // 已被其他线程调用
             return false;
         if(!m_done){
+            auto tmp = t_fiber_;
             t_fiber_ = shared_from_this();
             std::get<COROUTINE>(m_cb)();
-            t_fiber_.reset();
+            // t_fiber_.reset();
+            t_fiber_ = tmp;
             m_flag.clear();
             return true;
         }

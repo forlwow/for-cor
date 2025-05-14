@@ -41,6 +41,7 @@ IOManager_::IOManager_(size_t threads_, const std::string& name_)
         SERVER_LOG_FATAL(g_logger) << "IOManager Create Failed" << BacktraceToString(10, 0);
         exit(-1);
     }
+    SERVER_LOG_INFO(g_logger) << "IOManager Create Epoll: " << m_epfd;
 }
 
 IOManager_::~IOManager_(){
@@ -137,8 +138,8 @@ bool IOManager_::DelEvent(int fd, Event event){
 
 bool IOManager_::DelFd(int fd){
     int res = epoll_ctl(m_epfd, EPOLL_CTL_DEL, fd, NULL);
-    if(res < 0 && errno != EBADF){
-        if (errno != 2)
+    if(res < 0){
+        if (errno != ENOENT)
             SERVER_LOG_ERROR(g_logger) << "epoll ctl error, epollfd: " << m_epfd << ", fd: " << fd
                                             << ", errno: " << errno << ", error:"
                                             << std::string(strerror(errno));
@@ -239,7 +240,8 @@ void IOManager_::idle(){
                 //                                 << " write:" << (bool)(cur_evt.events & EPOLLOUT)
                 //                                 << " read:" << (bool)(cur_evt.events & EPOLLIN);
                 auto cur_fdcont = m_fdContexts[cur_evt.data.fd];
-                assert(cur_fdcont);
+                // assert(cur_fdcont);
+                if (!cur_fdcont) continue;
                 // 描述符出错或已关闭
                 if((cur_evt.events & EPOLLHUP) || (cur_evt.events & EPOLLERR)){
                     m_fdContexts.erase(m_fdContexts.find(cur_evt.data.fd));
